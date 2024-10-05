@@ -60,7 +60,7 @@ export default function ExoQuest() {
       const data = await response.json();
       setQuestions(data);
     } catch (err) {
-      setError("Error al cargar las preguntas. Por favor, intenta de nuevo.");
+      setError("An error ocurred when loading questions. Please try again..");
     } finally {
       setIsLoading(false);
     }
@@ -180,14 +180,14 @@ export default function ExoQuest() {
         <Card className="w-full max-w-md glassmorphism">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center text-white">
-              {isVictory ? "¡Felicidades!" : "Fin del juego"}
+              {isVictory ? "¡Congratulations!" : "The end"}
             </CardTitle>
           </CardHeader>
           <CardContent className="text-center">
             <p className="text-xl mb-4 text-white">
               {isVictory
-                ? "¡Has ganado! Obtuviste 6 o más respuestas correctas."
-                : `Obtuviste ${score} de 10 respuestas correctas.`}
+                ? "You've won! You've got 6 or more answers correct."
+                : `You got ${score}/10 correct answers.`}
             </p>
             {isVictory && (
               <motion.div
@@ -315,7 +315,7 @@ export default function ExoQuest() {
                   Siguiente <ChevronRight className="ml-2 h-4 w-4" />
                 </>
               ) : (
-                "Ver resultados"
+                "Show results"
               )}
             </Button>
           )}

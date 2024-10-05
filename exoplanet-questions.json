@@ -1,395 +1,392 @@
 [
     {
       "id": "1",
-      "question": "¿Cuál es el exoplaneta más cercano a la Tierra?",
-      "options": ["Próxima Centauri b", "TRAPPIST-1d", "Kepler-186f", "HD 219134 b"],
-      "correctAnswer": "Próxima Centauri b",
-      "explanation": "Próxima Centauri b es el exoplaneta confirmado más cercano a la Tierra, orbitando la estrella más cercana a nuestro Sol, Próxima Centauri, a solo 4.2 años luz de distancia.",
-      "difficulty": "Fácil"
+      "question": "What is the closest exoplanet to Earth?",
+      "options": ["Proxima Centauri b", "TRAPPIST-1d", "Kepler-186f", "HD 219134 b"],
+      "correctAnswer": "Proxima Centauri b",
+      "explanation": "Proxima Centauri b is the closest confirmed exoplanet to Earth, orbiting the nearest star to our Sun, Proxima Centauri, just 4.2 light-years away.",
+      "difficulty": "Easy"
     },
     {
       "id": "2",
-      "question": "¿Qué método se utiliza más comúnmente para detectar exoplanetas?",
-      "options": ["Tránsito", "Velocidad radial", "Microlente gravitacional", "Imagen directa"],
-      "correctAnswer": "Tránsito",
-      "explanation": "El método de tránsito es el más común para detectar exoplanetas. Detecta la disminución en el brillo de una estrella cuando un planeta pasa frente a ella desde nuestra perspectiva.",
-      "difficulty": "Intermedio"
+      "question": "Which method is most commonly used to detect exoplanets?",
+      "options": ["Transit", "Radial velocity", "Gravitational microlensing", "Direct image"],
+      "correctAnswer": "Transit",
+      "explanation": "The transit method is the most common method for detecting exoplanets. It detects the decrease in brightness of a star when a planet passes in front of it from our perspective.",
+      "difficulty": "Intermediate"
     },
     {
       "id": "3",
-      "question": "¿Qué telescopio espacial ha sido crucial para el descubrimiento de miles de exoplanetas?",
+      "question": "Which space telescope has been crucial to the discovery of thousands of exoplanets?",
       "options": ["Hubble", "Kepler", "James Webb", "Spitzer"],
       "correctAnswer": "Kepler",
-      "explanation": "El telescopio espacial Kepler ha sido fundamental en el descubrimiento de miles de exoplanetas utilizando el método de tránsito.",
-      "difficulty": "Fácil"
+      "explanation": "The Kepler space telescope has been instrumental in the discovery of thousands of exoplanets using the transit method.",
+      "difficulty": "Easy"
     },
     {
       "id": "4",
-      "question": "¿Qué característica define a un exoplaneta como 'habitable'?",
-      "options": ["Temperatura superficial", "Distancia a su estrella", "Tamaño similar a la Tierra", "Todas las anteriores"],
-      "correctAnswer": "Todas las anteriores",
-      "explanation": "Un exoplaneta habitable generalmente tiene temperatura adecuada, está a una distancia correcta de su estrella y tiene un tamaño adecuado para retener una atmósfera.",
-      "difficulty": "Intermedio"
+      "question": "What characteristic defines an exoplanet as 'habitable'?",
+      "options": ["Surface temperature", "Distance to its star", "Earth-like size", "All of above"],
+      "correctAnswer": "All of above",
+      "explanation": "A habitable exoplanet generally has adequate temperature, is at the correct distance from its star, and is of adequate size to retain an atmosphere.",
+      "difficulty": "Intermediate"
     },
     {
       "id": "5",
-      "question": "¿En qué constelación se encuentra el sistema TRAPPIST-1?",
-      "options": ["Acuario", "Orión", "Cáncer", "Perseo"],
-      "correctAnswer": "Acuario",
-      "explanation": "El sistema TRAPPIST-1 se encuentra en la constelación de Acuario y contiene siete exoplanetas, varios de los cuales están en la zona habitable.",
-      "difficulty": "Intermedio"
+      "question": "In which constellation is the TRAPPIST-1 system located?",
+      "options": ["Aquarium", "Orion", "Cancer", "Perseus"],
+      "correctAnswer": "Aquarium",
+      "explanation": "The TRAPPIST-1 system is located in the constellation Aquarius and contains seven exoplanets, several of which are in the habitable zone.",
+      "difficulty": "Intermediate"
     },
     {
       "id": "6",
-      "question": "¿Qué exoplaneta se conoce por ser extremadamente similar a la Tierra en tamaño y zona habitable?",
+      "question": "Which exoplanet is known to be extremely similar to Earth in size and habitable zone?",
       "options": ["Kepler-452b", "Gliese 581g", "Proxima Centauri b", "Kepler-186f"],
       "correctAnswer": "Kepler-186f",
-      "explanation": "Kepler-186f es un exoplaneta de tamaño similar a la Tierra que se encuentra en la zona habitable de su estrella, lo que lo hace un candidato para la existencia de agua líquida.",
-      "difficulty": "Difícil"
+      "explanation": "Kepler-186f is an Earth-like exoplanet that lies in the habitable zone of its star, making it a candidate for the existence of liquid water.",
+      "difficulty": "Hard"
     },
     {
       "id": "7",
-      "question": "¿Qué nombre recibe un planeta gigante gaseoso que orbita muy cerca de su estrella?",
-      "options": ["Júpiter caliente", "Júpiter frío", "Planeta enano", "Planeta rocoso"],
-      "correctAnswer": "Júpiter caliente",
-      "explanation": "Un 'Júpiter caliente' es un gigante gaseoso que orbita extremadamente cerca de su estrella, lo que lo expone a temperaturas muy altas.",
-      "difficulty": "Fácil"
+      "question": "What is the name for a gas giant planet orbiting very close to its star?",
+      "options": ["Hot Jupiter", "Cold Jupiter", "Dwarf planet", "Rocky planet"],
+      "correctAnswer": "Hot Jupiter",
+      "explanation": "A 'hot Jupiter' is a gas giant orbiting extremely close to its star, which exposes it to very high temperatures.",
+      "difficulty": "Easy"
     },
     {
       "id": "8",
-      "question": "¿Cuál de los siguientes exoplanetas tiene un cielo probablemente rojo debido a la atmósfera de su estrella?",
+      "question": "Which of the following exoplanets likely has a red sky due to its star's atmosphere?",
       "options": ["Gliese 667 Cc", "Kepler-22b", "HD 209458 b", "WASP-12b"],
       "correctAnswer": "Gliese 667 Cc",
-      "explanation": "Gliese 667 Cc orbita una estrella enana roja, lo que significa que el color predominante de su cielo podría ser rojo debido a la naturaleza de su luz estelar.",
-      "difficulty": "Intermedio"
+      "explanation": "Gliese 667 Cc orbits a red dwarf star, meaning the predominant color of its sky could be red due to the nature of its starlight.",
+      "difficulty": "Intermediate"
     },
     {
       "id": "9",
-      "question": "¿Qué instrumento permitió medir la velocidad radial de las estrellas para identificar exoplanetas?",
-      "options": ["Espectrógrafo", "Fotómetro", "Telescopio de rayos X", "Cámara infrarroja"],
-      "correctAnswer": "Espectrógrafo",
-      "explanation": "El espectrógrafo mide el desplazamiento Doppler en la luz de una estrella, permitiendo detectar la oscilación provocada por la gravedad de un planeta en órbita.",
-      "difficulty": "Intermedio"
+      "question": "Which instrument allowed the measurement of the radial velocity of stars to identify exoplanets?",
+      "options": ["Spectrograph", "Photometer", "X-ray telescope", "Infrared camera"],
+      "correctAnswer": "Spectrograph",
+      "explanation": "The spectrograph measures the Doppler shift in a star's light, allowing the detection of the wobble caused by the gravity of an orbiting planet.",
+      "difficulty": "Intermediate"
     },
     {
       "id": "10",
-      "question": "¿Qué elemento químico se buscaría en la atmósfera de un exoplaneta para evaluar la posibilidad de vida?",
-      "options": ["Oxígeno", "Metano", "Ozono", "Todos los anteriores"],
-      "correctAnswer": "Todos los anteriores",
-      "explanation": "Oxígeno, metano y ozono son biomarcadores importantes que podrían indicar actividad biológica en un exoplaneta.",
-      "difficulty": "Difícil"
+      "question": "Which chemical element would be sought in an exoplanet's atmosphere to assess the possibility of life?",
+      "options": ["Oxygen", "Methane", "Ozone", "All of the above"],
+      "correctAnswer": "All of the above",
+      "explanation": "Oxygen, methane, and ozone are important biomarkers that could indicate biological activity on an exoplanet.",
+      "difficulty": "Hard"
     },
     {
       "id": "11",
-      "question": "¿Qué tamaño suele tener un planeta tipo 'supertierra'?",
-      "options": ["Entre 1 y 10 veces la masa de la Tierra", "Entre 10 y 50 veces la masa de la Tierra", "Entre 1 y 2 veces la masa de la Tierra", "Más pequeño que la Tierra"],
-      "correctAnswer": "Entre 1 y 10 veces la masa de la Tierra",
-      "explanation": "Una supertierra tiene una masa entre 1 y 10 veces la de nuestro planeta, siendo más masiva que la Tierra pero menos que un gigante gaseoso.",
-      "difficulty": "Intermedio"
+      "question": "What size is a 'super-Earth' type planet usually?",
+      "options": ["Between 1 and 10 times the mass of Earth", "Between 10 and 50 times the mass of Earth", "Between 1 and 2 times the mass of Earth", "Smaller than Earth"],
+      "correctAnswer": "Between 1 and 10 times the mass of Earth",
+      "explanation": "A super-Earth has a mass between 1 and 10 times that of our planet, being more massive than Earth but less than a gas giant.",
+      "difficulty": "Intermediate"
     },
     {
       "id": "12",
-      "question": "¿Qué es un exoplaneta 'rogue' o 'planeta errante'?",
-      "options": ["Un planeta que no orbita ninguna estrella", "Un planeta en la zona habitable", "Un planeta con anillos", "Un planeta en un sistema binario"],
-      "correctAnswer": "Un planeta que no orbita ninguna estrella",
-      "explanation": "Un exoplaneta 'rogue' o 'planeta errante' es un planeta que no está unido gravitacionalmente a ninguna estrella y vaga libremente por el espacio.",
-      "difficulty": "Difícil"
+      "question": "What is a 'rogue' exoplanet?",
+      "options": ["A planet that does not orbit any star", "A planet in the habitable zone", "A planet with rings", "A planet in a binary system"],
+      "correctAnswer": "A planet that does not orbit any star",
+      "explanation": "A 'rogue' exoplanet is a planet that is not gravitationally bound to any star and roams freely through space.",
+      "difficulty": "Hard"
     },
     {
       "id": "13",
-      "question": "¿Qué tipo de estrella es más probable que tenga exoplanetas habitables?",
-      "options": ["Enana roja", "Gigante azul", "Supergigante roja", "Estrella de neutrones"],
-      "correctAnswer": "Enana roja",
-      "explanation": "Las estrellas enanas rojas son comunes en la galaxia y suelen tener zonas habitables cercanas donde podrían existir planetas con condiciones adecuadas para la vida.",
-      "difficulty": "Intermedio"
+      "question": "What type of star is most likely to have habitable exoplanets?",
+      "options": ["Red dwarf", "Blue giant", "Red supergiant", "Neutron star"],
+      "correctAnswer": "Red dwarf",
+      "explanation": "Red dwarf stars are common in the galaxy and often have close habitable zones where planets with suitable conditions for life could exist.",
+      "difficulty": "Intermediate"
     },
     {
       "id": "14",
-      "question": "¿Qué técnica se utiliza para estudiar la composición atmosférica de un exoplaneta?",
-      "options": ["Espectroscopía de transmisión", "Tránsito", "Microlente gravitacional", "Velocidad radial"],
-      "correctAnswer": "Espectroscopía de transmisión",
-      "explanation": "La espectroscopía de transmisión se utiliza para analizar la luz que pasa a través de la atmósfera de un exoplaneta durante un tránsito, revelando su composición.",
-      "difficulty": "Intermedio"
+      "question": "Which technique is used to study the atmospheric composition of an exoplanet?",
+      "options": ["Transmission spectroscopy", "Transit", "Gravitational microlensing", "Radial velocity"],
+      "correctAnswer": "Transmission spectroscopy",
+      "explanation": "Transmission spectroscopy is used to analyze the light passing through an exoplanet's atmosphere during a transit, revealing its composition.",
+      "difficulty": "Intermediate"
     },
     {
       "id": "15",
-      "question": "¿Qué es un exoplaneta de tipo 'subneptuno'?",
-      "options": ["Un planeta más pequeño que Neptuno pero más grande que la Tierra", "Un planeta gaseoso con una órbita larga", "Un planeta enano", "Un planeta sin atmósfera"],
-      "correctAnswer": "Un planeta más pequeño que Neptuno pero más grande que la Tierra",
-      "explanation": "Un exoplaneta tipo 'subneptuno' es más grande que la Tierra pero más pequeño que Neptuno, y generalmente tiene una atmósfera espesa.",
-      "difficulty": "Intermedio"
+      "question": "What is a 'sub-Neptune' type exoplanet?",
+      "options": ["A planet smaller than Neptune but larger than Earth", "A gas planet with a long orbit", "A dwarf planet", "A planet without an atmosphere"],
+      "correctAnswer": "A planet smaller than Neptune but larger than Earth",
+      "explanation": "A 'sub-Neptune' type exoplanet is larger than Earth but smaller than Neptune, and generally has a thick atmosphere.",
+      "difficulty": "Intermediate"
     },
     {
       "id": "16",
-      "question": "¿Cuál es la característica más importante para considerar un planeta en la 'zona habitable'?",
-      "options": ["La temperatura permite agua líquida", "Tiene atmósfera rica en oxígeno", "Está compuesto principalmente de carbono", "Es mayor que la Tierra"],
-      "correctAnswer": "La temperatura permite agua líquida",
-      "explanation": "La zona habitable se define como la distancia a una estrella donde la temperatura permite la existencia de agua líquida en la superficie de un planeta.",
-      "difficulty": "Fácil"
+      "question": "What is the most important characteristic to consider a planet in the 'habitable zone'?",
+      "options": ["Temperature allows liquid water", "Has an oxygen-rich atmosphere", "Is primarily composed of carbon", "Is larger than Earth"],
+      "correctAnswer": "Temperature allows liquid water",
+      "explanation": "The habitable zone is defined as the distance from a star where the temperature allows the existence of liquid water on a planet's surface.",
+      "difficulty": "Easy"
     },
     {
       "id": "17",
-      "question": "¿Qué tipo de exoplaneta es el HD 209458 b, conocido por su atmósfera evaporándose?",
-      "options": ["Júpiter caliente", "Supertierra", "Planeta errante", "Subneptuno"],
-      "correctAnswer": "Júpiter caliente",
-      "explanation": "HD 209458 b es un Júpiter caliente cuya atmósfera se está evaporando debido a la intensa radiación de su estrella anfitriona.",
-      "difficulty": "Difícil"
+      "question": "What type of exoplanet is HD 209458 b, known for its evaporating atmosphere?",
+      "options": ["Hot Jupiter", "Super-Earth", "Rogue planet", "Sub-Neptune"],
+      "correctAnswer": "Hot Jupiter",
+      "explanation": "HD 209458 b is a hot Jupiter whose atmosphere is evaporating due to the intense radiation from its host star.",
+      "difficulty": "Hard"
     },
     {
-        "id": "18",
-        "question": "¿Qué fenómeno ayuda a los astrónomos a detectar planetas por el efecto de la gravedad de la estrella en ellos?",
-        "options": ["Efecto Doppler", "Tránsito", "Microlente gravitacional", "Espectroscopía de emisión"],
-        "correctAnswer": "Efecto Doppler",
-        "explanation": "El efecto Doppler se usa para detectar variaciones en la velocidad radial de una estrella debido a la atracción gravitatoria de un planeta en órbita.",
-        "difficulty": "Intermedio"
-      },
-      {
-        "id": "19",
-        "question": "¿Qué misión espacial ha sido diseñada para encontrar exoplanetas en tránsito alrededor de estrellas cercanas?",
-        "options": ["TESS", "Voyager", "Pioneer", "Curiosity"],
-        "correctAnswer": "TESS",
-        "explanation": "La misión TESS (Transiting Exoplanet Survey Satellite) fue lanzada para encontrar exoplanetas que transiten frente a estrellas cercanas.",
-        "difficulty": "Intermedio"
-      },
-      {
-        "id": "20",
-        "question": "¿Cuál es la principal ventaja del método de velocidad radial frente al método de tránsito?",
-        "options": ["Detecta la masa del planeta", "Detecta la atmósfera", "Permite ver imágenes del planeta", "Solo detecta planetas gigantes"],
-        "correctAnswer": "Detecta la masa del planeta",
-        "explanation": "El método de velocidad radial permite estimar la masa del planeta detectando el movimiento oscilatorio de la estrella debido al tirón gravitacional del planeta.",
-        "difficulty": "Difícil"
-      },
-      {
-        "id": "21",
-        "question": "¿Qué tipo de exoplaneta es Kepler-22b?",
-        "options": ["Planeta tipo Neptuno", "Supertierra", "Júpiter caliente", "Planeta errante"],
-        "correctAnswer": "Supertierra",
-        "explanation": "Kepler-22b es una supertierra, un tipo de planeta más grande que la Tierra pero más pequeño que Urano o Neptuno.",
-        "difficulty": "Intermedio"
-      },
-      {
-        "id": "22",
-        "question": "¿Qué método para detectar exoplanetas utiliza el efecto de la luz de una estrella lejana que pasa cerca de un objeto masivo?",
-        "options": ["Microlente gravitacional", "Tránsito", "Imagen directa", "Espectroscopía"],
-        "correctAnswer": "Microlente gravitacional",
-        "explanation": "El método de microlente gravitacional se basa en la curvatura de la luz de una estrella lejana cuando pasa cerca de un objeto masivo, lo cual puede revelar la presencia de un planeta.",
-        "difficulty": "Difícil"
-      },
-      {
-        "id": "23",
-        "question": "¿Qué se espera encontrar en la atmósfera de un exoplaneta para considerarlo habitable?",
-        "options": ["Vapor de agua", "Amoníaco", "Hidrógeno", "Monóxido de carbono"],
-        "correctAnswer": "Vapor de agua",
-        "explanation": "El vapor de agua es un indicador de condiciones habitables, ya que podría sugerir la presencia de agua líquida en la superficie.",
-        "difficulty": "Intermedio"
-      },
-      {
-        "id": "24",
-        "question": "¿Qué misión está diseñada para estudiar la atmósfera de exoplanetas con más detalle?",
-        "options": ["James Webb", "Kepler", "TESS", "Hubble"],
-        "correctAnswer": "James Webb",
-        "explanation": "El telescopio espacial James Webb está diseñado para estudiar la atmósfera de exoplanetas con gran detalle utilizando técnicas de espectroscopía.",
-        "difficulty": "Fácil"
-      },
-      {
-        "id": "25",
-        "question": "¿Qué característica distingue a los planetas tipo 'Júpiter frío'?",
-        "options": ["Orbita lejos de su estrella", "Es más pequeño que la Tierra", "No tiene atmósfera", "Está hecho principalmente de metal"],
-        "correctAnswer": "Orbita lejos de su estrella",
-        "explanation": "Un 'Júpiter frío' es un gigante gaseoso que orbita lejos de su estrella, lo cual provoca bajas temperaturas.",
-        "difficulty": "Intermedio"
-      },
-      {
-        "id": "26",
-        "question": "¿Qué técnica se utiliza para observar directamente exoplanetas en ciertos casos?",
-        "options": ["Imagen directa", "Velocidad radial", "Tránsito", "Microlente gravitacional"],
-        "correctAnswer": "Imagen directa",
-        "explanation": "La imagen directa se utiliza para observar exoplanetas en sistemas donde la luz de la estrella se puede bloquear o reducir, permitiendo ver el planeta.",
-        "difficulty": "Difícil"
-      },
-      {
-        "id": "27",
-        "question": "¿Cuál es el nombre del primer exoplaneta descubierto en la zona habitable de una estrella similar al Sol?",
-        "options": ["Kepler-452b", "Proxima Centauri b", "Gliese 667 Cc", "WASP-12b"],
-        "correctAnswer": "Kepler-452b",
-        "explanation": "Kepler-452b fue el primer exoplaneta descubierto en la zona habitable de una estrella similar al Sol, lo que lo convierte en un candidato interesante para la posible presencia de vida.",
-        "difficulty": "Intermedio"
-      },
-        {
-          "id": "28",
-          "question": "¿Qué se requiere para que un planeta se considere una 'supertierra'?",
-          "options": ["Más masivo que la Tierra y menos que Neptuno", "Tener una atmósfera densa", "Tener agua líquida", "Estar cerca de una estrella tipo M"],
-          "correctAnswer": "Ser más masivo que la Tierra pero menos que Neptuno",
-          "explanation": "Una supertierra es un planeta con una masa mayor que la de la Tierra pero menor que la de Urano o Neptuno.",
-          "difficulty": "Intermedio"
-        },
-        {
-          "id": "29",
-          "question": "¿Qué tipo de estrella es más probable que albergue planetas en la zona habitable?",
-          "options": ["Estrella tipo M", "Estrella tipo O", "Estrella tipo A", "Estrella de neutrones"],
-          "correctAnswer": "Estrella tipo M",
-          "explanation": "Las estrellas tipo M (enanas rojas) son abundantes y de larga vida, lo que las hace propicias para albergar planetas en la zona habitable durante períodos prolongados.",
-          "difficulty": "Intermedio"
-        },
-        {
-          "id": "30",
-          "question": "¿Qué característica hace a TRAPPIST-1 un sistema notable en la búsqueda de exoplanetas?",
-          "options": ["Siete planetas en la zona habitable", "Una estrella gigante", "Planetas de gas gigantes", "Emite radiación intensa"],
-          "correctAnswer": "Siete planetas en la zona habitable",
-          "explanation": "El sistema TRAPPIST-1 tiene siete planetas, varios de los cuales están en la zona habitable, lo que lo convierte en un sistema ideal para buscar signos de habitabilidad.",
-          "difficulty": "Fácil"
-        },
-        {
-          "id": "31",
-          "question": "¿Qué es un 'planeta errante'?",
-          "options": ["Un planeta sin estrella anfitriona", "Un planeta que cambia de órbita", "Un planeta con dos estrellas", "Un planeta con una atmósfera que se evapora"],
-          "correctAnswer": "Un planeta sin estrella anfitriona",
-          "explanation": "Un planeta errante es un planeta que no está ligado gravitacionalmente a una estrella y vaga libremente por el espacio.",
-          "difficulty": "Difícil"
-        },
-        {
-          "id": "32",
-          "question": "¿Qué técnica ha sido utilizada para identificar la composición atmosférica de un exoplaneta?",
-          "options": ["Espectroscopía", "Microlente gravitacional", "Tránsito", "Velocidad radial"],
-          "correctAnswer": "Espectroscopía",
-          "explanation": "La espectroscopía se utiliza para analizar la luz de la atmósfera de un exoplaneta y determinar su composición química.",
-          "difficulty": "Intermedio"
-        },
-        {
-          "id": "33",
-          "question": "¿Qué misión se espera que mejore la capacidad de detectar exoplanetas más pequeños y similares a la Tierra?",
-          "options": ["James Webb", "TESS", "Hubble", "Voyager"],
-          "correctAnswer": "James Webb",
-          "explanation": "El telescopio James Webb se espera que mejore significativamente la capacidad para detectar y estudiar exoplanetas pequeños, incluyendo aquellos similares a la Tierra.",
-          "difficulty": "Intermedio"
-        },
-        {
-          "id": "34",
-          "question": "¿Cuál es la principal ventaja del método de tránsito para detectar exoplanetas?",
-          "options": ["Detecta el tamaño del planeta", "Detecta la atmósfera del planeta", "Permite ver planetas errantes", "No requiere luz estelar"],
-          "correctAnswer": "Detecta el tamaño del planeta",
-          "explanation": "El método de tránsito permite estimar el tamaño del planeta al medir la cantidad de luz estelar bloqueada durante el tránsito.",
-          "difficulty": "Intermedio"
-        },
-        {
-          "id": "35",
-          "question": "¿Qué tipo de exoplaneta se caracteriza por tener una órbita extremadamente cercana a su estrella anfitriona?",
-          "options": ["Júpiter caliente", "Planeta errante", "Supertierra", "Subneptuno"],
-          "correctAnswer": "Júpiter caliente",
-          "explanation": "Un Júpiter caliente es un tipo de exoplaneta gigante gaseoso que orbita extremadamente cerca de su estrella anfitriona, con temperaturas muy altas.",
-          "difficulty": "Fácil"
-        },
-        {
-          "id": "36",
-          "question": "¿Qué factor es esencial para determinar si un planeta está en la 'zona habitable'?",
-          "options": ["Distancia a la estrella", "Composición del núcleo", "Cantidad de satélites", "Rotación axial"],
-          "correctAnswer": "Distancia a la estrella",
-          "explanation": "La distancia a la estrella es crucial para determinar si un planeta se encuentra en la zona habitable, donde las temperaturas permiten la existencia de agua líquida.",
-          "difficulty": "Fácil"
-        },
-        {
-          "id": "37",
-          "question": "¿Cuál es la diferencia principal entre un 'Júpiter caliente' y un 'Neptuno caliente'?",
-          "options": ["Masa y tamaño", "Distancia a la estrella", "Composición de la atmósfera", "Número de lunas"],
-          "correctAnswer": "Masa y tamaño",
-          "explanation": "La principal diferencia es la masa y el tamaño: los Júpiter calientes son más grandes y masivos que los Neptuno calientes, aunque ambos están cerca de su estrella.",
-          "difficulty": "Intermedio"
-        },
-        {
-            "id": "38",
-            "question": "¿Cuál de los siguientes exoplanetas está ubicado en el sistema estelar Alpha Centauri?",
-            "options": ["Proxima Centauri b", "Kepler-22b", "HD 189733 b", "TRAPPIST-1e"],
-            "correctAnswer": "Proxima Centauri b",
-            "explanation": "Proxima Centauri b se encuentra en el sistema estelar Alpha Centauri, siendo uno de los exoplanetas más cercanos a la Tierra.",
-            "difficulty": "Fácil"
-          },
-          {
-            "id": "39",
-            "question": "¿Qué telescopio espacial es responsable de descubrir el primer exoplaneta que orbita una estrella enana roja en la zona habitable?",
-            "options": ["Kepler", "James Webb", "TESS", "Hubble"],
-            "correctAnswer": "Kepler",
-            "explanation": "El telescopio Kepler descubrió el primer exoplaneta que orbita una estrella enana roja en la zona habitable, demostrando que estos planetas pueden ser comunes.",
-            "difficulty": "Intermedio"
-          },
-          {
-            "id": "40",
-            "question": "¿Qué define a un planeta como un 'subneptuno'?",
-            "options": ["Tamaño entre la Tierra y Neptuno", "Tener una atmósfera rica en metano", "Estar lejos de la zona habitable", "Carecer de lunas"],
-            "correctAnswer": "Tamaño entre la Tierra y Neptuno",
-            "explanation": "Un subneptuno es un planeta cuyo tamaño está entre el de la Tierra y el de Neptuno, generalmente con una atmósfera significativa.",
-            "difficulty": "Intermedio"
-          },
-          {
-            "id": "41",
-            "question": "¿Cuál de estos exoplanetas se descubrió con el método de imagen directa?",
-            "options": ["HR 8799 c", "Proxima Centauri b", "Kepler-452b", "Gliese 581g"],
-            "correctAnswer": "HR 8799 c",
-            "explanation": "HR 8799 c es uno de los primeros exoplanetas en ser observado mediante el método de imagen directa.",
-            "difficulty": "Difícil"
-          },
-          {
-            "id": "42",
-            "question": "¿Cuál es el nombre del primer exoplaneta confirmado que fue descubierto?",
-            "options": ["51 Pegasi b", "Proxima Centauri b", "Gliese 581g", "WASP-12b"],
-            "correctAnswer": "51 Pegasi b",
-            "explanation": "51 Pegasi b fue el primer exoplaneta confirmado que orbitaba una estrella similar al Sol, descubierto en 1995.",
-            "difficulty": "Intermedio"
-          },
-          {
-            "id": "43",
-            "question": "¿Qué exoplaneta es conocido por tener vientos extremadamente rápidos y lluvias de vidrio?",
-            "options": ["HD 189733 b", "Kepler-22b", "Proxima Centauri b", "TRAPPIST-1d"],
-            "correctAnswer": "HD 189733 b",
-            "explanation": "HD 189733 b es conocido por sus vientos extremos y lluvia de vidrio que ocurre a altas velocidades.",
-            "difficulty": "Difícil"
-          },
-          {
-            "id": "44",
-            "question": "¿Qué técnica de detección de exoplanetas se basa en la observación de las variaciones en la posición de una estrella?",
-            "options": ["Astrometría", "Tránsito", "Velocidad radial", "Microlente gravitacional"],
-            "correctAnswer": "Astrometría",
-            "explanation": "La astrometría mide los pequeños movimientos en la posición de una estrella causados por la atracción gravitacional de un exoplaneta.",
-            "difficulty": "Difícil"
-          },
-          
-          {
-            "id": "46",
-            "question": "¿Cuál es la importancia de encontrar metano en la atmósfera de un exoplaneta?",
-            "options": ["Podría ser un indicador de actividad biológica", "Indica la presencia de océanos", "Significa que el planeta es un gigante gaseoso", "Indica la presencia de volcanes"],
-            "correctAnswer": "Podría ser un indicador de actividad biológica",
-            "explanation": "El metano en la atmósfera de un exoplaneta puede ser un indicio de actividad biológica, especialmente si se encuentra junto con otros gases, como el oxígeno.",
-            "difficulty": "Intermedio"
-          },
-          {
-            "id": "47",
-            "question": "¿Qué planeta descubierto por Kepler fue considerado como el más similar a la Tierra en términos de tamaño y zona habitable?",
-            "options": ["Kepler-452b", "Kepler-22b", "Kepler-186f", "Kepler-10c"],
-            "correctAnswer": "Kepler-186f",
-            "explanation": "Kepler-186f fue el primer exoplaneta de tamaño similar al de la Tierra descubierto en la zona habitable de su estrella.",
-            "difficulty": "Intermedio"
-          },
-          {
-            "id": "48",
-            "question": "¿Qué factor contribuye a que un exoplaneta se considere 'potencialmente habitable'?",
-            "options": ["Temperatura adecuada para mantener agua líquida", "Alta cantidad de gases tóxicos", "Presencia de anillos", "Órbita extremadamente elíptica"],
-            "correctAnswer": "Temperatura adecuada para mantener agua líquida",
-            "explanation": "Para que un exoplaneta se considere potencialmente habitable, debe tener una temperatura adecuada que permita la existencia de agua líquida en su superficie.",
-            "difficulty": "Fácil"
-          },
-          {
-            "id": "49",
-            "question": "¿Qué telescopio espacial se especializa en buscar planetas alrededor de estrellas brillantes en el cielo?",
-            "options": ["TESS", "Kepler", "Spitzer", "Hubble"],
-            "correctAnswer": "TESS",
-            "explanation": "El telescopio espacial TESS fue diseñado específicamente para buscar planetas alrededor de estrellas brillantes cercanas.",
-            "difficulty": "Fácil"
-          },
-          {
-            "id": "50",
-            "question": "¿Qué descubrimiento importante fue realizado sobre el sistema Gliese 581?",
-            "options": ["Contiene varios exoplanetas potencialmente habitables", "Es el sistema más cercano al Sol", "Tiene el mayor número de planetas gigantes", "Es la estrella más antigua observada"],
-            "correctAnswer": "Contiene varios exoplanetas potencialmente habitables",
-            "explanation": "El sistema Gliese 581 contiene varios exoplanetas, algunos de los cuales se encuentran en la zona habitable, lo cual los hace posibles candidatos para la vida.",
-            "difficulty": "Intermedio"
-          }
+      "id": "18",
+      "question": "What phenomenon helps astronomers detect planets by the effect of the star's gravity on them?",
+      "options": ["Doppler effect", "Transit", "Gravitational microlensing", "Emission spectroscopy"],
+      "correctAnswer": "Doppler effect",
+      "explanation": "The Doppler effect is used to detect variations in a star's radial velocity due to the gravitational pull of an orbiting planet.",
+      "difficulty": "Intermediate"
+    },{
+      "id": "19",
+      "question": "Which space mission has been designed to find exoplanets transiting around nearby stars?",
+      "options": ["TESS", "Voyager", "Pioneer", "Curiosity"],
+      "correctAnswer": "TESS",
+      "explanation": "The TESS (Transiting Exoplanet Survey Satellite) mission was launched to find exoplanets that transit in front of nearby stars.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "20",
+      "question": "What is the main advantage of the radial velocity method over the transit method?",
+      "options": ["Detects the planet's mass", "Detects the atmosphere", "Allows seeing images of the planet", "Only detects giant planets"],
+      "correctAnswer": "Detects the planet's mass",
+      "explanation": "The radial velocity method allows estimating the planet's mass by detecting the star's wobbling motion due to the gravitational pull of the planet.",
+      "difficulty": "Hard"
+    },
+    {
+      "id": "21",
+      "question": "What type of exoplanet is Kepler-22b?",
+      "options": ["Neptune-like planet", "Super-Earth", "Hot Jupiter", "Rogue planet"],
+      "correctAnswer": "Super-Earth",
+      "explanation": "Kepler-22b is a super-Earth, a type of planet larger than Earth but smaller than Uranus or Neptune.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "22",
+      "question": "Which method for detecting exoplanets uses the effect of light from a distant star passing near a massive object?",
+      "options": ["Gravitational microlensing", "Transit", "Direct imaging", "Spectroscopy"],
+      "correctAnswer": "Gravitational microlensing",
+      "explanation": "The gravitational microlensing method is based on the bending of light from a distant star when it passes near a massive object, which can reveal the presence of a planet.",
+      "difficulty": "Hard"
+    },
+    {
+      "id": "23",
+      "question": "What is expected to be found in an exoplanet's atmosphere to consider it habitable?",
+      "options": ["Water vapor", "Ammonia", "Hydrogen", "Carbon monoxide"],
+      "correctAnswer": "Water vapor",
+      "explanation": "Water vapor is an indicator of habitable conditions, as it could suggest the presence of liquid water on the surface.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "24",
+      "question": "Which mission is designed to study exoplanet atmospheres in more detail?",
+      "options": ["James Webb", "Kepler", "TESS", "Hubble"],
+      "correctAnswer": "James Webb",
+      "explanation": "The James Webb Space Telescope is designed to study exoplanet atmospheres in great detail using spectroscopy techniques.",
+      "difficulty": "Easy"
+    },
+    {
+      "id": "25",
+      "question": "What characteristic distinguishes 'cold Jupiter' type planets?",
+      "options": ["Orbits far from its star", "Smaller than Earth", "No atmosphere", "Mainly made of metal"],
+      "correctAnswer": "Orbits far from its star",
+      "explanation": "A 'cold Jupiter' is a gas giant that orbits far from its star, resulting in low temperatures.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "26",
+      "question": "Which technique is used to directly observe exoplanets in certain cases?",
+      "options": ["Direct imaging", "Radial velocity", "Transit", "Gravitational microlensing"],
+      "correctAnswer": "Direct imaging",
+      "explanation": "Direct imaging is used to observe exoplanets in systems where the star's light can be blocked or reduced, allowing the planet to be seen.",
+      "difficulty": "Hard"
+    },
+    {
+      "id": "27",
+      "question": "What is the name of the first exoplanet discovered in the habitable zone of a Sun-like star?",
+      "options": ["Kepler-452b", "Proxima Centauri b", "Gliese 667 Cc", "WASP-12b"],
+      "correctAnswer": "Kepler-452b",
+      "explanation": "Kepler-452b was the first exoplanet discovered in the habitable zone of a Sun-like star, making it an interesting candidate for the possible presence of life.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "28",
+      "question": "What is required for a planet to be considered a 'super-Earth'?",
+      "options": ["More massive than Earth but less than Neptune", "Having a dense atmosphere", "Having liquid water", "Being close to an M-type star"],
+      "correctAnswer": "More massive than Earth but less than Neptune",
+      "explanation": "A super-Earth is a planet with a mass greater than Earth's but less than Uranus or Neptune.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "29",
+      "question": "What type of star is most likely to host planets in the habitable zone?",
+      "options": ["M-type star", "O-type star", "A-type star", "Neutron star"],
+      "correctAnswer": "M-type star",
+      "explanation": "M-type stars (red dwarfs) are abundant and long-lived, making them conducive to hosting planets in the habitable zone for extended periods.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "30",
+      "question": "What characteristic makes TRAPPIST-1 a notable system in the search for exoplanets?",
+      "options": ["Seven planets in the habitable zone", "A giant star", "Giant gas planets", "Emits intense radiation"],
+      "correctAnswer": "Seven planets in the habitable zone",
+      "explanation": "The TRAPPIST-1 system has seven planets, several of which are in the habitable zone, making it an ideal system to search for signs of habitability.",
+      "difficulty": "Easy"
+    },
+    {
+      "id": "31",
+      "question": "What is a 'rogue planet'?",
+      "options": ["A planet without a host star", "A planet that changes orbit", "A planet with two stars", "A planet with an evaporating atmosphere"],
+      "correctAnswer": "A planet without a host star",
+      "explanation": "A rogue planet is a planet that is not gravitationally bound to a star and roams freely through space.",
+      "difficulty": "Hard"
+    },
+    {
+      "id": "32",
+      "question": "Which technique has been used to identify the atmospheric composition of an exoplanet?",
+      "options": ["Spectroscopy", "Gravitational microlensing", "Transit", "Radial velocity"],
+      "correctAnswer": "Spectroscopy",
+      "explanation": "Spectroscopy is used to analyze the light from an exoplanet's atmosphere and determine its chemical composition.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "33",
+      "question": "Which mission is expected to improve the ability to detect smaller, Earth-like exoplanets?",
+      "options": ["James Webb", "TESS", "Hubble", "Voyager"],
+      "correctAnswer": "James Webb",
+      "explanation": "The James Webb Telescope is expected to significantly improve the ability to detect and study smaller exoplanets, including those similar to Earth.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "34",
+      "question": "What is the main advantage of the transit method for detecting exoplanets?",
+      "options": ["Detects the planet's size", "Detects the planet's atmosphere", "Allows seeing rogue planets", "Does not require starlight"],
+      "correctAnswer": "Detects the planet's size",
+      "explanation": "The transit method allows estimating the planet's size by measuring the amount of starlight blocked during the transit.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "35",
+      "question": "What type of exoplanet is characterized by having an extremely close orbit to its host star?",
+      "options": ["Hot Jupiter", "Rogue planet", "Super-Earth", "Sub-Neptune"],
+      "correctAnswer": "Hot Jupiter",
+      "explanation": "A hot Jupiter is a type of gas giant exoplanet that orbits extremely close to its host star, with very high temperatures.",
+      "difficulty": "Easy"
+    },
+    {
+      "id": "36",
+      "question": "What factor is essential to determine if a planet is in the 'habitable zone'?",
+      "options": ["Distance to the star", "Core composition", "Number of satellites", "Axial rotation"],
+      "correctAnswer": "Distance to the star",
+      "explanation": "The distance to the star is crucial to determine if a planet is in the habitable zone, where temperatures allow the existence of liquid water.",
+      "difficulty": "Easy"
+    },
+    {
+      "id": "37",
+      "question": "What is the main difference between a 'hot Jupiter' and a 'hot Neptune'?",
+      "options": ["Mass and size", "Distance to the star", "Atmospheric composition", "Number of moons"],
+      "correctAnswer": "Mass and size",
+      "explanation": "The main difference is mass and size: hot Jupiters are larger and more massive than hot Neptunes, although both are close to their star.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "38",
+      "question": "Which of the following exoplanets is located in the Alpha Centauri star system?",
+      "options": ["Proxima Centauri b", "Kepler-22b", "HD 189733 b", "TRAPPIST-1e"],
+      "correctAnswer": "Proxima Centauri b",
+      "explanation": "Proxima Centauri b is located in the Alpha Centauri star system, being one of the closest exoplanets to Earth.",
+      "difficulty": "Easy"
+    },
+    {
+      "id": "39",
+      "question": "Which space telescope is responsible for discovering the first exoplanet orbiting a red dwarf star in the habitable zone?",
+      "options": ["Kepler", "James Webb", "TESS", "Hubble"],
+      "correctAnswer": "Kepler",
+      "explanation": "The Kepler telescope discovered the first exoplanet orbiting a red dwarf star in the habitable zone, demonstrating that these planets can be common.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "40",
+      "question": "What defines a planet as a 'sub-Neptune'?",
+      "options": ["Size between Earth and Neptune", "Having a methane-rich atmosphere", "Being far from the habitable zone", "Lacking moons"],
+      "correctAnswer": "Size between Earth and Neptune",
+      "explanation": "A sub-Neptune is a planet whose size is between that of Earth and Neptune, generally with a significant atmosphere.",
+      "difficulty": "Intermediate"
+    },{
+      "id": "41",
+      "question": "Which of these exoplanets was discovered using the direct imaging method?",
+      "options": ["HR 8799 c", "Proxima Centauri b", "Kepler-452b", "Gliese 581g"],
+      "correctAnswer": "HR 8799 c",
+      "explanation": "HR 8799 c is one of the first exoplanets to be observed using the direct imaging method.",
+      "difficulty": "Hard"
+    },
+    {
+      "id": "42",
+      "question": "What is the name of the first confirmed exoplanet that was discovered?",
+      "options": ["51 Pegasi b", "Proxima Centauri b", "Gliese 581g", "WASP-12b"],
+      "correctAnswer": "51 Pegasi b",
+      "explanation": "51 Pegasi b was the first confirmed exoplanet orbiting a Sun-like star, discovered in 1995.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "43",
+      "question": "Which exoplanet is known for having extremely fast winds and glass rain?",
+      "options": ["HD 189733 b", "Kepler-22b", "Proxima Centauri b", "TRAPPIST-1d"],
+      "correctAnswer": "HD 189733 b",
+      "explanation": "HD 189733 b is known for its extreme winds and glass rain that occurs at high speeds.",
+      "difficulty": "Hard"
+    },
+    {
+      "id": "44",
+      "question": "Which exoplanet detection technique is based on observing variations in a star's position?",
+      "options": ["Astrometry", "Transit", "Radial velocity", "Gravitational microlensing"],
+      "correctAnswer": "Astrometry",
+      "explanation": "Astrometry measures the small movements in a star's position caused by the gravitational pull of an exoplanet.",
+      "difficulty": "Hard"
+    },
+    {
+      "id": "46",
+      "question": "What is the importance of finding methane in an exoplanet's atmosphere?",
+      "options": ["It could be an indicator of biological activity", "Indicates the presence of oceans", "Means the planet is a gas giant", "Indicates the presence of volcanoes"],
+      "correctAnswer": "It could be an indicator of biological activity",
+      "explanation": "Methane in an exoplanet's atmosphere can be an indication of biological activity, especially if found along with other gases like oxygen.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "47",
+      "question": "Which planet discovered by Kepler was considered the most Earth-like in terms of size and habitable zone?",
+      "options": ["Kepler-452b", "Kepler-22b", "Kepler-186f", "Kepler-10c"],
+      "correctAnswer": "Kepler-186f",
+      "explanation": "Kepler-186f was the first Earth-sized exoplanet discovered in the habitable zone of its star.",
+      "difficulty": "Intermediate"
+    },
+    {
+      "id": "48",
+      "question": "What factor contributes to an exoplanet being considered 'potentially habitable'?",
+      "options": ["Temperature suitable for liquid water", "High amount of toxic gases", "Presence of rings", "Extremely elliptical orbit"],
+      "correctAnswer": "Temperature suitable for liquid water",
+      "explanation": "For an exoplanet to be considered potentially habitable, it must have a suitable temperature that allows the existence of liquid water on its surface.",
+      "difficulty": "Easy"
+    },
+    {
+      "id": "49",
+      "question": "Which space telescope specializes in searching for planets around bright stars in the sky?",
+      "options": ["TESS", "Kepler", "Spitzer", "Hubble"],
+      "correctAnswer": "TESS",
+      "explanation": "The TESS space telescope was specifically designed to search for planets around nearby bright stars.",
+      "difficulty": "Easy"
+    },
+    {
+      "id": "50",
+      "question": "What important discovery was made about the Gliese 581 system?",
+      "options": ["Contains several potentially habitable exoplanets", "Is the closest system to the Sun", "Has the largest number of giant planets", "Is the oldest observed star"],
+      "correctAnswer": "Contains several potentially habitable exoplanets",
+      "explanation": "The Gliese 581 system contains several exoplanets, some of which are in the habitable zone, making them possible candidates for life.",
+      "difficulty": "Intermediate"
+    }    
   ]
