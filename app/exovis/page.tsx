@@ -68,9 +68,9 @@ export default function Exovis() {
                 <h1 className="text-4xl font-bold mb-8 text-center text-white">Catalog of Some Exoplanets</h1>
                 <div className="flex flex-wrap justify-center relative">
                     {exoplanets.map((planet, index) => (
-                        <div key={index} className="bg-black rounded-lg shadow-lg m-4 p-6 w-80">
+                        <div key={index} className="bg-gray-800 text-white rounded-lg shadow-lg m-4 p-4 flex flex-col items-center">
                             <h2 className="text-xl font-semibold mt-2">{planet.name}</h2>
-                            <img src={planet.image} alt={planet.name} className="rounded-lg w-full h-32 object-cover mb-4" />
+                            <img src={planet.image} alt={planet.name} className="w-64 h-64 object-cover mb-2" />
                             <p className="text-gray-600 mt-2">{planet.distance}</p>
                         </div>
                     ))}
