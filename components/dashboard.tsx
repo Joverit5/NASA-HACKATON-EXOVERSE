@@ -1,20 +1,45 @@
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Trophy } from 'lucide-react'
 
-export function Dashboard() {
-  // En una aplicación real, obtendrías estos datos de una API o base de datos
-  const achievements = [
-    { name: "Descubridor de Supertierras", unlocked: true },
-    { name: "Maestro de Atmósferas", unlocked: true },
-    { name: "ExoQuest Master", unlocked: false },
-  ]
+type Achievement = {
+  name: string
+  unlocked: boolean
+}
 
-  // Calcula el progreso basado en los logros desbloqueados
+export function Dashboard() {
+  const [achievements, setAchievements] = useState<Achievement[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    fetchAchievements()
+  }, [])
+
+  const fetchAchievements = async () => {
+    try {
+      const response = await fetch('/api/achievements')
+      if (!response.ok) {
+        throw new Error('Failed to fetch achievements')
+      }
+      const data = await response.json()
+      setAchievements(data)
+    } catch (error) {
+      console.error('Error fetching achievements:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Calculate progress based on unlocked achievements
   const unlockedAchievements = achievements.filter(a => a.unlocked).length
   const totalAchievements = achievements.length
   const progressPercentage = (unlockedAchievements / totalAchievements) * 100
+
+  if (isLoading) {
+    return <div>Loading achievements...</div>
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

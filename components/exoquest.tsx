@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -21,8 +22,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useRouter } from "next/navigation";
-import CoverParticles from "@/components/ui/star_particles";
+import CoverParticles from  "@/components/ui/star_particles";
 
 interface Question {
   id: string;
@@ -60,7 +60,7 @@ export default function ExoQuest() {
       const data = await response.json();
       setQuestions(data);
     } catch (err) {
-      setError("An error ocurred when loading questions. Please try again.");
+      setError("An error occurred when loading questions. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -84,22 +84,25 @@ export default function ExoQuest() {
       setGameOver(true);
       setIsVictory(score >= 6);
       if (score >= 6) {
-        updateAchievements();
+        updateAchievement();
       }
     }
   };
 
-  const updateAchievements = async () => {
+  const updateAchievement = async () => {
     try {
-      await fetch("/api/update-achievements", {
+      const response = await fetch("/api/achievements", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ achievement: "ExoQuest Master" }),
+        body: JSON.stringify({ name: "ExoQuest Master" }),
       });
+      if (!response.ok) {
+        throw new Error('Failed to update achievement');
+      }
     } catch (error) {
-      console.error("Error updating achievements:", error);
+      console.error("Error updating achievement:", error);
     }
   };
 
@@ -174,19 +177,18 @@ export default function ExoQuest() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <CoverParticles />
-
+        <CoverParticles/>
         <Card className="w-full max-w-md glassmorphism">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center text-white">
-              {isVictory ? "¡Congratulations!" : "The end"}
+              {isVictory ? "¡Congratulations!" : "Game Over"}
             </CardTitle>
           </CardHeader>
           <CardContent className="text-center">
             <p className="text-xl mb-4 text-white">
               {isVictory
                 ? "You've won! You've got 6 or more answers correct."
-                : `You got ${score}/10 correct answers.`}
+                : `You got ${score} out of ${questions.length} correct answers.`}
             </p>
             {isVictory && (
               <motion.div
@@ -196,7 +198,7 @@ export default function ExoQuest() {
               >
                 <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
                 <p className="text-lg font-semibold mb-2 text-white">
-                  ¡Nueva insignia desbloqueada!
+                  New badge unlocked!
                 </p>
                 <Badge
                   variant="secondary"
@@ -212,7 +214,7 @@ export default function ExoQuest() {
               onClick={handleRetry}
               className="flex items-center bg-indigo-600/30 text-white hover:bg-indigo-600/50"
             >
-              <RefreshCw className="mr-2 h-4 w-4" /> Intentar de nuevo
+              <RefreshCw className="mr-2 h-4 w-4" /> Try Again
             </Button>
             <Button
               onClick={() => router.push("/")}
@@ -237,7 +239,7 @@ export default function ExoQuest() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <CoverParticles />
+      <CoverParticles/>
       <div className="absolute inset-0 bg-gradient-to-br from-black to-purple-500/20" />
       <Card className="w-full max-w-2xl glassmorphism relative z-10">
         <CardHeader>
@@ -291,14 +293,14 @@ export default function ExoQuest() {
           </div>
           <div className="flex justify-between w-full">
             <Badge variant="outline" className="border-white/30 text-white">
-              Pregunta {currentQuestionIndex + 1} de {questions.length}
+              Question {currentQuestionIndex + 1} of {questions.length}
             </Badge>
             <Badge
               variant="outline"
               className="flex items-center gap-1 border-white/30 text-white"
             >
               <Star className="w-4 w-4" />
-              Puntuación: {score}
+              Score: {score}
             </Badge>
             <Badge variant="outline" className="border-white/30 text-white">
               {currentQuestion.difficulty}
@@ -311,10 +313,10 @@ export default function ExoQuest() {
             >
               {currentQuestionIndex < questions.length - 1 ? (
                 <>
-                  Siguiente <ChevronRight className="ml-2 h-4 w-4" />
+                  Next <ChevronRight className="ml-2 h-4 w-4" />
                 </>
               ) : (
-                "Show results"
+                "Show Results"
               )}
             </Button>
           )}
