@@ -1,4 +1,8 @@
-import React from 'react'
+"use client"
+
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -6,11 +10,27 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Orbit, Brain, BarChart3, Trophy, User } from 'lucide-react'
 
-export default function Component() {
+export default function ExoPlanetPlatform() {
+  const [isRedirecting, setIsRedirecting] = useState(false)
+  const router = useRouter()
+
+  const handleExoQuestRedirect = () => {
+    setIsRedirecting(true)
+    setTimeout(() => {
+      router.push('/exoquest')
+    }, 500) // Delay to allow for exit animation
+  }
+  
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-indigo-900 to-purple-900 text-white">
+    <motion.div 
+      className="flex flex-col h-screen bg-gradient-to-br from-indigo-900 to-purple-900 text-white"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <header className="p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">ExoVerse Explorer</h1>
+        <h1 className="text-2xl font-bold">ExoPlanet Explorer</h1>
         <Button variant="outline" className="flex items-center gap-2">
           <User className="h-4 w-4" />
           Mi Perfil
@@ -22,7 +42,7 @@ export default function Component() {
           <TabsList className="grid w-full grid-cols-4 mb-4">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="exoquest">ExoQuest</TabsTrigger>
-            <TabsTrigger value="creator">ExoVerse Creator</TabsTrigger>
+            <TabsTrigger value="creator">Exoplanet Creator</TabsTrigger>
             <TabsTrigger value="exoviz">ExoViz</TabsTrigger>
           </TabsList>
           
@@ -65,7 +85,7 @@ export default function Component() {
                 <CardContent>
                   <ul className="space-y-2">
                     <li>Completaste 5 preguntas en ExoQuest</li>
-                    <li>Creaste un nuevo ExoVersea: "Zephyria"</li>
+                    <li>Creaste un nuevo exoplaneta: "Zephyria"</li>
                     <li>Analizaste datos de TRAPPIST-1 en ExoViz</li>
                   </ul>
                 </CardContent>
@@ -80,22 +100,14 @@ export default function Component() {
                   <Brain className="h-6 w-6" />
                   ExoQuest
                 </CardTitle>
-                <CardDescription>Desafía tu conocimiento sobre ExoVerseas</CardDescription>
+                <CardDescription>Desafía tu conocimiento sobre exoplanetas</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <p>Pregunta actual: ¿Cuál es el ExoVersea más cercano a la Tierra?</p>
-                  <div className="grid grid-cols-2 gap-4">
-                    <Button>Próxima Centauri b</Button>
-                    <Button>TRAPPIST-1d</Button>
-                    <Button>Kepler-186f</Button>
-                    <Button>HD 219134 b</Button>
-                  </div>
-                </div>
+                <p className="mb-4">¿Listo para poner a prueba tus conocimientos sobre exoplanetas? ExoQuest te desafía con preguntas fascinantes sobre estos mundos distantes.</p>
+                <Button onClick={handleExoQuestRedirect} className="w-full" disabled={isRedirecting}>
+                  {isRedirecting ? 'Cargando...' : 'Iniciar ExoQuest'}
+                </Button>
               </CardContent>
-              <CardFooter>
-                <Badge variant="secondary">Dificultad: Intermedia</Badge>
-              </CardFooter>
             </Card>
           </TabsContent>
           
@@ -104,9 +116,9 @@ export default function Component() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Orbit className="h-6 w-6" />
-                  ExoVerse Creator
+                  Exoplanet Creator
                 </CardTitle>
-                <CardDescription>Diseña tu propio ExoVersea</CardDescription>
+                <CardDescription>Diseña tu propio exoplaneta</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
@@ -137,7 +149,7 @@ export default function Component() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full">Generar ExoVersea</Button>
+                <Button className="w-full">Generar Exoplaneta</Button>
               </CardFooter>
             </Card>
           </TabsContent>
@@ -149,11 +161,11 @@ export default function Component() {
                   <BarChart3 className="h-6 w-6" />
                   ExoViz
                 </CardTitle>
-                <CardDescription>Visualiza y analiza datos de ExoVerseas</CardDescription>
+                <CardDescription>Visualiza y analiza datos de exoplanetas</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="aspect-video bg-gray-800 rounded-lg flex items-center justify-center">
-                  [Gráfico interactivo de datos de ExoVerseas]
+                  [Gráfico interactivo de datos de exoplanetas]
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between">
@@ -166,8 +178,8 @@ export default function Component() {
       </main>
       
       <footer className="p-4 text-center">
-        <p>&copy; 2024 ExoVerse Explorer. Todos los derechos reservados.</p>
+        <p>&copy; 2024 ExoPlanet Explorer. Todos los derechos reservados.</p>
       </footer>
-    </div>
+    </motion.div>
   )
 }
