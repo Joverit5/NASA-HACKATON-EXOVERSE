@@ -1,5 +1,4 @@
 "use client"
-
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
@@ -9,7 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Loader2, Star, AlertTriangle, ChevronRight, Trophy, RefreshCw } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useRouter } from 'next/navigation'
-
+import CoverParticles from "@/components/ui/star_particles";
 interface Question {
   id: string
   question: string
@@ -20,6 +19,7 @@ interface Question {
 }
 
 export default function ExoQuest() {
+
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [score, setScore] = useState(0)
@@ -194,14 +194,16 @@ export default function ExoQuest() {
   const currentQuestion = questions[currentQuestionIndex]
 
   return (
+    
     <motion.div
-      className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex items-center justify-center p-4"
+      className="min-h-screen bg-black bg-[url('/stars.png')] bg-repeat flex items-center justify-center p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card className="w-full max-w-2xl">
+      <CoverParticles/>
+      <Card className="w-full max-w-2xl bg-opacity-80 bg-indigo-900 text-white">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">ExoQuest</CardTitle>
         </CardHeader>
@@ -232,7 +234,7 @@ export default function ExoQuest() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="mt-4 p-4 bg-secondary rounded-lg"
+                  className="mt-4 p-4 bg-indigo-800 rounded-lg"
                 >
                   <h3 className="font-bold mb-2">Explicación:</h3>
                   <p>{currentQuestion.explanation}</p>
@@ -246,17 +248,17 @@ export default function ExoQuest() {
             <Progress value={progressPercentage} className="w-full" />
           </div>
           <div className="flex justify-between w-full">
-            <Badge variant="outline">
+            <Badge variant="outline" className="border-white text-white">
               Pregunta {currentQuestionIndex + 1} de {questions.length}
             </Badge>
-            <Badge variant="outline" className="flex items-center gap-1">
+            <Badge variant="outline" className="flex items-center gap-1 border-white text-white">
               <Star className="w-4 w-4" />
               Puntuación: {score}
             </Badge>
-            <Badge variant="outline">{currentQuestion.difficulty}</Badge>
+            <Badge variant="outline" className="border-white text-white">{currentQuestion.difficulty}</Badge>
           </div>
           {isAnswered && (
-            <Button onClick={handleNext} className="mt-4 w-full">
+            <Button onClick={handleNext} className="mt-4 w-full bg-indigo-700 text-white hover:bg-indigo-600">
               {currentQuestionIndex < questions.length - 1 ? (
                 <>
                   Siguiente <ChevronRight className="ml-2 h-4 w-4" />
