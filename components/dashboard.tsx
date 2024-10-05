@@ -11,15 +11,22 @@ export function Dashboard() {
     { name: "ExoQuest Master", unlocked: false },
   ]
 
+  // Calcula el progreso basado en los logros desbloqueados
+  const unlockedAchievements = achievements.filter(a => a.unlocked).length
+  const totalAchievements = achievements.length
+  const progressPercentage = (unlockedAchievements / totalAchievements) * 100
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <Card>
         <CardHeader>
           <CardTitle>Progreso General</CardTitle>
         </CardHeader>
         <CardContent>
-          <Progress value={33} className="w-full" />
-          <p className="mt-2">Nivel 3 - Explorador Novato</p>
+          <Progress value={progressPercentage} className="w-full" />
+          <p className="mt-2">
+            {unlockedAchievements} de {totalAchievements} logros completados
+          </p>
         </CardContent>
       </Card>
       
@@ -40,19 +47,6 @@ export function Dashboard() {
                 )}
               </li>
             ))}
-          </ul>
-        </CardContent>
-      </Card>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Actividad Reciente</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-2">
-            <li>Completaste ExoQuest con éxito</li>
-            <li>Creaste un nuevo exoplaneta: "Zephyria"</li>
-            <li>Analizaste datos de TRAPPIST-1 en ExoViz</li>
           </ul>
         </CardContent>
       </Card>

@@ -1,75 +1,89 @@
 "use client"
+import Image from "next/image";
+import Navbar from "@/components/ui/navBar";
+import exoplanetImage from '/app/images/exoplanet.jpg'; 
+import starsImage from '/app/images/stars.jpg';
+import Lenis from "lenis";
+import { useEffect } from "react";
 
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Orbit, Brain, BarChart3, Trophy, User } from 'lucide-react'
-import { Dashboard } from '@/components/dashboard'
-export default function ExoPlanetPlatform() {
-  const [isRedirecting, setIsRedirecting] = useState(false)
-  const router = useRouter()
+export default function Home() {
+    useEffect(() => {
+        const lenis = new Lenis();
+    
+        lenis.on("scroll", e => {
+          console.log(e);
+        });
+    
+        function raf(time:any) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+    
+        requestAnimationFrame(raf);
+      }, []);    
+    return (
+        <div>
+            <Navbar />  {/* Navbar stays at the top */}
+            <div 
+                        className="absolute inset-0"
+                        style={{
+                            backgroundImage: `url(${starsImage.src})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'repeat',
+                            opacity: 0.5, 
+                            zIndex: -1, 
+                        }}
+                    ></div>
+            {/* Main container for text and image side-by-side */}
+            <div className="flex items-center justify-between p-14 max-w-7xl mx-auto min-h-screen">
+                
+                {/* Text on the left */}
+                <div className="w-1/2 pr-8">
+                    <h1 className="text-4xl font-bold mb-4">Exoplanets</h1>
+                    <p className="text-lg" >
+                        Exoplanets are planets that orbit stars outside of our solar system.
+                        These alien worlds come in various sizes, compositions, and conditions. 
+                        Some of them might even host life! The discovery of exoplanets has opened up 
+                        a new field in astronomy, revealing thousands of these distant worlds and 
+                        expanding our understanding of the universe.
+                    </p>
+                </div>
+                
+                {/* Image on the right */}
+                <div className="w-1/2">
+                    <Image 
+                        src={exoplanetImage} 
+                        alt="Exoplanet" 
+                        width={700} 
+                        height={700} 
+                        className="object-contain"
+                    />
+                </div>
 
-  const handleExoQuestRedirect = () => {
-    setIsRedirecting(true)
-    setTimeout(() => {
-      router.push('/exoquest')
-    }, 500) // Delay to allow for exit animation
-  }
+                
+            </div>
 
-  return (
-    <motion.div 
-      className="flex flex-col h-screen bg-gradient-to-br from-indigo-900 to-purple-900 text-white"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <header className="p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">ExoQuest</h1>
-        <Button variant="outline" className="flex items-center gap-2">
-          <User className="h-4 w-4" />
-          Mi Perfil
-        </Button>
-      </header>
-      
-      <main className="flex-grow p-4 overflow-auto">
-        <Tabs defaultValue="exoquest" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-4">
-            <TabsTrigger value="exoquest">ExoQuest</TabsTrigger>
-            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-          </TabsList>
-          
-          
-          <TabsContent value="dashboard">
-            <Dashboard />
-          </TabsContent>
-          
-          <TabsContent value="exoquest">
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 ">
-                  <Brain className="h-6 w-6" />
-                  ExoQuest
-                </CardTitle>
-                <CardDescription>Desafía tu conocimiento sobre exoplanetas</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4">¿Listo para poner a prueba tus conocimientos sobre exoplanetas? ExoQuest te desafía con preguntas fascinantes sobre estos mundos distantes.</p>
-                <Button onClick={handleExoQuestRedirect} className="w-full" disabled={isRedirecting}>
-                  {isRedirecting ? 'Cargando...' : 'Iniciar ExoQuest'}
-                </Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </main>
-      
-      <footer className="p-4 text-center">
-        <p>&copy; 2024 ExoPlanet Explorer. Todos los derechos reservados.</p>
-      </footer>
-    </motion.div>
-  )
+            <div className="p-14 max-w-7xl mx-auto">
+                <h2 className="text-3xl font-bold mb-4">A Bit of History...</h2>
+                <p className="text-lg">
+                    The quest to discover exoplanets dates back to the early 1990s when astronomers began to 
+                    detect planets orbiting stars beyond our solar system. The first confirmed discovery came 
+                    in 1992, when two planets were found orbiting a pulsar—remnants of a supernova explosion. 
+                    But it wasn't until 1995 that the first exoplanet orbiting a Sun-like star was detected. 
+                    This breakthrough came with the discovery of 51 Pegasi b, a massive gas giant similar to 
+                    Jupiter but much closer to its parent star.
+                </p>
+                <p className="text-lg mt-4">
+                    Since then, advancements in technology, especially space-based observatories like Kepler 
+                    and TESS, have revolutionized the search for exoplanets. These missions have revealed that 
+                    exoplanets are not rare at all, but rather common throughout the galaxy. Scientists now 
+                    estimate that there are more planets than stars in the Milky Way, with billions of them 
+                    potentially habitable. This astonishing discovery has profound implications for the 
+                    possibility of life elsewhere in the universe and continues to inspire the exploration 
+                    of these distant worlds.
+                </p>
+            </div>
+        </div>
+    );
 }
