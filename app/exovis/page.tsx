@@ -22,7 +22,7 @@ export default function Exovis() {
           <div className="bg-gradient-to-br from-gray}-500 to-black-600">
             <Navbar /> {/* Navbar stays at the top */}
             <div className="p-14 max-w-7xl mx-auto">
-                <h1 className="text-4xl font-bold mb-8 text-center">Exoplanets Timeline</h1>
+                <h1 className="text-4xl font-bold mb-8 text-center">Catalog of some exoplanets</h1>
                 
                 <div className="flex flex-wrap justify-center relative">
                     {exoplanets.map((planet, index) => (

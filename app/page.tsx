@@ -8,11 +8,7 @@ import { useEffect } from "react";
 
 export default function Home() {
     useEffect(() => {
-        const lenis = new Lenis({
-            duration: 1.2, // Duración del scroll
-            easing: (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t, // Easing personalizado
-            smoothWheel: true, // Habilitar smooth wheel
-        });
+        const lenis = new Lenis();
     
         lenis.on("scroll", e => {
           console.log(e);
@@ -24,10 +20,6 @@ export default function Home() {
         }
     
         requestAnimationFrame(raf);
-
-        return () => {
-            lenis.destroy(); // Limpiar al desmontar
-        };
       }, []);    
     return (
         <div>
