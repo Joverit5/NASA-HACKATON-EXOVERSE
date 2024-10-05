@@ -1,9 +1,34 @@
+"use client"
 import Image from "next/image";
 import Navbar from "@/components/ui/navBar";
 import exoplanetImage from '/app/images/exoplanet.jpg'; 
 import starsImage from '/app/images/stars.jpg';
+import Lenis from "lenis";
+import { useEffect } from "react";
 
 export default function Home() {
+    useEffect(() => {
+        const lenis = new Lenis({
+            duration: 1.2, // Duración del scroll
+            easing: (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t, // Easing personalizado
+            smoothWheel: true, // Habilitar smooth wheel
+        });
+    
+        lenis.on("scroll", e => {
+          console.log(e);
+        });
+    
+        function raf(time:any) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+    
+        requestAnimationFrame(raf);
+
+        return () => {
+            lenis.destroy(); // Limpiar al desmontar
+        };
+      }, []);    
     return (
         <div>
             <Navbar />  {/* Navbar stays at the top */}
@@ -14,8 +39,8 @@ export default function Home() {
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             backgroundRepeat: 'repeat',
-                            opacity: 0.5, // Ajusta la opacidad según lo desees
-                            zIndex: -1, // Asegura que las estrellas estén detrás de la imagen del exoplaneta
+                            opacity: 0.5, 
+                            zIndex: -1, 
                         }}
                     ></div>
             {/* Main container for text and image side-by-side */}

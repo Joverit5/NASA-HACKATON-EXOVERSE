@@ -19,6 +19,7 @@ export default function Exovis() {
 
     return (
         <div>
+          <div className="bg-gradient-to-br from-gray}-500 to-black-600">
             <Navbar /> {/* Navbar stays at the top */}
             <div className="p-14 max-w-7xl mx-auto">
                 <h1 className="text-4xl font-bold mb-8 text-center">Exoplanets Timeline</h1>
@@ -35,6 +36,8 @@ export default function Exovis() {
                     ))}
                 </div>
             </div>
+          </div>
         </div>
+
     );
 }
