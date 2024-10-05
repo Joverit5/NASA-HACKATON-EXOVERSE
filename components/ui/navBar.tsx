@@ -10,22 +10,22 @@ export default function Navbar() {
         </Link>
         <ul className="flex space-x-6">
           <li>
-            <Link href="/info" className="hover:text-blue-400 transition-colors">
+            <Link href="/info" className="text-xl hover:text-blue-400 transition-colors">
               Info
             </Link>
           </li>
           <li>
-            <Link href="/game" className="hover:text-blue-400 transition-colors">
+            <Link href="/game" className="text-xl hover:text-blue-400 transition-colors">
               Game
             </Link>
           </li>
           <li>
-            <Link href="/planet-creator" className="hover:text-blue-400 transition-colors">
+            <Link href="/exocreator" className="text-xl hover:text-blue-400 transition-colors">
               Planet Creator
             </Link>
           </li>
           <li>
-            <Link href="/exovis" className="hover:text-blue-400 transition-colors">
+            <Link href="/exovis" className="text-xl hover:text-blue-400 transition-colors">
               Exovis
             </Link>
           </li>
