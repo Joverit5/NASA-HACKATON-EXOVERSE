@@ -4,6 +4,7 @@ import Navbar from "@/components/ui/navBar";
 import exoplanetImage from '/app/images/exoplanet.jpg'; 
 import starsImage from '/app/images/stars.jpg';
 import Lenis from "lenis";
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -21,7 +22,12 @@ export default function Home() {
     
         requestAnimationFrame(raf);
       }, []);    
-    return (
+    return (    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
         <div>
             <Navbar />  {/* Navbar stays at the top */}
             <div 
@@ -85,5 +91,6 @@ export default function Home() {
                 </p>
             </div>
         </div>
+        </motion.div>
     );
 }

@@ -32,7 +32,13 @@ interface Question {
   explanation: string;
   difficulty: string;
 }
-
+function shuffleArray(array:any) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 export default function ExoQuest() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -58,9 +64,13 @@ export default function ExoQuest() {
         throw new Error("Failed to fetch questions");
       }
       const data = await response.json();
-      setQuestions(data);
+      const randomizedQuestions = data.map((question:any) => ({
+        ...question,
+        options: shuffleArray([...question.options]),
+      }));
+      setQuestions(randomizedQuestions);
     } catch (err) {
-      setError("An error occurred when loading questions. Please try again.");
+      setError("An error ocurred when loading questions. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -217,7 +227,7 @@ export default function ExoQuest() {
               <RefreshCw className="mr-2 h-4 w-4" /> Try Again
             </Button>
             <Button
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/exoquest/menu")}
               variant="outline"
               className="text-white border-white/30 hover:bg-white/10"
             >

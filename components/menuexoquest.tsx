@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button"
 import { Brain, BarChart3, Trophy, User } from 'lucide-react'
 import { Dashboard } from '@/components/dashboard'
+import Link from "next/link"
 export default function ExoPlanetPlatform() {
   const [isRedirecting, setIsRedirecting] = useState(false)
   const router = useRouter()
@@ -28,11 +29,9 @@ export default function ExoPlanetPlatform() {
       transition={{ duration: 0.5 }}
     >
       <header className="p-4 flex justify-between items-center">
+        <Link href = "/">
         <h1 className="text-2xl font-bold">ExoQuest</h1>
-        <Button variant="outline" className="flex items-center gap-2">
-          <User className="h-4 w-4" />
-          Profile
-        </Button>
+        </Link>
       </header>
       
       <main className="flex-grow p-4 overflow-auto">
