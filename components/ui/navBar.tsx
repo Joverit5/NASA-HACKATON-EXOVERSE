@@ -15,8 +15,8 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="/game" className="text-xl hover:text-blue-400 transition-colors">
-              Game
+            <Link href="/exoquest" className="text-xl hover:text-blue-400 transition-colors">
+              Exoquest
             </Link>
           </li>
           <li>
