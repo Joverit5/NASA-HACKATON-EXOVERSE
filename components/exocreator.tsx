@@ -74,6 +74,8 @@ const createProceduralTexture = (type: string, color: string) => {
 
 const Satellite: React.FC<{ radius: number, orbitRadius: number, speed: number }> = ({ radius, orbitRadius, speed }) => {
   const meshRef = useRef<THREE.Mesh>(null!)
+  const color = useMemo(() => new THREE.Color(Math.random(), Math.random(), Math.random()), [])
+  const texture = useMemo(() => createProceduralTexture(['rock', 'water', 'gas'][Math.floor(Math.random() * 3)], color.getHexString()), [color])
 
   useFrame(({ clock }) => {
     const angle = clock.getElapsedTime() * speed
@@ -85,7 +87,7 @@ const Satellite: React.FC<{ radius: number, orbitRadius: number, speed: number }
   return (
     <mesh ref={meshRef}>
       <sphereGeometry args={[radius, 32, 32]} />
-      <meshStandardMaterial color="#888" roughness={0.5} metalness={0.5} />
+      <meshStandardMaterial map={texture} color={color} roughness={0.5} metalness={0.5} />
     </mesh>
   )
 }
@@ -99,6 +101,14 @@ const Planet: React.FC<PlanetProps> = ({ radius, color, planetType, satelliteCou
       meshRef.current.rotation.y += 0.005
     }
   })
+
+  const ringDistances = useMemo(() => {
+    let distances = [radius + 1.8]
+    for (let i = 1; i < ringCount; i++) {
+      distances.push(distances[i-1] + Math.random() * 0.5 + 0.2)
+    }
+    return distances
+  }, [radius, ringCount])
 
   return (
     <group>
@@ -121,9 +131,9 @@ const Planet: React.FC<PlanetProps> = ({ radius, color, planetType, satelliteCou
           speed={0.5 + i * 0.2}
         />
       ))}
-      {Array.from({ length: ringCount }, (_, i) => (
+      {ringDistances.map((distance, i) => (
         <mesh rotation={[-Math.PI / 2, 0, 0]} key={i}>
-          <ringGeometry args={[radius + 1.8 + i * 0.1, radius + 2.2 + i * 0.1, 64]} />
+          <ringGeometry args={[distance, distance + 0.2, 64]} />
           <meshStandardMaterial color="#aaa" side={THREE.DoubleSide} transparent opacity={0.7} />
         </mesh>
       ))}
@@ -131,21 +141,30 @@ const Planet: React.FC<PlanetProps> = ({ radius, color, planetType, satelliteCou
   )
 }
 
-const Star: React.FC<{ color: THREE.Color, intensity: number }> = ({ color, intensity }) => {
+const Star: React.FC<{ color: THREE.Color, intensity: number, distance: number, size: number }> = ({ color, intensity, distance, size }) => {
   const { scene } = useThree()
   const lightRef = useRef<THREE.PointLight>(null!)
+  const glowRef = useRef<THREE.Mesh>(null!)
 
-  useFrame(() => {
-    if (lightRef.current) {
-      lightRef.current.position.set(50, 30, -100)
+  useFrame(({ clock }) => {
+    if (lightRef.current && glowRef.current) {
+      const time = clock.getElapsedTime()
+      const glowIntensity = Math.sin(time * 2) * 0.1 + 0.9
+      lightRef.current.position.set(distance, 30, -100)
+      glowRef.current.position.set(distance, 30, -100)
+      glowRef.current.material.opacity = glowIntensity
     }
   })
 
   return (
     <group>
-      <mesh position={[50, 30, -100]}>
-        <sphereGeometry args={[5, 32, 32]} />
+      <mesh position={[distance, 30, -100]}>
+        <sphereGeometry args={[size, 32, 32]} />
         <meshBasicMaterial color={color} />
+      </mesh>
+      <mesh ref={glowRef}>
+        <sphereGeometry args={[size * 1.2, 32, 32]} />
+        <meshBasicMaterial color={color} transparent opacity={0.5} />
       </mesh>
       <pointLight ref={lightRef} color={color} intensity={intensity} distance={1000} decay={2} />
     </group>
@@ -174,6 +193,7 @@ export default function ExoCreator() {
   const [ringCount, setRingCount] = useState(0)
   const [starType, setStarType] = useState<'redDwarf' | 'yellowDwarf' | 'giant'>('yellowDwarf')
   const [textureType, setTextureType] = useState('water')
+  const [starDistance, setStarDistance] = useState(50)
 
   const starColor = useMemo(() => {
     switch (starType) {
@@ -201,11 +221,18 @@ export default function ExoCreator() {
     }
   }, [starType])
 
-  const textures = [
-    { name: 'Water', value: 'water' },
-    { name: 'Rock', value: 'rock' },
-    { name: 'Gas', value: 'gas' },
-  ]
+  const starSize = useMemo(() => {
+    switch (starType) {
+      case 'redDwarf':
+        return 3
+      case 'yellowDwarf':
+        return 5
+      case 'giant':
+        return 15
+      default:
+        return 5
+    }
+  }, [starType])
 
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-900 text-white p-8">
@@ -222,7 +249,7 @@ export default function ExoCreator() {
               ringCount={ringCount} 
               textureType={textureType}
             />
-            <Star color={starColor} intensity={starIntensity} />
+            <Star color={starColor} intensity={starIntensity} distance={starDistance} size={starSize} />
           </Suspense>
           <OrbitControls enableZoom={true} maxDistance={20} minDistance={5} />
           <Stars radius={300} depth={100} count={5000} factor={4} saturation={0} fade speed={1} />
@@ -310,6 +337,17 @@ export default function ExoCreator() {
                 <SelectItem value="giant">Giant</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <div>
+            <Label htmlFor="starDistance">Star Distance</Label>
+            <Slider
+              id="starDistance"
+              min={20}
+              max={100}
+              step={1}
+              value={[starDistance]}
+              onValueChange={(value) => setStarDistance(value[0])}
+            />
           </div>
         </div>
         <Button className="w-full mt-4" onClick={() => alert("Planet created!")}>
