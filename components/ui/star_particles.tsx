@@ -38,7 +38,7 @@ const CoverParticles = () => {
                   bubble: {
                     distance: 200,
                     duration: 2,
-                    opacity: 0,
+                    opacity: 1,
                     size: 0,
                     speed: 3
                   },
@@ -61,7 +61,7 @@ const CoverParticles = () => {
                     enable: true,
                     speed: 5
                   },
-                  value: { min: 0.3, max: 0.6 }
+                  value: { min: 0.3, max: 1 }
                 },
                 shape: {
                   type: "circle"

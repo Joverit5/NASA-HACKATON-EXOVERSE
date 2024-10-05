@@ -218,7 +218,7 @@
         {
           "id": "28",
           "question": "¿Qué se requiere para que un planeta se considere una 'supertierra'?",
-          "options": ["Ser más masivo que la Tierra pero menos que Neptuno", "Tener una atmósfera densa", "Tener agua líquida", "Estar cerca de una estrella tipo M"],
+          "options": ["Más masivo que la Tierra y menos que Neptuno", "Tener una atmósfera densa", "Tener agua líquida", "Estar cerca de una estrella tipo M"],
           "correctAnswer": "Ser más masivo que la Tierra pero menos que Neptuno",
           "explanation": "Una supertierra es un planeta con una masa mayor que la de la Tierra pero menor que la de Urano o Neptuno.",
           "difficulty": "Intermedio"
@@ -351,14 +351,7 @@
             "explanation": "La astrometría mide los pequeños movimientos en la posición de una estrella causados por la atracción gravitacional de un exoplaneta.",
             "difficulty": "Difícil"
           },
-          {
-            "id": "45",
-            "question": "¿Qué es una 'zona habitable circumbinaria'?",
-            "options": ["Región alrededor de un sistema binario de estrellas donde podría existir agua líquida", "Un planeta orbitando dos estrellas fuera de la zona habitable", "Área alrededor de un agujero negro donde el tiempo se detiene", "Región estéril alrededor de dos estrellas enanas"],
-            "correctAnswer": "Región alrededor de un sistema binario de estrellas donde podría existir agua líquida",
-            "explanation": "La zona habitable circumbinaria es la región alrededor de un sistema binario de estrellas donde podría existir agua líquida, haciendo posible la vida.",
-            "difficulty": "Difícil"
-          },
+          
           {
             "id": "46",
             "question": "¿Cuál es la importancia de encontrar metano en la atmósfera de un exoplaneta?",

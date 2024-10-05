@@ -6,8 +6,6 @@ import { motion } from 'framer-motion'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
-import { Badge } from "@/components/ui/badge"
 import { Orbit, Brain, BarChart3, Trophy, User } from 'lucide-react'
 import { Dashboard } from '@/components/dashboard'
 export default function ExoPlanetPlatform() {
@@ -30,7 +28,7 @@ export default function ExoPlanetPlatform() {
       transition={{ duration: 0.5 }}
     >
       <header className="p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">ExoPlanet Explorer</h1>
+        <h1 className="text-2xl font-bold">ExoQuest</h1>
         <Button variant="outline" className="flex items-center gap-2">
           <User className="h-4 w-4" />
           Mi Perfil
@@ -38,12 +36,10 @@ export default function ExoPlanetPlatform() {
       </header>
       
       <main className="flex-grow p-4 overflow-auto">
-        <Tabs defaultValue="dashboard" className="w-full">
+        <Tabs defaultValue="exoquest" className="w-full">
           <TabsList className="grid w-full grid-cols-4 mb-4">
-            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="exoquest">ExoQuest</TabsTrigger>
-            <TabsTrigger value="creator">Exoplanet Creator</TabsTrigger>
-            <TabsTrigger value="exoviz">ExoViz</TabsTrigger>
+            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           </TabsList>
           
           
@@ -54,7 +50,7 @@ export default function ExoPlanetPlatform() {
           <TabsContent value="exoquest">
             <Card className="w-full">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 ">
                   <Brain className="h-6 w-6" />
                   ExoQuest
                 </CardTitle>
@@ -66,70 +62,6 @@ export default function ExoPlanetPlatform() {
                   {isRedirecting ? 'Cargando...' : 'Iniciar ExoQuest'}
                 </Button>
               </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="creator">
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Orbit className="h-6 w-6" />
-                  Exoplanet Creator
-                </CardTitle>
-                <CardDescription>Diseña tu propio exoplaneta</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block mb-2">Tamaño del planeta</label>
-                    <input type="range" min="0" max="100" className="w-full" />
-                  </div>
-                  <div>
-                    <label className="block mb-2">Distancia a la estrella</label>
-                    <input type="range" min="0" max="100" className="w-full" />
-                  </div>
-                  <div>
-                    <label className="block mb-2">Composición atmosférica</label>
-                    <select className="w-full p-2 rounded bg-gray-700">
-                      <option>Rica en hidrógeno</option>
-                      <option>Similar a la Tierra</option>
-                      <option>Sin atmósfera</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block mb-2">Tipo de estrella</label>
-                    <select className="w-full p-2 rounded bg-gray-700">
-                      <option>Enana roja</option>
-                      <option>Similar al Sol</option>
-                      <option>Gigante azul</option>
-                    </select>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button className="w-full">Generar Exoplaneta</Button>
-              </CardFooter>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="exoviz">
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-6 w-6" />
-                  ExoViz
-                </CardTitle>
-                <CardDescription>Visualiza y analiza datos de exoplanetas</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="aspect-video bg-gray-800 rounded-lg flex items-center justify-center">
-                  [Gráfico interactivo de datos de exoplanetas]
-                </div>
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <Button variant="outline">Cambiar Visualización</Button>
-                <Button variant="outline">Exportar Datos</Button>
-              </CardFooter>
             </Card>
           </TabsContent>
         </Tabs>
