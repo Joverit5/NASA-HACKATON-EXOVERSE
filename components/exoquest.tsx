@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loader2, Star, AlertTriangle, ChevronRight } from 'lucide-react'
+import { Loader2, Star, AlertTriangle, ChevronRight, Trophy, RefreshCw } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { useRouter } from 'next/navigation'
 
 interface Question {
   id: string
@@ -26,6 +27,9 @@ export default function ExoQuest() {
   const [isAnswered, setIsAnswered] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [gameOver, setGameOver] = useState(false)
+  const [isVictory, setIsVictory] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     fetchQuestions()
@@ -35,34 +39,12 @@ export default function ExoQuest() {
     setIsLoading(true)
     setError(null)
     try {
-      // Simular la obtención de preguntas de una API
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      setQuestions([
-        {
-          id: "1",
-          question: "¿Cuál es el exoplaneta más cercano a la Tierra?",
-          options: ["Próxima Centauri b", "TRAPPIST-1d", "Kepler-186f", "HD 219134 b"],
-          correctAnswer: "Próxima Centauri b",
-          explanation: "Próxima Centauri b es el exoplaneta confirmado más cercano a la Tierra, orbitando la estrella más cercana a nuestro Sol, Próxima Centauri, a solo 4.2 años luz de distancia.",
-          difficulty: "Fácil"
-        },
-        {
-          id: "2",
-          question: "¿Qué método se utiliza más comúnmente para detectar exoplanetas?",
-          options: ["Tránsito", "Velocidad radial", "Microlente gravitacional", "Imagen directa"],
-          correctAnswer: "Tránsito",
-          explanation: "El método de tránsito es el más común para detectar exoplanetas. Detecta la disminución en el brillo de una estrella cuando un planeta pasa frente a ella desde nuestra perspectiva.",
-          difficulty: "Intermedio"
-        },
-        {
-          id: "3",
-          question: "¿Cuál de estos exoplanetas está en la 'zona habitable' de su estrella?",
-          options: ["WASP-12b", "Kepler-442b", "HD 189733b", "55 Cancri e"],
-          correctAnswer: "Kepler-442b",
-          explanation: "Kepler-442b es un exoplaneta que orbita dentro de la zona habitable de su estrella, lo que significa que podría tener condiciones adecuadas para albergar agua líquida en su superficie.",
-          difficulty: "Difícil"
-        }
-      ])
+      const response = await fetch('/api/questions')
+      if (!response.ok) {
+        throw new Error('Failed to fetch questions')
+      }
+      const data = await response.json()
+      setQuestions(data)
     } catch (err) {
       setError('Error al cargar las preguntas. Por favor, intenta de nuevo.')
     } finally {
@@ -84,7 +66,39 @@ export default function ExoQuest() {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
       setSelectedAnswer("")
       setIsAnswered(false)
+    } else {
+      setGameOver(true)
+      setIsVictory(score >= 6)
+      if (score >= 6) {
+        // Aquí llamaríamos a una función para actualizar los logros y las insignias
+        updateAchievements()
+      }
     }
+  }
+
+  const updateAchievements = async () => {
+    try {
+      await fetch('/api/update-achievements', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ achievement: 'ExoQuest Master' }),
+      })
+    } catch (error) {
+      console.error('Error updating achievements:', error)
+    }
+  }
+
+  const handleRetry = () => {
+    setQuestions([])
+    setCurrentQuestionIndex(0)
+    setScore(0)
+    setSelectedAnswer("")
+    setIsAnswered(false)
+    setGameOver(false)
+    setIsVictory(false)
+    fetchQuestions()
   }
 
   const getButtonStyle = (option: string) => {
@@ -129,10 +143,64 @@ export default function ExoQuest() {
     )
   }
 
+  if (gameOver) {
+    return (
+      <motion.div
+        className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex items-center justify-center p-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold text-center">
+              {isVictory ? '¡Felicidades!' : 'Fin del juego'}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-center">
+            <p className="text-xl mb-4">
+              {isVictory
+                ? '¡Has ganado! Obtuviste 6 o más respuestas correctas.'
+                : `Obtuviste ${score} de 10 respuestas correctas.`}
+            </p>
+            {isVictory && (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+              >
+                <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
+                <p className="text-lg font-semibold mb-2">¡Nueva insignia desbloqueada!</p>
+                <Badge variant="secondary" className="text-lg py-1 px-3">
+                  ExoQuest Master
+                </Badge>
+              </motion.div>
+            )}
+          </CardContent>
+          <CardFooter className="flex justify-center space-x-4">
+            <Button onClick={handleRetry} className="flex items-center">
+              <RefreshCw className="mr-2 h-4 w-4" /> Intentar de nuevo
+            </Button>
+            <Button onClick={() => router.push('/')} variant="outline">
+              Volver al inicio
+            </Button>
+          </CardFooter>
+        </Card>
+      </motion.div>
+    )
+  }
+
   const currentQuestion = questions[currentQuestionIndex]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex items-center justify-center p-4">
+    <motion.div
+      className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex items-center justify-center p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <Card className="w-full max-w-2xl">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">ExoQuest</CardTitle>
@@ -182,18 +250,24 @@ export default function ExoQuest() {
               Pregunta {currentQuestionIndex + 1} de {questions.length}
             </Badge>
             <Badge variant="outline" className="flex items-center gap-1">
-              <Star className="w-4 h-4" />
+              <Star className="w-4 w-4" />
               Puntuación: {score}
             </Badge>
             <Badge variant="outline">{currentQuestion.difficulty}</Badge>
           </div>
           {isAnswered && (
             <Button onClick={handleNext} className="mt-4 w-full">
-              Siguiente <ChevronRight className="ml-2 h-4 w-4" />
+              {currentQuestionIndex < questions.length - 1 ? (
+                <>
+                  Siguiente <ChevronRight className="ml-2 h-4 w-4" />
+                </>
+              ) : (
+                'Ver resultados'
+              )}
             </Button>
           )}
         </CardFooter>
       </Card>
-    </div>
+    </motion.div>
   )
 }

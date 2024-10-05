@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Orbit, Brain, BarChart3, Trophy, User } from 'lucide-react'
-
+import { Dashboard } from '@/components/dashboard'
 export default function ExoPlanetPlatform() {
   const [isRedirecting, setIsRedirecting] = useState(false)
   const router = useRouter()
@@ -20,7 +20,7 @@ export default function ExoPlanetPlatform() {
       router.push('/exoquest')
     }, 500) // Delay to allow for exit animation
   }
-  
+
   return (
     <motion.div 
       className="flex flex-col h-screen bg-gradient-to-br from-indigo-900 to-purple-900 text-white"
@@ -46,51 +46,9 @@ export default function ExoPlanetPlatform() {
             <TabsTrigger value="exoviz">ExoViz</TabsTrigger>
           </TabsList>
           
+          
           <TabsContent value="dashboard">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Progreso General</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Progress value={33} className="w-full" />
-                </CardContent>
-                <CardFooter>
-                  <p>Nivel 3 - Explorador Novato</p>
-                </CardFooter>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Últimos Logros</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2">
-                      <Trophy className="h-4 w-4 text-yellow-400" />
-                      <span>Descubridor de Supertierras</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Trophy className="h-4 w-4 text-yellow-400" />
-                      <span>Maestro de Atmósferas</span>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Actividad Reciente</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    <li>Completaste 5 preguntas en ExoQuest</li>
-                    <li>Creaste un nuevo exoplaneta: "Zephyria"</li>
-                    <li>Analizaste datos de TRAPPIST-1 en ExoViz</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
+            <Dashboard />
           </TabsContent>
           
           <TabsContent value="exoquest">
