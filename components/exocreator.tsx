@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Card, CardContent } from "@/components/ui/card"
 
 interface PlanetProps {
   radius: number
@@ -194,6 +195,7 @@ export default function ExoCreator() {
   const [starType, setStarType] = useState<'redDwarf' | 'yellowDwarf' | 'giant'>('yellowDwarf')
   const [textureType, setTextureType] = useState('water')
   const [starDistance, setStarDistance] = useState(50)
+  const [planetInfo, setPlanetInfo] = useState<string | null>(null)
 
   const starColor = useMemo(() => {
     switch (starType) {
@@ -234,6 +236,22 @@ export default function ExoCreator() {
     }
   }, [starType])
 
+  const generatePlanetInfo = () => {
+    const mass = (Math.random() * 10 + 0.1).toFixed(2)
+    const gravity = (Math.random() * 20 + 1).toFixed(2)
+    const temperature = Math.floor(Math.random() * 1000 - 200)
+    const atmosphere = Math.random() > 0.5 ? 'Yes' : 'No'
+    const possibleLife = Math.random() > 0.8 ? 'Possible' : 'Unlikely'
+
+    return `
+      Mass: ${mass} Earth masses
+      Surface Gravity: ${gravity} m/s²
+      Average Temperature: ${temperature}°C
+      Atmosphere: ${atmosphere}
+      Potential for Life: ${possibleLife}
+    `
+  }
+
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-900 text-white p-8">
       <div className="w-full md:w-1/2 h-64 md:h-full mb-8 md:mb-0">
@@ -255,7 +273,7 @@ export default function ExoCreator() {
           <Stars radius={300} depth={100} count={5000} factor={4} saturation={0} fade speed={1} />
         </Canvas>
       </div>
-      <div className="w-full md:w-1/2 space-y-6 p-6 bg-gray-800 rounded-lg overflow-y-auto">
+      <div className="w-full glassmorphism md:w-1/2 space-y-6 p-6 bg-gray-800 rounded-lg overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4">Customize Your Exoplanet</h2>
         <div className="space-y-4">
           <div>
@@ -350,9 +368,23 @@ export default function ExoCreator() {
             />
           </div>
         </div>
-        <Button className="w-full mt-4" onClick={() => alert("Planet created!")}>
+        <Button 
+          className="w-full mt-4 bg-gray-700" 
+          onClick={() => {
+            setPlanetInfo(generatePlanetInfo())
+            alert("Planet created!")
+          }}
+        >
           Create Exoplanet
         </Button>
+        {planetInfo && (
+          <Card className="mt-4 bg-gray-700">
+            <CardContent className="p-4">
+              <h3 className="text-xl font-bold mb-2">Exoplanet Information</h3>
+              <pre className="whitespace-pre-wrap">{planetInfo}</pre>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   )
