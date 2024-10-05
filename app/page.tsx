@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Navbar from "@/components/ui/navBar";
-import exoplanetImage from '/app/exoplanet.jpg'; 
-import starsImage from '/app/stars.jpg';
+import exoplanetImage from '/app/images/exoplanet.jpg'; 
+import starsImage from '/app/images/stars.jpg';
 
 export default function Home() {
     return (

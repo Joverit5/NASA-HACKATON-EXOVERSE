@@ -10,7 +10,7 @@ export default function Navbar() {
         </Link>
         <ul className="flex space-x-6">
           <li>
-            <Link href="/info" className="text-xl hover:text-blue-400 transition-colors">
+            <Link href="/" className="text-xl hover:text-blue-400 transition-colors">
               Info
             </Link>
           </li>
