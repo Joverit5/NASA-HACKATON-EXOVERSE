@@ -6,12 +6,16 @@ import { OrbitControls, Stars, useTexture, SpotLight } from '@react-three/drei'
 import * as THREE from 'three'
 
 // Import components from shadcn/ui
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
+import { ChevronLeft } from "lucide-react"
+import Link from "next/link"
+
 
 interface PlanetProps {
   radius: number
@@ -253,7 +257,18 @@ export default function ExoCreator() {
   }
 
   return (
+    <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+        >
     <div className="flex flex-col md:flex-row h-screen bg-gray-900 text-white p-8">
+      <Link href="/">
+      <Button variant="outline" size="icon">
+        <ChevronLeft className="h-4 w-4" />
+      </Button>
+    </Link>
       <div className="w-full md:w-1/2 h-64 md:h-full mb-8 md:mb-0">
         <Canvas shadows camera={{ position: [0, 5, 10], fov: 60 }}>
           <ambientLight intensity={0.3} />
@@ -387,5 +402,6 @@ export default function ExoCreator() {
         )}
       </div>
     </div>
+    </motion.div>
   )
 }
