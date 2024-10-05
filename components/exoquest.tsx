@@ -60,7 +60,7 @@ export default function ExoQuest() {
       const data = await response.json();
       setQuestions(data);
     } catch (err) {
-      setError("An error ocurred when loading questions. Please try again..");
+      setError("An error ocurred when loading questions. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -156,10 +156,9 @@ export default function ExoQuest() {
     return (
       <div className="flex items-center justify-center h-screen bg-blue-950">
         <Alert className="bg-indigo-900/30 border-indigo-600/30 text-white backdrop-blur-md">
-          <AlertTitle>No hay preguntas disponibles</AlertTitle>
+          <AlertTitle>No questions available</AlertTitle>
           <AlertDescription>
-            No se encontraron preguntas en la base de datos. Por favor, intenta
-            más tarde.
+            No questions found in database. Please, try again later.
           </AlertDescription>
         </Alert>
       </div>
@@ -220,7 +219,7 @@ export default function ExoQuest() {
               variant="outline"
               className="text-white border-white/30 hover:bg-white/10"
             >
-              Volver al inicio
+              Back to Menu
             </Button>
           </CardFooter>
         </Card>
@@ -279,7 +278,7 @@ export default function ExoQuest() {
                   transition={{ duration: 0.5 }}
                   className="mt-4 p-4 bg-indigo-800/20 rounded-lg backdrop-blur-md"
                 >
-                  <h3 className="font-bold mb-2 text-white">Explicación:</h3>
+                  <h3 className="font-bold mb-2 text-white">Explanation:</h3>
                   <p className="text-white">{currentQuestion.explanation}</p>
                 </motion.div>
               )}
