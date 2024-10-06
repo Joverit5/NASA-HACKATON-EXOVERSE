@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -22,7 +22,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import CoverParticles from  "@/components/ui/star_particles";
+import CoverParticles from "@/components/ui/star_particles";
 
 interface Question {
   id: string;
@@ -32,13 +32,7 @@ interface Question {
   explanation: string;
   difficulty: string;
 }
-function shuffleArray(array:any) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
+
 export default function ExoQuest() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -50,30 +44,37 @@ export default function ExoQuest() {
   const [gameOver, setGameOver] = useState(false);
   const [isVictory, setIsVictory] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const difficulty = searchParams ? searchParams.get('difficulty') || 'all' : 'all';
 
   useEffect(() => {
     fetchQuestions();
-  }, []);
+  }, [difficulty]);
 
   const fetchQuestions = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/questions");
+      const response = await fetch(`/api/questions?difficulty=${difficulty}`);
       if (!response.ok) {
         throw new Error("Failed to fetch questions");
       }
       const data = await response.json();
-      const randomizedQuestions = data.map((question:any) => ({
-        ...question,
-        options: shuffleArray([...question.options]),
-      }));
+      const randomizedQuestions = shuffleArray(data).slice(0, 10);
       setQuestions(randomizedQuestions);
     } catch (err) {
-      setError("An error ocurred when loading questions. Please try again.");
+      setError("An error occurred when loading questions. Please try again.");
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const shuffleArray = (array: any[]) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
   };
 
   const handleAnswer = (answer: string) => {
@@ -187,7 +188,7 @@ export default function ExoQuest() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <CoverParticles/>
+        <CoverParticles />
         <Card className="w-full max-w-md glassmorphism">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center text-white">
@@ -249,7 +250,7 @@ export default function ExoQuest() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <CoverParticles/>
+      <CoverParticles />
       <div className="absolute inset-0 bg-gradient-to-br from-black to-purple-500/20" />
       <Card className="w-full max-w-2xl glassmorphism relative z-10">
         <CardHeader>
