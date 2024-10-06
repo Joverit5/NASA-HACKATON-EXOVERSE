@@ -26,6 +26,19 @@ interface PlanetProps {
   textureType: string
 }
 
+const contrastColors = [
+  '#FF6B6B', // Coral
+  '#4ECDC4', // Turquoise
+  '#45B7D1', // Sky Blue
+  '#FFA07A', // Light Salmon
+  '#98FB98', // Pale Green
+  '#DDA0DD', // Plum
+  '#F0E68C', // Khaki
+  '#FF69B4', // Hot Pink
+  '#20B2AA', // Light Sea Green
+  '#B0E0E6', // Powder Blue
+]
+
 const createProceduralTexture = (type: string, color: string) => {
   const canvas = document.createElement('canvas')
   canvas.width = 1024
@@ -79,8 +92,8 @@ const createProceduralTexture = (type: string, color: string) => {
 
 const Satellite: React.FC<{ radius: number, orbitRadius: number, speed: number }> = ({ radius, orbitRadius, speed }) => {
   const meshRef = useRef<THREE.Mesh>(null!)
-  const color = useMemo(() => new THREE.Color(Math.random(), Math.random(), Math.random()), [])
-  const texture = useMemo(() => createProceduralTexture(['rock', 'water', 'gas'][Math.floor(Math.random() * 3)], color.getHexString()), [color])
+  const color = useMemo(() => contrastColors[Math.floor(Math.random() * contrastColors.length)], [])
+  const texture = useMemo(() => createProceduralTexture(['rock', 'water', 'gas'][Math.floor(Math.random() * 3)], color), [color])
 
   useFrame(({ clock }) => {
     const angle = clock.getElapsedTime() * speed
@@ -97,8 +110,7 @@ const Satellite: React.FC<{ radius: number, orbitRadius: number, speed: number }
   )
 }
 
-const Planet: React.FC<PlanetProps> = ({ radius, color, planetType, satelliteCount, ringCount, textureType }) => {
-  const meshRef = useRef<THREE.Mesh>(null!)
+const Planet: React.FC<PlanetProps> = ({ radius, color, planetType, satelliteCount, ringCount, textureType }) => {  const meshRef = useRef<THREE.Mesh>(null!)
   const texture = useMemo(() => createProceduralTexture(textureType, color), [textureType, color])
 
   useFrame(() => {
@@ -136,10 +148,10 @@ const Planet: React.FC<PlanetProps> = ({ radius, color, planetType, satelliteCou
           speed={0.5 + i * 0.2}
         />
       ))}
-      {ringDistances.map((distance, i) => (
+      {ringCount > 0 && ringDistances.map((distance, i) => (
         <mesh rotation={[-Math.PI / 2, 0, 0]} key={i}>
           <ringGeometry args={[distance, distance + 0.2, 64]} />
-          <meshStandardMaterial color="#aaa" side={THREE.DoubleSide} transparent opacity={0.7} />
+          <meshStandardMaterial color={contrastColors[i % contrastColors.length]} side={THREE.DoubleSide} transparent opacity={0.7} />
         </mesh>
       ))}
     </group>
@@ -157,7 +169,9 @@ const Star: React.FC<{ color: THREE.Color, intensity: number, distance: number, 
       const glowIntensity = Math.sin(time * 2) * 0.1 + 0.9
       lightRef.current.position.set(distance, 30, -100)
       glowRef.current.position.set(distance, 30, -100)
-      glowRef.current.material.opacity = glowIntensity
+      
+      const glowMaterial = glowRef.current.material as THREE.MeshBasicMaterial
+      glowMaterial.opacity = glowIntensity
     }
   })
 
@@ -171,7 +185,7 @@ const Star: React.FC<{ color: THREE.Color, intensity: number, distance: number, 
         <sphereGeometry args={[size * 1.2, 32, 32]} />
         <meshBasicMaterial color={color} transparent opacity={0.5} />
       </mesh>
-      <pointLight ref={lightRef} color={color} intensity={intensity} distance={1000} decay={2} />
+      <pointLight ref={lightRef} color={color} intensity={intensity * 5} distance={1000} decay={1} />
     </group>
   )
 }
@@ -182,8 +196,8 @@ const SceneLight: React.FC<{ color: THREE.Color, intensity: number }> = ({ color
       position={[10, 10, 10]}
       angle={0.3}
       penumbra={1}
-      intensity={intensity}
-      color={color}
+      intensity={intensity * 5}
+      color={color.getHexString()}
       castShadow
       shadow-mapSize={[2048, 2048]}
     />
@@ -192,7 +206,7 @@ const SceneLight: React.FC<{ color: THREE.Color, intensity: number }> = ({ color
 
 export default function ExoCreator() {
   const [radius, setRadius] = useState(1)
-  const [color, setColor] = useState('#ff6b6b')
+  const [color, setColor] = useState(contrastColors[0])
   const [planetType, setPlanetType] = useState<'water' | 'rock' | 'gas'>('water')
   const [satelliteCount, setSatelliteCount] = useState(1)
   const [ringCount, setRingCount] = useState(0)
@@ -217,13 +231,13 @@ export default function ExoCreator() {
   const starIntensity = useMemo(() => {
     switch (starType) {
       case 'redDwarf':
-        return 1.5
+        return 12
       case 'yellowDwarf':
-        return 2
+        return 18
       case 'giant':
-        return 3
+        return 30
       default:
-        return 2
+        return 18
     }
   }, [starType])
 
@@ -258,150 +272,150 @@ export default function ExoCreator() {
 
   return (
     <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-    <div className="flex flex-col md:flex-row h-screen bg-gray-900 text-white p-8">
-      <Link href="/">
-      <Button variant="outline" size="icon">
-        <ChevronLeft className="h-4 w-4" />
-      </Button>
-    </Link>
-      <div className="w-full md:w-1/2 h-64 md:h-full mb-8 md:mb-0">
-        <Canvas shadows camera={{ position: [0, 5, 10], fov: 60 }}>
-          <ambientLight intensity={0.3} />
-          <SceneLight color={starColor} intensity={starIntensity} />
-          <Suspense fallback={null}>
-            <Planet 
-              radius={radius} 
-              color={color} 
-              planetType={planetType} 
-              satelliteCount={satelliteCount} 
-              ringCount={ringCount} 
-              textureType={textureType}
-            />
-            <Star color={starColor} intensity={starIntensity} distance={starDistance} size={starSize} />
-          </Suspense>
-          <OrbitControls enableZoom={true} maxDistance={20} minDistance={5} />
-          <Stars radius={300} depth={100} count={5000} factor={4} saturation={0} fade speed={1} />
-        </Canvas>
-      </div>
-      <div className="w-full glassmorphism md:w-1/2 space-y-6 p-6 bg-gray-800 rounded-lg overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4">Customize Your Exoplanet</h2>
-        <div className="space-y-4">
-          <div>
-            <Label htmlFor="radius">Radius</Label>
-            <Slider
-              id="radius"
-              min={0.5}
-              max={2}
-              step={0.1}
-              value={[radius]}
-              onValueChange={(value) => setRadius(value[0])}
-            />
-          </div>
-          <div>
-            <Label htmlFor="planetType">Planet Type</Label>
-            <Select value={planetType} onValueChange={(value: 'water' | 'rock' | 'gas') => {
-              setPlanetType(value)
-              setTextureType(value)
-            }}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select planet type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="water">Water</SelectItem>
-                <SelectItem value="rock">Rock</SelectItem>
-                <SelectItem value="gas">Gas</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="color">Color</Label>
-            <div className="flex items-center space-x-2">
-              <Input
-                id="color"
-                type="color"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-                className="w-12 h-12 p-1 bg-transparent"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="flex flex-col md:flex-row h-screen bg-gray-900 text-white p-8">
+        <Link href="/">
+          <Button variant="outline" size="icon">
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+        </Link>
+        <div className="w-full md:w-1/2 h-64 md:h-full mb-8 md:mb-0">
+          <Canvas shadows camera={{ position: [0, 5, 50], fov: 60 }}>
+            <ambientLight intensity={0.2} />
+            <SceneLight color={starColor} intensity={starIntensity * 0.5} />
+            <Suspense fallback={null}>
+              <Planet 
+                radius={radius} 
+                color={color} 
+                planetType={planetType} 
+                satelliteCount={satelliteCount} 
+                ringCount={ringCount} 
+                textureType={textureType}
               />
-              <Input
-                type="text"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-                className="flex-grow"
+              <Star color={starColor} intensity={starIntensity} distance={starDistance} size={starSize} />
+            </Suspense>
+            <OrbitControls enableZoom={true} maxDistance={20} minDistance={5} />
+            <Stars radius={300} depth={100} count={5000} factor={4} saturation={0} fade speed={1} />
+          </Canvas>
+        </div>
+        <div className="w-full glassmorphism md:w-1/2 space-y-6 p-6 bg-gray-800 rounded-lg overflow-y-auto">
+          <h2 className="text-2xl font-bold mb-4">Customize Your Exoplanet</h2>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="radius">Radius</Label>
+              <Slider
+                id="radius"
+                min={0.5}
+                max={2}
+                step={0.1}
+                value={[radius]}
+                onValueChange={(value) => setRadius(value[0])}
+              />
+            </div>
+            <div>
+              <Label htmlFor="planetType">Planet Type</Label>
+              <Select value={planetType} onValueChange={(value: 'water' | 'rock' | 'gas') => {
+                setPlanetType(value)
+                setTextureType(value)
+              }}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select planet type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="water">Water</SelectItem>
+                  <SelectItem value="rock">Rock</SelectItem>
+                  <SelectItem value="gas">Gas</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="color">Color</Label>
+              <Select value={color} onValueChange={(value) => setColor(value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select planet color" />
+                </SelectTrigger>
+                <SelectContent>
+                  {contrastColors.map((c, index) => (
+                    <SelectItem key={index} value={c}>
+                      <div className="flex items-center">
+                        <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: c }}></div>
+                        {c}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="satelliteCount">Satellites</Label>
+              <Slider
+                id="satelliteCount"
+                min={0}
+                max={5}
+                step={1}
+                value={[satelliteCount]}
+                onValueChange={(value) => setSatelliteCount(value[0])}
+              />
+            </div>
+            <div>
+              <Label htmlFor="ringCount">Rings</Label>
+              <Slider
+                id="ringCount"
+                min={0}
+                max={5}
+                step={1}
+                value={[ringCount]}
+                onValueChange={(value) => setRingCount(value[0])}
+              />
+            </div>
+            <div>
+              <Label htmlFor="starType">Star Type</Label>
+              <Select value={starType} onValueChange={(value: 'redDwarf' | 'yellowDwarf' | 'giant') => setStarType(value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select star type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="redDwarf">Red Dwarf</SelectItem>
+                  <SelectItem value="yellowDwarf">Yellow Dwarf</SelectItem>
+                  <SelectItem value="giant">Giant</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="starDistance">Star Distance</Label>
+              <Slider
+                id="starDistance"
+                min={20}
+                max={100}
+                step={1}
+                value={[starDistance]}
+                onValueChange={(value) => setStarDistance(value[0])}
               />
             </div>
           </div>
-          <div>
-            <Label htmlFor="satelliteCount">Satellites</Label>
-            <Slider
-              id="satelliteCount"
-              min={0}
-              max={5}
-              step={1}
-              value={[satelliteCount]}
-              onValueChange={(value) => setSatelliteCount(value[0])}
-            />
-          </div>
-          <div>
-            <Label htmlFor="ringCount">Rings</Label>
-            <Slider
-              id="ringCount"
-              min={0}
-              max={3}
-              step={1}
-              value={[ringCount]}
-              onValueChange={(value) => setRingCount(value[0])}
-            />
-          </div>
-          <div>
-            <Label htmlFor="starType">Star Type</Label>
-            <Select value={starType} onValueChange={(value: 'redDwarf' | 'yellowDwarf' | 'giant') => setStarType(value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select star type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="redDwarf">Red Dwarf</SelectItem>
-                <SelectItem value="yellowDwarf">Yellow Dwarf</SelectItem>
-                <SelectItem value="giant">Giant</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="starDistance">Star Distance</Label>
-            <Slider
-              id="starDistance"
-              min={20}
-              max={100}
-              step={1}
-              value={[starDistance]}
-              onValueChange={(value) => setStarDistance(value[0])}
-            />
-          </div>
+          <Button 
+            className="w-full mt-4 bg-gray-700" 
+            onClick={() => {
+              setPlanetInfo(generatePlanetInfo())
+              alert("Planet created!")
+            }}
+          >
+            Create Exoplanet
+          </Button>
+          {planetInfo && (
+            <Card className="mt-4 bg-gray-700">
+              <CardContent className="p-4">
+                <h3 className="text-xl font-bold mb-2">Exoplanet Information</h3>
+                <pre className="whitespace-pre-wrap">{planetInfo}</pre>
+              </CardContent>
+            </Card>
+          )}
         </div>
-        <Button 
-          className="w-full mt-4 bg-gray-700" 
-          onClick={() => {
-            setPlanetInfo(generatePlanetInfo())
-            alert("Planet created!")
-          }}
-        >
-          Create Exoplanet
-        </Button>
-        {planetInfo && (
-          <Card className="mt-4 bg-gray-700">
-            <CardContent className="p-4">
-              <h3 className="text-xl font-bold mb-2">Exoplanet Information</h3>
-              <pre className="whitespace-pre-wrap">{planetInfo}</pre>
-            </CardContent>
-          </Card>
-        )}
       </div>
-    </div>
     </motion.div>
   )
 }
