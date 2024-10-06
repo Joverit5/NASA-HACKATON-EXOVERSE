@@ -5,7 +5,11 @@ import exoplanetImage from '/app/images/exoplanet.jpg';
 import starsImage from '/app/images/stars.jpg';
 import Lenis from "lenis";
 import { useEffect } from "react";
-import fotoGrupal from "/app/images/grupal.jpg";
+import Fabian from "/app/images/Fabián.jpg";
+import Eduardo from "/app/images/Eduardo.jpg";
+import Isabella from "/app/images/Isabella.jpg";
+import Jose from "/app/images/Jose.jpg";
+import grupalPhoto from "/app/images/grupal.jpg";
 
 export default function Home() {
     useEffect(() => {
@@ -135,12 +139,25 @@ export default function Home() {
                     <p>Isabella Sofía Arrieta Guardo (@arrietai@utb.edu.co)</p>
                     <p>Eduardo Alejandro Negrín Pérez (@enegrin@utb.edu.co)</p>
                     <p>José Fernando González Ortiz (@joseortiz@utb.edu.co)</p>
-                    <div className="md:w-1/3 mt-10">
-                        <img
-                            src={fotoGrupal.src}
-                            alt="Team Photo"
-                            className="w-full h-auto rounded-lg shadow-lg"
-                        />
+                    <div className="flex flex-wrap justify-center mt-24">
+                        <div className="m-2 w-1/3 md:w-1/4">
+                            <Image src="" alt="Team Member 1" layout="responsive" width={300} height={300} className="rounded-lg" />
+                        </div>
+                        <div className="m-2 w-1/3 md:w-1/4">
+                            <Image src={Fabian.src} alt="Team Member 2" layout="responsive" width={300} height={300} className="rounded-lg" />
+                        </div>
+                        <div className="m-2 w-1/3 md:w-1/4">
+                            <Image src={Eduardo.src} alt="Team Member 3" layout="responsive" width={300} height={300} className="rounded-lg" />
+                        </div>
+                        <div className="m-2 w-1/3 md:w-1/4">
+                            <Image src={Isabella.src} alt="Team Member 4" layout="responsive" width={300} height={300} className="rounded-lg" />
+                        </div>
+                        <div className="m-2 w-1/3 md:w-1/4">
+                            <Image src={Jose.src} alt="Team Member 5" layout="responsive" width={400} height={400} className="rounded-lg" />
+                        </div>
+                        <div className="m-2 w-1/3 md:w-1/4">
+                            <Image src={grupalPhoto.src} alt="Photo in group" layout="responsive" width={400} height={400} className="rounded-lg" />
+                        </div>
                     </div>
                 </section>
             </div>
