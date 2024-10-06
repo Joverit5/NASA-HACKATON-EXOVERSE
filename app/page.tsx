@@ -83,9 +83,58 @@ export default function Home() {
                 <p className="text-lg mt-4">
                     The next major leap in exoplanet research came with the launch of NASA's Kepler Space Telescope in 2009. Kepler was specifically designed to detect Earth-sized planets in the habitable zones of their stars, where conditions might allow for liquid water—and potentially life. Over the course of its mission, Kepler discovered over 2,600 confirmed exoplanets, vastly expanding our knowledge of planetary systems and revealing that small, rocky planets like Earth are common throughout the galaxy.
                 </p>
-                <p className="text-lg mt-4 mb-20">
+                <p className="text-lg mt-4">
                     Today, exoplanet research continues to thrive with missions like NASA's Transiting Exoplanet Survey Satellite (TESS) and the James Webb Space Telescope, which aim to find even more distant and faint exoplanets. Scientists are now focused on studying the atmospheres of these worlds to determine their composition and potential habitability. The discovery of exoplanets has broadened our understanding of the universe and opened exciting possibilities for the search for extraterrestrial life.
                 </p>
+            </div>
+
+            <div className="p-14 max-w-7xl mx-auto text-white">
+                {/* What ExoVerse Does Section */}
+                <section id="what-we-do" className="mb-14">
+                    <h2 className="text-4xl font-bold mb-6">What ExoVerse Does</h2>
+                    <p className="mb-6 text-lg">
+                    ExoVerse invites you on an exciting journey through the vast realm of exoplanets, offering:
+                    </p>
+                    <ul className="list-disc pl-6">
+                    <li className="mb-4 text-lg">A fascinating information hub that unveils the basics and captivating history of exoplanets.</li>
+                    <li className="mb-4 text-lg">
+                        <strong>ExoQuest:</strong> An interactive trivia adventure that challenges and expands your cosmic knowledge.
+                    </li>
+                    <li className="mb-4 text-lg">
+                        <strong>ExoCreator:</strong> A unique tool empowering you to craft your own exoplanets, fueling your creativity and understanding of the cosmos.
+                    </li>
+                    <li className="mb-4 text-lg">
+                        <strong>ExoVis:</strong> A dynamic portal connecting you to the latest exoplanet discoveries, keeping you at the forefront of astronomical breakthroughs.
+                    </li>
+                    </ul>
+                </section>
+
+                {/* Benefits and Aspirations Section */}
+                <section id="benefits" className="mb-14">
+                    <h2 className="text-4xl font-bold mb-6">Benefits and Aspirations</h2>
+                    <p className="mb-4 text-lg">
+                    ExoVerse breaks barriers and transcends traditional education by offering:
+                    </p>
+                    <ul className="list-disc pl-6">
+                    <li className="mb-4 text-lg"><strong>Accessibility:</strong> Breaking down obstacles to space education, making it available to underserved communities and igniting curiosity across diverse backgrounds.</li>
+                    <li className="mb-4 text-lg"><strong>Engagement:</strong> Transforming complex astronomical concepts into exciting, digestible content that captivates learners of all ages.</li>
+                    <li className="mb-4 text-lg"><strong>Inspiration:</strong> Fostering a passion for astronomy and planetary sciences in the next generation of space enthusiasts.</li>
+                    <li className="mb-4 text-lg"><strong>Scientific Literacy:</strong> Enhancing public understanding of exoplanets and their relevance in our quest to comprehend the universe.</li>
+                    <li className="mb-4 text-lg"><strong>Community Building:</strong> Bringing people together through the wonder of cosmic exploration, creating a shared space for learning and discovery.</li>
+                    </ul>
+                </section>
+
+                {/* Development Team Section */}
+                <section id="team" className="mb-14">
+                    <h2 className="text-4xl font-bold mb-6">Our Development Team</h2>
+                    <p className="mb-5">We are a team of fifth-semester systems engineering students from the Universidad Tecnológica de Bolívar (UTB), driven by our passion for innovation and space exploration.
+                    </p>
+                    <p>Santiago Quintero Pareja (@squintero@utb.edu.co)</p>
+                    <p>Fabián Camilo Quintero Pareja (@parejaf@utb.edu.co)</p>
+                    <p>Isabella Sofía Arrieta Guardo (@arrietai@utb.edu.co)</p>
+                    <p>Eduardo Alejandro Negrín Pérez (@enegrin@utb.edu.co)</p>
+                    <p>José Fernando González Ortiz (@joseortiz@utb.edu.co)</p>
+                </section>
             </div>
         </div>
     );
