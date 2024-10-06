@@ -18,7 +18,7 @@ export default function Navbar() {
         <ul className="flex space-x-6">
           <li>
             <Link href="/exoquest" className="text-xl hover:text-blue-400 transition-colors">
-              Exoquest
+              ExoQuest
             </Link>
           </li>
           <li>
@@ -28,7 +28,7 @@ export default function Navbar() {
           </li>
           <li>
             <Link href="/exovis" className="text-xl hover:text-blue-400 transition-colors">
-              Exovis
+              ExoVis
             </Link>
           </li>
           <li>
