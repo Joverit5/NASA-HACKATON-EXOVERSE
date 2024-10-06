@@ -12,6 +12,7 @@ import Eduardo from "/app/images/Eduardo.jpg"
 import Isabella from "/app/images/Isabella.jpg";
 import Jose from "/app/images/Jose.jpg";
 import grupalPhoto from "/app/images/grupal.jpg";
+import { BookOpen, Brain, Palette, Telescope } from 'lucide-react';
 
 export default function Home() {
     useEffect(() => {
@@ -38,46 +39,41 @@ export default function Home() {
     }, []);   
 
     return (
-        <div>
-            <Navbar />  {/* Navbar stays at the top */}
-            <div 
-                className="absolute inset-0"
-                style={{
-                    backgroundImage: `url(${starsImage.src})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'repeat',
-                    opacity: 0.5, 
-                    zIndex: -1, 
-                }}
-            ></div>
-            {/* Main container for text and image side-by-side */}
-            <div className="flex flex-col md:flex-row items-center justify-between p-6 md:p-14 max-w-7xl mx-auto min-h-screen">
-                
-                {/* Text on the left */}
-                <div className="w-full md:w-1/2 pr-0 md:pr-8 mb-6 md:mb-0">
-                    <h1 className="text-4xl font-bold mb-4">Exoplanets</h1>
-                    <p className="text-lg">
-                        Exoplanets are planets that orbit stars outside of our solar system.
-                        These alien worlds come in various sizes, compositions, and conditions. 
-                        Some of them might even host life! The discovery of exoplanets has opened up 
-                        a new field in astronomy, revealing thousands of these distant worlds and 
-                        expanding our understanding of the universe.
-                    </p>
-                </div>
-                
-                {/* Image on the right */}
-                <div className="w-full md:w-1/2">
-                    <Image 
-                        src={exoplanetImage} 
-                        alt="Exoplanet" 
-                        width={700} 
-                        height={700} 
-                        className="object-contain"
-                    />
+        <div className="bg-black text-white">
+            <Navbar />
+            
+            {/* Exoplanets Section with Stars Background */}
+            <div className="relative">
+                <div 
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50"
+                    style={{
+                        backgroundImage: `url(${starsImage.src})`,
+                    }}
+                ></div>
+                <div className="flex flex-col md:flex-row items-center justify-between p-6 md:p-14 max-w-7xl mx-auto min-h-screen relative z-10">
+                    <div className="w-full md:w-1/2 pr-0 md:pr-8 mb-6 md:mb-0">
+                        <h1 className="text-4xl font-bold mb-4">Exoplanets</h1>
+                        <p className="text-lg">
+                            Exoplanets are planets that orbit stars outside of our solar system.
+                            These alien worlds come in various sizes, compositions, and conditions. 
+                            Some of them might even host life! The discovery of exoplanets has opened up 
+                            a new field in astronomy, revealing thousands of these distant worlds and 
+                            expanding our understanding of the universe.
+                        </p>
+                    </div>
+                    <div className="w-full md:w-1/2">
+                        <Image 
+                            src={exoplanetImage} 
+                            alt="Exoplanet" 
+                            width={700} 
+                            height={700} 
+                            className="object-contain"
+                        />
+                    </div>
                 </div>
             </div>
 
+            {/* A Bit of History Section */}
             <div className="p-6 md:p-14 max-w-7xl mx-auto">
                 <h2 className="text-3xl font-bold mb-4">A Bit of History...</h2>
                 <p className="text-lg">
@@ -94,28 +90,48 @@ export default function Home() {
                 </p>
             </div>
 
-            <div className="p-6 md:p-14 max-w-7xl mx-auto text-white">
-                {/* What ExoVerse Does Section */}
-                <section id="what-we-do" className="mb-14">
-                    <h2 className="text-4xl font-bold mb-6">What ExoVerse Does</h2>
-                    <p className="mb-6 text-lg">
-                        ExoVerse invites you on an exciting journey through the vast realm of exoplanets, offering:
-                    </p>
-                    <ul className="list-disc pl-6">
-                        <li className="mb-4 text-lg">A fascinating information hub that unveils the basics and captivating history of exoplanets.</li>
-                        <li className="mb-4 text-lg">
-                            <strong>ExoQuest:</strong> An interactive trivia adventure that challenges and expands your cosmic knowledge.
-                        </li>
-                        <li className="mb-4 text-lg">
-                            <strong>ExoCreator:</strong> A unique tool empowering you to craft your own exoplanets, fueling your creativity and understanding of the cosmos.
-                        </li>
-                        <li className="mb-4 text-lg">
-                            <strong>ExoVis:</strong> A dynamic portal connecting you to the latest exoplanet discoveries, keeping you at the forefront of astronomical breakthroughs.
-                        </li>
-                    </ul>
-                </section>
+            {/* What ExoVerse Does Section with Stars Background */}
+            <div className="relative p-6 md:p-14">
+                <div 
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50"
+                    style={{
+                        backgroundImage: `url(${starsImage.src})`,
+                    }}
+                ></div>
+                <div className="max-w-7xl mx-auto relative z-10">
+                    <section id="what-we-do" className="mb-14">
+                        <h2 className="text-4xl font-bold mb-6 text-center">What ExoVerse Does</h2>
+                        <p className="mb-10 text-lg text-center">
+                            ExoVerse invites you on an exciting journey through the vast realm of exoplanets, offering:
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
+                                <BookOpen className="w-12 h-12 mb-4 text-blue-400" />
+                                <h3 className="text-xl font-semibold mb-2">Information Hub</h3>
+                                <p>A fascinating resource that unveils the basics and captivating history of exoplanets.</p>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
+                                <Brain className="w-12 h-12 mb-4 text-green-400" />
+                                <h3 className="text-xl font-semibold mb-2">ExoQuest</h3>
+                                <p>An interactive trivia adventure that challenges and expands your cosmic knowledge.</p>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
+                                <Palette className="w-12 h-12 mb-4 text-purple-400" />
+                                <h3 className="text-xl font-semibold mb-2">ExoCreator</h3>
+                                <p>A unique tool empowering you to craft your own exoplanets, fueling your creativity and understanding of the cosmos.</p>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
+                                <Telescope className="w-12 h-12 mb-4 text-red-400" />
+                                <h3 className="text-xl font-semibold mb-2">ExoVis</h3>
+                                <p>A dynamic portal connecting you to the latest exoplanet discoveries, keeping you at the forefront of astronomical breakthroughs.</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
 
-                {/* Benefits and Aspirations Section */}
+            {/* Benefits and Aspirations Section */}
+            <div className="p-6 md:p-14 max-w-7xl mx-auto text-white">
                 <section id="benefits" className="mb-14">
                     <h2 className="text-4xl font-bold mb-6">Benefits and Aspirations</h2>
                     <p className="mb-4 text-lg">
@@ -129,46 +145,60 @@ export default function Home() {
                         <li className="mb-4 text-lg"><strong>Community Building:</strong> Bringing people together through the wonder of cosmic exploration, creating a shared space for learning and discovery.</li>
                     </ul>
                 </section>
+            </div>
 
-                {/* Development Team Section */}
-                <section id="team" className="mb-14">
-                    <h2 className="text-4xl font-bold mb-6">Our Development Team</h2>
-                    <p className="mb-5">We are a team of fifth-semester systems engineering students from the Universidad Tecnológica de Bolívar (UTB), driven by our passion for innovation and space exploration. We are also members of the Astronomy and Data Science Research Group in the Faculty of Basic Sciences.</p>
-                    <p>The research group aims to foster investigations in areas related to astronomy and data science, providing students with opportunities to develop innovative technological solutions for global challenges. Learn more about the <a href="https://www.utb.edu.co/investigacion/apoyo-a-la-investigacion/semilleros-de-investigacion/semillero-astronomia-ciencia-de-datos/" className="underline">group</a>.</p>
+            {/* Development Team Section with Stars Background */}
+            <div className="relative p-6 md:p-14">
+                <div 
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50"
+                    style={{
+                        backgroundImage: `url(${starsImage.src})`,
+                    }}
+                ></div>
+                <div className="max-w-7xl mx-auto relative z-10">
+                    <section id="team" className="mb-14">
+                        <h2 className="text-4xl font-bold mb-6 text-center">Our Development Team</h2>
+                        <p className="mb-5 text-center">We are a team of fifth-semester systems engineering students from the Universidad Tecnológica de Bolívar (UTB), driven by our passion for innovation and space exploration. We are also members of the Astronomy and Data Science Research Group in the Faculty of Basic Sciences.</p>
+                        <p className="mb-10 text-center">The research group aims to foster investigations in areas related to astronomy and data science, providing students with opportunities to develop innovative technological solutions for global challenges. Learn more about the <a href="https://www.utb.edu.co/investigacion/apoyo-a-la-investigacion/semilleros-de-investigacion/semillero-astronomia-ciencia-de-datos/" className="underline">group</a>.</p>
 
-                    <p className="mt-10">David Sierra Porta (dporta@utb.edu.co)</p>
-                    <p>Santiago Quintero Pareja (@squintero@utb.edu.co)</p>
-                    <p>Fabián Camilo Quintero Pareja (@parejaf@utb.edu.co)</p>
-                    <p>Isabella Sofía Arrieta Guardo (@arrietai@utb.edu.co)</p>
-                    <p>Eduardo Alejandro Negrín Pérez (@enegrin@utb.edu.co)</p>
-                    <p>José Fernando González Ortiz (@joseortiz@utb.edu.co)</p>
-                    
-                    {/* Team Member Images */}
-                    <div className="flex flex-wrap justify-center mt-12">
-                        <div className="m-2 w-1/2 md:w-1/4">
-                            <Image src={David} alt="Fabián" layout="responsive" width={400} height={400} />
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
+                                <Image src={David} alt="David" width={200} height={200} className="rounded-full mx-auto mb-4" />
+                                <h3 className="text-xl font-semibold mb-2 text-center">David Sierra Porta</h3>
+                                <p className="text-center text-gray-400">dporta@utb.edu.co</p>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
+                                <Image src={Santiago} alt="Santiago" width={200} height={200} className="rounded-full mx-auto mb-4" />
+                                <h3 className="text-xl font-semibold mb-2 text-center">Santiago Quintero Pareja</h3>
+                                <p className="text-center text-gray-400">squintero@utb.edu.co</p>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
+                                <Image src={Fabian} alt="Fabián" width={200} height={200} className="rounded-full mx-auto mb-4" />
+                                <h3 className="text-xl font-semibold mb-2 text-center">Fabián Camilo Quintero Pareja</h3>
+                                <p className="text-center text-gray-400">parejaf@utb.edu.co</p>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
+                                <Image src={Eduardo} alt="Eduardo" width={200} height={200} className="rounded-full mx-auto mb-4" />
+                                <h3 className="text-xl font-semibold mb-2 text-center">Eduardo Alejandro Negrín Pérez</h3>
+                                <p className="text-center text-gray-400">enegrin@utb.edu.co</p>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
+                                <Image src={Isabella} alt="Isabella" width={200} height={200} className="rounded-full mx-auto mb-4" />
+                                <h3 className="text-xl font-semibold mb-2 text-center">Isabella Sofía Arrieta Guardo</h3>
+                                <p className="text-center text-gray-400">arrietai@utb.edu.co</p>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
+                                <Image src={Jose} alt="José" width={200} height={200} className="rounded-full mx-auto mb-4" />
+                                <h3 className="text-xl font-semibold mb-2 text-center">José Fernando González Ortiz</h3>
+                                <p className="text-center text-gray-400">joseortiz@utb.edu.co</p>
+                            </div>
                         </div>
-                        <div className="m-2 w-1/2 md:w-1/4">
-                            <Image src={Santiago} alt="Fabián" layout="responsive" width={400} height={400} />
-                        </div>
-                        <div className="m-2 w-1/2 md:w-1/4">
-                            <Image src={Fabian} alt="Fabián" layout="responsive" width={400} height={400} />
-                        </div>
-                        <div className="m-2 w-1/2 md:w-1/4">
-                            <Image src={Eduardo} alt="Eduardo" layout="responsive" width={400} height={400} />
-                        </div>
-                        <div className="m-2 w-1/2 md:w-1/4">
-                            <Image src={Isabella} alt="Isabella" layout="responsive" width={400} height={400} />
-                        </div>
-                        <div className="m-2 w-1/2 md:w-1/4">
-                            <Image src={Jose} alt="José" layout="responsive" width={400} height={400} />
-                        </div>
-                    </div>
 
-                    <div className="flex justify-center mt-12">
-                        <Image src={grupalPhoto} alt="Grupal Team Photo" width={400} height={400} className="rounded-lg" />
-                    </div>
-                </section>
+                        <div className="flex justify-center mt-12">
+                            <Image src={grupalPhoto} alt="Grupal Team Photo" width={400} height={400} className="rounded-lg" />
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
     );
