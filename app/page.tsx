@@ -193,10 +193,6 @@ export default function Home() {
                                 <p className="text-center text-gray-400">joseortiz@utb.edu.co</p>
                             </div>
                         </div>
-
-                        <div className="flex justify-center mt-12">
-                            <Image src={grupalPhoto} alt="Grupal Team Photo" width={400} height={400} className="rounded-lg" />
-                        </div>
                     </section>
                 </div>
             </div>
