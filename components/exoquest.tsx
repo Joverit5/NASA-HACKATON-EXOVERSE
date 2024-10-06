@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +26,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const CoverParticles = dynamic(() => import("@/components/ui/star_particles"), {
   ssr: false,
-  loading: () => <div className="h-screen bg-blue-950" />
+  loading: () => <div className="h-screen bg-blue-950" />,
 });
 
 interface Question {
@@ -50,7 +50,9 @@ export default function ExoQuest() {
   const [isVictory, setIsVictory] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const difficulty = searchParams ? searchParams.get('difficulty') || 'all' : 'all';
+  const difficulty = searchParams
+    ? searchParams.get("difficulty") || "all"
+    : "all";
 
   const shuffleArray = useCallback((array: any[]) => {
     const shuffled = [...array];
@@ -74,7 +76,7 @@ export default function ExoQuest() {
         .slice(0, 10)
         .map((q: Question) => ({
           ...q,
-          options: shuffleArray(q.options)
+          options: shuffleArray(q.options),
         }));
       setQuestions(randomizedQuestions);
     } catch (err) {
@@ -88,18 +90,21 @@ export default function ExoQuest() {
     fetchQuestions();
   }, [fetchQuestions]);
 
-  const handleAnswer = useCallback((answer: string) => {
-    if (isAnswered) return;
-    setSelectedAnswer(answer);
-    setIsAnswered(true);
-    if (answer === questions[currentQuestionIndex].correctAnswer) {
-      setScore(prevScore => prevScore + 1);
-    }
-  }, [isAnswered, questions, currentQuestionIndex]);
+  const handleAnswer = useCallback(
+    (answer: string) => {
+      if (isAnswered) return;
+      setSelectedAnswer(answer);
+      setIsAnswered(true);
+      if (answer === questions[currentQuestionIndex].correctAnswer) {
+        setScore((prevScore) => prevScore + 1);
+      }
+    },
+    [isAnswered, questions, currentQuestionIndex]
+  );
 
   const handleNext = useCallback(() => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
       setSelectedAnswer("");
       setIsAnswered(false);
     } else {
@@ -121,7 +126,7 @@ export default function ExoQuest() {
         body: JSON.stringify({ name: "ExoQuest Master" }),
       });
       if (!response.ok) {
-        throw new Error('Failed to update achievement');
+        throw new Error("Failed to update achievement");
       }
     } catch (error) {
       console.error("Error updating achievement:", error);
@@ -139,21 +144,26 @@ export default function ExoQuest() {
     fetchQuestions();
   }, [fetchQuestions]);
 
-  const getButtonStyle = useCallback((option: string) => {
-    if (!isAnswered)
+  const getButtonStyle = useCallback(
+    (option: string) => {
+      if (!isAnswered)
+        return "bg-indigo-700/30 text-white hover:bg-indigo-600/50";
+      if (option === questions[currentQuestionIndex].correctAnswer)
+        return "bg-green-500/30 text-white hover:bg-green-600/50";
+      if (option === selectedAnswer)
+        return "bg-red-500/30 text-white hover:bg-red-600/50";
       return "bg-indigo-700/30 text-white hover:bg-indigo-600/50";
-    if (option === questions[currentQuestionIndex].correctAnswer)
-      return "bg-green-500/30 text-white hover:bg-green-600/50";
-    if (option === selectedAnswer)
-      return "bg-red-500/30 text-white hover:bg-red-600/50";
-    return "bg-indigo-700/30 text-white hover:bg-indigo-600/50";
-  }, [isAnswered, questions, currentQuestionIndex, selectedAnswer]);
+    },
+    [isAnswered, questions, currentQuestionIndex, selectedAnswer]
+  );
 
-  const progressPercentage = useMemo(() => 
-    questions.length > 0
-      ? ((currentQuestionIndex + 1) / questions.length) * 100
-      : 0
-  , [questions.length, currentQuestionIndex]);
+  const progressPercentage = useMemo(
+    () =>
+      questions.length > 0
+        ? ((currentQuestionIndex + 1) / questions.length) * 100
+        : 0,
+    [questions.length, currentQuestionIndex]
+  );
 
   if (isLoading) {
     return (
