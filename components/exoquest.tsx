@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
+import dynamic from 'next/dynamic';
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -22,7 +23,11 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import CoverParticles from "@/components/ui/star_particles";
+
+const CoverParticles = dynamic(() => import("@/components/ui/star_particles"), {
+  ssr: false,
+  loading: () => <div className="h-screen bg-blue-950" />
+});
 
 interface Question {
   id: string;
@@ -47,11 +52,16 @@ export default function ExoQuest() {
   const searchParams = useSearchParams();
   const difficulty = searchParams ? searchParams.get('difficulty') || 'all' : 'all';
 
-  useEffect(() => {
-    fetchQuestions();
-  }, [difficulty]);
+  const shuffleArray = useCallback((array: any[]) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }, []);
 
-  const fetchQuestions = async () => {
+  const fetchQuestions = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -60,35 +70,36 @@ export default function ExoQuest() {
         throw new Error("Failed to fetch questions");
       }
       const data = await response.json();
-      const randomizedQuestions = shuffleArray(data).slice(0, 10);
+      const randomizedQuestions = shuffleArray(data)
+        .slice(0, 10)
+        .map((q: Question) => ({
+          ...q,
+          options: shuffleArray(q.options)
+        }));
       setQuestions(randomizedQuestions);
     } catch (err) {
       setError("An error occurred when loading questions. Please try again.");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [difficulty, shuffleArray]);
 
-  const shuffleArray = (array: any[]) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };
+  useEffect(() => {
+    fetchQuestions();
+  }, [fetchQuestions]);
 
-  const handleAnswer = (answer: string) => {
+  const handleAnswer = useCallback((answer: string) => {
     if (isAnswered) return;
     setSelectedAnswer(answer);
     setIsAnswered(true);
     if (answer === questions[currentQuestionIndex].correctAnswer) {
-      setScore(score + 1);
+      setScore(prevScore => prevScore + 1);
     }
-  };
+  }, [isAnswered, questions, currentQuestionIndex]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestionIndex(prevIndex => prevIndex + 1);
       setSelectedAnswer("");
       setIsAnswered(false);
     } else {
@@ -98,9 +109,9 @@ export default function ExoQuest() {
         updateAchievement();
       }
     }
-  };
+  }, [currentQuestionIndex, questions.length, score]);
 
-  const updateAchievement = async () => {
+  const updateAchievement = useCallback(async () => {
     try {
       const response = await fetch("/api/achievements", {
         method: "POST",
@@ -115,9 +126,9 @@ export default function ExoQuest() {
     } catch (error) {
       console.error("Error updating achievement:", error);
     }
-  };
+  }, []);
 
-  const handleRetry = () => {
+  const handleRetry = useCallback(() => {
     setQuestions([]);
     setCurrentQuestionIndex(0);
     setScore(0);
@@ -126,9 +137,9 @@ export default function ExoQuest() {
     setGameOver(false);
     setIsVictory(false);
     fetchQuestions();
-  };
+  }, [fetchQuestions]);
 
-  const getButtonStyle = (option: string) => {
+  const getButtonStyle = useCallback((option: string) => {
     if (!isAnswered)
       return "bg-indigo-700/30 text-white hover:bg-indigo-600/50";
     if (option === questions[currentQuestionIndex].correctAnswer)
@@ -136,12 +147,13 @@ export default function ExoQuest() {
     if (option === selectedAnswer)
       return "bg-red-500/30 text-white hover:bg-red-600/50";
     return "bg-indigo-700/30 text-white hover:bg-indigo-600/50";
-  };
+  }, [isAnswered, questions, currentQuestionIndex, selectedAnswer]);
 
-  const progressPercentage =
+  const progressPercentage = useMemo(() => 
     questions.length > 0
       ? ((currentQuestionIndex + 1) / questions.length) * 100
-      : 0;
+      : 0
+  , [questions.length, currentQuestionIndex]);
 
   if (isLoading) {
     return (

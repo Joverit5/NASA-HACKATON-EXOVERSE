@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react'
+"use client"
+
+import { useState, useEffect, useMemo, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Trophy } from 'lucide-react'
+import { Trophy, Star } from 'lucide-react'
 
 type Achievement = {
   name: string
@@ -13,11 +15,7 @@ export function Dashboard() {
   const [achievements, setAchievements] = useState<Achievement[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    fetchAchievements()
-  }, [])
-
-  const fetchAchievements = async () => {
+  const fetchAchievements = useCallback(async () => {
     try {
       const response = await fetch('/api/achievements')
       if (!response.ok) {
@@ -30,48 +28,105 @@ export function Dashboard() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [])
 
-  // Calculate progress based on unlocked achievements
-  const unlockedAchievements = achievements.filter(a => a.unlocked).length
-  const totalAchievements = achievements.length
-  const progressPercentage = (unlockedAchievements / totalAchievements) * 100
+  useEffect(() => {
+    fetchAchievements()
+  }, [fetchAchievements])
+
+  const { unlockedAchievements, totalAchievements, progressPercentage } = useMemo(() => {
+    const unlockedCount = achievements.filter(a => a.unlocked).length
+    return {
+      unlockedAchievements: unlockedCount,
+      totalAchievements: achievements.length,
+      progressPercentage: achievements.length > 0 ? (unlockedCount / achievements.length) * 100 : 0
+    }
+  }, [achievements])
 
   if (isLoading) {
-    return <div>Loading achievements...</div>
+    return (
+      <div className="flex items-center justify-center h-64">
+        <motion.div
+          className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+        />
+      </div>
+    )
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <Card>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Card className="bg-indigo-900/30 border-indigo-500/30 backdrop-blur-md overflow-hidden">
         <CardHeader>
-          <CardTitle>General Progress</CardTitle>
+          <CardTitle className="text-2xl font-bold text-white flex items-center">
+            <Star className="mr-2 h-6 w-6 text-yellow-400" />
+            General Progress
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <Progress value={progressPercentage} className="w-full" />
-          <p className="mt-2">
+          <div className="relative pt-1">
+            <div className="flex mb-2 items-center justify-between">
+              <div>
+                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-indigo-200 bg-indigo-600">
+                  Progress
+                </span>
+              </div>
+              <div className="text-right">
+                <span className="text-xs font-semibold inline-block text-indigo-200">
+                  {progressPercentage.toFixed(0)}%
+                </span>
+              </div>
+            </div>
+            <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-indigo-200">
+              <motion.div 
+                style={{ width: `${progressPercentage}%` }}
+                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-indigo-500"
+                initial={{ width: 0 }}
+                animate={{ width: `${progressPercentage}%` }}
+                transition={{ duration: 1, ease: "easeOut" }}
+              />
+            </div>
+          </div>
+          <p className="text-indigo-200 text-lg mt-4">
             {unlockedAchievements} of {totalAchievements} completed achievements
           </p>
         </CardContent>
       </Card>
       
-      <Card>
+      <Card className="bg-indigo-900/30 border-indigo-500/30 backdrop-blur-md">
         <CardHeader>
-          <CardTitle>Achievements</CardTitle>
+          <CardTitle className="text-2xl font-bold text-white flex items-center">
+            <Trophy className="mr-2 h-6 w-6 text-yellow-400" />
+            Achievements
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="space-y-2">
-            {achievements.map((achievement, index) => (
-              <li key={index} className="flex items-center gap-2">
-                <Trophy className={`h-4 w-4 ${achievement.unlocked ? 'text-yellow-400' : 'text-gray-400'}`} />
-                <span className={achievement.unlocked ? 'font-medium' : 'text-gray-500'}>
-                  {achievement.name}
-                </span>
-                {achievement.unlocked && (
-                  <Badge variant="secondary" className="ml-auto">Unlucked</Badge>
-                )}
-              </li>
-            ))}
+          <ul className="space-y-4">
+            <AnimatePresence>
+              {achievements.map((achievement, index) => (
+                <motion.li 
+                  key={index} 
+                  className="flex items-center justify-between bg-indigo-800/50 p-3 rounded-lg"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <div className="flex items-center">
+                    <Trophy className={`h-5 w-5 mr-3 ${achievement.unlocked ? 'text-yellow-400' : 'text-gray-400'}`} />
+                    <span className={`font-medium ${achievement.unlocked ? 'text-white' : 'text-indigo-300'}`}>
+                      {achievement.name}
+                    </span>
+                  </div>
+                  {achievement.unlocked && (
+                    <Badge variant="secondary" className="bg-indigo-600 text-white">
+                      Unlocked
+                    </Badge>
+                  )}
+                </motion.li>
+              ))}
+            </AnimatePresence>
           </ul>
         </CardContent>
       </Card>
