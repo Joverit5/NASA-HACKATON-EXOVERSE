@@ -6,7 +6,7 @@ import starsImage from '/app/images/stars.jpg';
 import Lenis from "lenis";
 import { useEffect } from "react";
 import Fabian from "/app/images/Fabián.jpg";
-import Eduardo from "/app/images/Eduardo.jpg";
+import Eduardo from "/app/images/Eduardo.jpg"
 import Isabella from "/app/images/Isabella.jpg";
 import Jose from "/app/images/Jose.jpg";
 import grupalPhoto from "/app/images/grupal.jpg";
@@ -38,23 +38,23 @@ export default function Home() {
         <div>
             <Navbar />  {/* Navbar stays at the top */}
             <div 
-                        className="absolute inset-0"
-                        style={{
-                            backgroundImage: `url(${starsImage.src})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'repeat',
-                            opacity: 0.5, 
-                            zIndex: -1, 
-                        }}
-                    ></div>
+                className="absolute inset-0"
+                style={{
+                    backgroundImage: `url(${starsImage.src})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'repeat',
+                    opacity: 0.5, 
+                    zIndex: -1, 
+                }}
+            ></div>
             {/* Main container for text and image side-by-side */}
-            <div className="flex items-center justify-between p-14 max-w-7xl mx-auto min-h-screen">
+            <div className="flex flex-col md:flex-row items-center justify-between p-6 md:p-14 max-w-7xl mx-auto min-h-screen">
                 
                 {/* Text on the left */}
-                <div className="w-1/2 pr-8">
+                <div className="w-full md:w-1/2 pr-0 md:pr-8 mb-6 md:mb-0">
                     <h1 className="text-4xl font-bold mb-4">Exoplanets</h1>
-                    <p className="text-lg" >
+                    <p className="text-lg">
                         Exoplanets are planets that orbit stars outside of our solar system.
                         These alien worlds come in various sizes, compositions, and conditions. 
                         Some of them might even host life! The discovery of exoplanets has opened up 
@@ -64,7 +64,7 @@ export default function Home() {
                 </div>
                 
                 {/* Image on the right */}
-                <div className="w-1/2">
+                <div className="w-full md:w-1/2">
                     <Image 
                         src={exoplanetImage} 
                         alt="Exoplanet" 
@@ -73,11 +73,9 @@ export default function Home() {
                         className="object-contain"
                     />
                 </div>
-
-                
             </div>
 
-            <div className="p-14 max-w-7xl mx-auto">
+            <div className="p-6 md:p-14 max-w-7xl mx-auto">
                 <h2 className="text-3xl font-bold mb-4">A Bit of History...</h2>
                 <p className="text-lg">
                     The history of exoplanet discovery dates back to the early 1990s, when scientists first developed techniques to detect planets orbiting stars beyond our solar system. Before this period, the existence of planets outside of our solar system was purely hypothetical. Although many astronomers believed that exoplanets were likely abundant, none had been directly detected. The breakthrough came in 1992 when two planets were discovered orbiting a pulsar—a highly magnetized, rotating neutron star that emits beams of electromagnetic radiation.
@@ -93,24 +91,24 @@ export default function Home() {
                 </p>
             </div>
 
-            <div className="p-14 max-w-7xl mx-auto text-white">
+            <div className="p-6 md:p-14 max-w-7xl mx-auto text-white">
                 {/* What ExoVerse Does Section */}
                 <section id="what-we-do" className="mb-14">
                     <h2 className="text-4xl font-bold mb-6">What ExoVerse Does</h2>
                     <p className="mb-6 text-lg">
-                    ExoVerse invites you on an exciting journey through the vast realm of exoplanets, offering:
+                        ExoVerse invites you on an exciting journey through the vast realm of exoplanets, offering:
                     </p>
                     <ul className="list-disc pl-6">
-                    <li className="mb-4 text-lg">A fascinating information hub that unveils the basics and captivating history of exoplanets.</li>
-                    <li className="mb-4 text-lg">
-                        <strong>ExoQuest:</strong> An interactive trivia adventure that challenges and expands your cosmic knowledge.
-                    </li>
-                    <li className="mb-4 text-lg">
-                        <strong>ExoCreator:</strong> A unique tool empowering you to craft your own exoplanets, fueling your creativity and understanding of the cosmos.
-                    </li>
-                    <li className="mb-4 text-lg">
-                        <strong>ExoVis:</strong> A dynamic portal connecting you to the latest exoplanet discoveries, keeping you at the forefront of astronomical breakthroughs.
-                    </li>
+                        <li className="mb-4 text-lg">A fascinating information hub that unveils the basics and captivating history of exoplanets.</li>
+                        <li className="mb-4 text-lg">
+                            <strong>ExoQuest:</strong> An interactive trivia adventure that challenges and expands your cosmic knowledge.
+                        </li>
+                        <li className="mb-4 text-lg">
+                            <strong>ExoCreator:</strong> A unique tool empowering you to craft your own exoplanets, fueling your creativity and understanding of the cosmos.
+                        </li>
+                        <li className="mb-4 text-lg">
+                            <strong>ExoVis:</strong> A dynamic portal connecting you to the latest exoplanet discoveries, keeping you at the forefront of astronomical breakthroughs.
+                        </li>
                     </ul>
                 </section>
 
@@ -118,46 +116,45 @@ export default function Home() {
                 <section id="benefits" className="mb-14">
                     <h2 className="text-4xl font-bold mb-6">Benefits and Aspirations</h2>
                     <p className="mb-4 text-lg">
-                    ExoVerse breaks barriers and transcends traditional education by offering:
+                        ExoVerse breaks barriers and transcends traditional education by offering:
                     </p>
                     <ul className="list-disc pl-6">
-                    <li className="mb-4 text-lg"><strong>Accessibility:</strong> Breaking down obstacles to space education, making it available to underserved communities and igniting curiosity across diverse backgrounds.</li>
-                    <li className="mb-4 text-lg"><strong>Engagement:</strong> Transforming complex astronomical concepts into exciting, digestible content that captivates learners of all ages.</li>
-                    <li className="mb-4 text-lg"><strong>Inspiration:</strong> Fostering a passion for astronomy and planetary sciences in the next generation of space enthusiasts.</li>
-                    <li className="mb-4 text-lg"><strong>Scientific Literacy:</strong> Enhancing public understanding of exoplanets and their relevance in our quest to comprehend the universe.</li>
-                    <li className="mb-4 text-lg"><strong>Community Building:</strong> Bringing people together through the wonder of cosmic exploration, creating a shared space for learning and discovery.</li>
+                        <li className="mb-4 text-lg"><strong>Accessibility:</strong> Breaking down obstacles to space education, making it available to underserved communities and igniting curiosity across diverse backgrounds.</li>
+                        <li className="mb-4 text-lg"><strong>Engagement:</strong> Transforming complex astronomical concepts into exciting, digestible content that captivates learners of all ages.</li>
+                        <li className="mb-4 text-lg"><strong>Inspiration:</strong> Fostering a passion for astronomy and planetary sciences in the next generation of space enthusiasts.</li>
+                        <li className="mb-4 text-lg"><strong>Scientific Literacy:</strong> Enhancing public understanding of exoplanets and their relevance in our quest to comprehend the universe.</li>
+                        <li className="mb-4 text-lg"><strong>Community Building:</strong> Bringing people together through the wonder of cosmic exploration, creating a shared space for learning and discovery.</li>
                     </ul>
                 </section>
 
                 {/* Development Team Section */}
                 <section id="team" className="mb-14">
                     <h2 className="text-4xl font-bold mb-6">Our Development Team</h2>
-                    <p className="mb-5">We are a team of fifth-semester systems engineering students from the Universidad Tecnológica de Bolívar (UTB), driven by our passion for innovation and space exploration.
-                    </p>
+                    <p className="mb-5">We are a team of fifth-semester systems engineering students from the Universidad Tecnológica de Bolívar (UTB), driven by our passion for innovation and space exploration.</p>
                     <p>Santiago Quintero Pareja (@squintero@utb.edu.co)</p>
                     <p>Fabián Camilo Quintero Pareja (@parejaf@utb.edu.co)</p>
                     <p>Isabella Sofía Arrieta Guardo (@arrietai@utb.edu.co)</p>
                     <p>Eduardo Alejandro Negrín Pérez (@enegrin@utb.edu.co)</p>
                     <p>José Fernando González Ortiz (@joseortiz@utb.edu.co)</p>
-                    <div className="flex flex-wrap justify-center mt-24">
-                        <div className="m-2 w-1/3 md:w-1/4">
-                            <Image src="" alt="Team Member 1" layout="responsive" width={300} height={300} className="rounded-lg" />
+                    
+                    {/* Team Member Images */}
+                    <div className="flex flex-wrap justify-center mt-12">
+                        <div className="m-2 w-1/2 md:w-1/4">
+                            <Image src={Fabian} alt="Fabián" layout="responsive" width={400} height={400} />
                         </div>
-                        <div className="m-2 w-1/3 md:w-1/4">
-                            <Image src={Fabian.src} alt="Team Member 2" layout="responsive" width={300} height={300} className="rounded-lg" />
+                        <div className="m-2 w-1/2 md:w-1/4">
+                            <Image src={Eduardo} alt="Eduardo" layout="responsive" width={400} height={400} />
                         </div>
-                        <div className="m-2 w-1/3 md:w-1/4">
-                            <Image src={Eduardo.src} alt="Team Member 3" layout="responsive" width={300} height={300} className="rounded-lg" />
+                        <div className="m-2 w-1/2 md:w-1/4">
+                            <Image src={Isabella} alt="Isabella" layout="responsive" width={400} height={400} />
                         </div>
-                        <div className="m-2 w-1/3 md:w-1/4">
-                            <Image src={Isabella.src} alt="Team Member 4" layout="responsive" width={300} height={300} className="rounded-lg" />
+                        <div className="m-2 w-1/2 md:w-1/4">
+                            <Image src={Jose} alt="José" layout="responsive" width={400} height={400} />
                         </div>
-                        <div className="m-2 w-1/3 md:w-1/4">
-                            <Image src={Jose.src} alt="Team Member 5" layout="responsive" width={400} height={400} className="rounded-lg" />
-                        </div>
-                        <div className="m-2 w-1/3 md:w-1/4">
-                            <Image src={grupalPhoto.src} alt="Photo in group" layout="responsive" width={400} height={400} className="rounded-lg" />
-                        </div>
+                    </div>
+
+                    <div className="flex justify-center mt-12">
+                        <Image src={grupalPhoto} alt="Grupal Team Photo" width={400} height={400} className="rounded-lg" />
                     </div>
                 </section>
             </div>
