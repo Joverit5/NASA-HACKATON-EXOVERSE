@@ -5,6 +5,8 @@ import exoplanetImage from '/app/images/exoplanet.jpg';
 import starsImage from '/app/images/stars.jpg';
 import Lenis from "lenis";
 import { useEffect } from "react";
+import David from "/app/images/David.png";
+import Santiago from "/app/images/Santiago.jpg"
 import Fabian from "/app/images/Fabián.jpg";
 import Eduardo from "/app/images/Eduardo.jpg"
 import Isabella from "/app/images/Isabella.jpg";
@@ -131,7 +133,10 @@ export default function Home() {
                 {/* Development Team Section */}
                 <section id="team" className="mb-14">
                     <h2 className="text-4xl font-bold mb-6">Our Development Team</h2>
-                    <p className="mb-5">We are a team of fifth-semester systems engineering students from the Universidad Tecnológica de Bolívar (UTB), driven by our passion for innovation and space exploration.</p>
+                    <p className="mb-5">We are a team of fifth-semester systems engineering students from the Universidad Tecnológica de Bolívar (UTB), driven by our passion for innovation and space exploration. We are also members of the Astronomy and Data Science Research Group in the Faculty of Basic Sciences.</p>
+                    <p>The research group aims to foster investigations in areas related to astronomy and data science, providing students with opportunities to develop innovative technological solutions for global challenges. Learn more about the <a href="https://www.utb.edu.co/investigacion/apoyo-a-la-investigacion/semilleros-de-investigacion/semillero-astronomia-ciencia-de-datos/" className="underline">group</a>.</p>
+
+                    <p className="mt-10">David Sierra Porta (dporta@utb.edu.co)</p>
                     <p>Santiago Quintero Pareja (@squintero@utb.edu.co)</p>
                     <p>Fabián Camilo Quintero Pareja (@parejaf@utb.edu.co)</p>
                     <p>Isabella Sofía Arrieta Guardo (@arrietai@utb.edu.co)</p>
@@ -140,6 +145,12 @@ export default function Home() {
                     
                     {/* Team Member Images */}
                     <div className="flex flex-wrap justify-center mt-12">
+                        <div className="m-2 w-1/2 md:w-1/4">
+                            <Image src={David} alt="Fabián" layout="responsive" width={400} height={400} />
+                        </div>
+                        <div className="m-2 w-1/2 md:w-1/4">
+                            <Image src={Santiago} alt="Fabián" layout="responsive" width={400} height={400} />
+                        </div>
                         <div className="m-2 w-1/2 md:w-1/4">
                             <Image src={Fabian} alt="Fabián" layout="responsive" width={400} height={400} />
                         </div>
