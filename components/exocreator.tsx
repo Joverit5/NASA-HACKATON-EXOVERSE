@@ -14,6 +14,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ChevronLeft, Trophy } from "lucide-react"
 import Link from "next/link"
+import { achievementsService } from '@/pages/api/achievements'
 
 const contrastColors = [
   '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98FB98',
@@ -308,39 +309,13 @@ const fetchAchievements = async () => {
     setPlanetInfo(generatePlanetInfo())
     setPlanetCount(prevCount => prevCount + 1)
     
-    if (!unlockedAchievements.includes("Master of Atmospheres")) {
-      await unlockAchievement("Master of Atmospheres")
-    }
-    if (planetCount + 1 >= 5 && !unlockedAchievements.includes("Superland Discoverer")) {
-      await unlockAchievement("Superland Discoverer")
-    }
-  }, [planetCount, unlockedAchievements])
+    const achievement = achievementsService.unlockAchievement("Master of Atmospheres");
+  if (achievement) {
+    setAchievementName(achievement.name);
+    setShowAchievement(true);
+    setTimeout(() => setShowAchievement(false), 5000);}
 
-  const unlockAchievement = async (name: string) => {
-    try {
-      const response = await fetch('/api/achievements', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to update achievement')
-      }
-      
-      const updatedAchievements = await response.json()
-      setUnlockedAchievements(updatedAchievements.achievements.filter((a: Achievement) => a.unlocked).map((a: Achievement) => a.name))
-      
-      setAchievementName(name)
-      setShowAchievement(true)
-
-      setTimeout(() => setShowAchievement(false), 5000)
-    } catch (error) {
-      console.error('Error updating achievement:', error)
-    }
-  }
+  }, []);
 
   return (
     <motion.div

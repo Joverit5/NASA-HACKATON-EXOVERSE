@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Trophy, Star } from "lucide-react"
+import { achievementsService } from '@/pages/api/achievements'
 
 type Achievement = {
   name: string
@@ -31,8 +32,24 @@ export function Dashboard() {
   }, [])
 
   useEffect(() => {
-    fetchAchievements()
-  }, [fetchAchievements])
+    fetchAchievements();
+  }, [fetchAchievements]);
+
+
+  useEffect(() => {
+    // Obtener los logros al cargar el componente
+    const loadedAchievements = achievementsService.getAllAchievements()
+    setAchievements(loadedAchievements)
+  }, [])
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const currentAchievements = achievementsService.getAllAchievements()
+      setAchievements(currentAchievements)
+    }, 1000)
+
+    return () => clearInterval(intervalId)
+  }, [])
 
   const { unlockedAchievements, totalAchievements, progressPercentage } = useMemo(() => {
     const unlockedCount = achievements.filter((a) => a.unlocked).length

@@ -1,47 +1,73 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+// lib/services/achievements.ts
 
-type Achievement = {
-  name: string
-  unlocked: boolean
+export interface Achievement {
+  name: string;
+  description: string;
+  unlocked: boolean;
+  unlockedAt?: string;
 }
 
-let achievements: Achievement[] = [
-  { name: "Superland Discoverer", unlocked: false },
-  { name: "Master of Atmospheres", unlocked: false },
-  { name: "ExoQuest Master", unlocked: false },
-]
+const ACHIEVEMENTS_KEY = 'app_achievements';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'GET') {
-    // Retrieve achievements from session storage if available
-    const sessionAchievements = global.sessionStorage?.getItem('achievements')
-    if (sessionAchievements) {
-      achievements = JSON.parse(sessionAchievements)
+const INITIAL_ACHIEVEMENTS: Achievement[] = [
+  {
+    name: "Superland Discoverer",
+    description: "Enter ExoVis for the first time",
+    unlocked: false
+  },
+  {
+    name: "Master of Atmospheres",
+    description: "Create your first planet in ExoCreator",
+    unlocked: false
+  },
+  {
+    name: "ExoQuest Master",
+    description: "Win ExoQuest by getting 6 or more correct answers",
+    unlocked: false
+  }
+];
+
+export const achievementsService = {
+  initializeAchievements() {
+    localStorage.clear();
+    if (typeof window !== 'undefined') {
+      const existingAchievements = localStorage.getItem(ACHIEVEMENTS_KEY);
+      if (!existingAchievements) {
+        localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(INITIAL_ACHIEVEMENTS));
+      }
     }
-    res.status(200).json(achievements)
-  } else if (req.method === 'POST') {
-    const { name } = req.body
+  },
 
-    if (!name) {
-      return res.status(400).json({ error: 'Achievement name is required' })
+  getAllAchievements(): Achievement[] {
+    if (typeof window !== 'undefined') {
+      const achievements = localStorage.getItem(ACHIEVEMENTS_KEY);
+      return achievements ? JSON.parse(achievements) : INITIAL_ACHIEVEMENTS;
     }
+    return INITIAL_ACHIEVEMENTS;
+  },
 
-    const achievementIndex = achievements.findIndex(a => a.name === name)
+  getUnlockedAchievements(): Achievement[] {
+    return this.getAllAchievements().filter(achievement => achievement.unlocked);
+  },
 
-    if (achievementIndex === -1) {
-      return res.status(404).json({ error: 'Achievement not found' })
+  unlockAchievement(name: string): Achievement | null {
+    if (typeof window !== 'undefined') {
+      const achievements = this.getAllAchievements();
+      const achievementIndex = achievements.findIndex(a => a.name === name);
+      
+      if (achievementIndex !== -1 && !achievements[achievementIndex].unlocked) {
+        achievements[achievementIndex].unlocked = true;
+        achievements[achievementIndex].unlockedAt = new Date().toISOString();
+        localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
+        return achievements[achievementIndex];
+      }
     }
+    return null;
+  },
 
-    achievements[achievementIndex].unlocked = true
-
-    // Store updated achievements in session storage
-    if (global.sessionStorage) {
-      global.sessionStorage.setItem('achievements', JSON.stringify(achievements))
+  resetAchievements() {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(INITIAL_ACHIEVEMENTS));
     }
-
-    res.status(200).json({ message: 'Achievement updated successfully', achievements })
-  } else {
-    res.setHeader('Allow', ['GET', 'POST'])
-    res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }

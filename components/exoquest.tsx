@@ -7,6 +7,7 @@ import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
+import { achievementsService } from '@/pages/api/achievements'
 import {
   Card,
   CardContent,
@@ -38,6 +39,11 @@ interface Question {
   difficulty: string
 }
 
+type Achievement = {
+  name: string
+  unlocked: boolean
+}
+
 export default function ExoQuest() {
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -48,6 +54,7 @@ export default function ExoQuest() {
   const [error, setError] = useState<string | null>(null)
   const [gameOver, setGameOver] = useState(false)
   const [isVictory, setIsVictory] = useState(false)
+  const [unlockedAchievements, setUnlockedAchievements] = useState<string[]>([])
   const router = useRouter()
   const searchParams = useSearchParams()
   const difficulty = searchParams
@@ -63,6 +70,22 @@ export default function ExoQuest() {
     return shuffled
   }, [])
 
+  
+  useEffect(() => {
+    fetchAchievements()
+  }, [])
+
+const fetchAchievements = async () => {
+    try {
+      const response = await fetch('/api/achievements')
+      if (response.ok) {
+        const achievements = await response.json()
+        setUnlockedAchievements(achievements.filter((a: Achievement) => a.unlocked).map((a: Achievement) => a.name))
+      }
+    } catch (error) {
+      console.error('Error fetching achievements:', error)
+    }
+  }
   const fetchQuestions = useCallback(async () => {
     setIsLoading(true)
     setError(null)
@@ -111,11 +134,12 @@ export default function ExoQuest() {
       setGameOver(true)
       setIsVictory(score >= 6)
       if (score >= 6) {
-        updateAchievement()
+        const achievement = achievementsService.unlockAchievement("ExoQuest Master");
       }
     }
   }, [currentQuestionIndex, questions.length, score])
 
+/*
   const updateAchievement = useCallback(async () => {
     try {
       const response = await fetch("/api/achievements", {
@@ -132,6 +156,7 @@ export default function ExoQuest() {
       console.error("Error updating achievement:", error)
     }
   }, [])
+  */
 
   const handleRetry = useCallback(() => {
     setQuestions([])
