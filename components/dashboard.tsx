@@ -45,19 +45,19 @@ export function Dashboard() {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <Card>
         <CardHeader>
-          <CardTitle>Progreso General</CardTitle>
+          <CardTitle>General Progress</CardTitle>
         </CardHeader>
         <CardContent>
           <Progress value={progressPercentage} className="w-full" />
           <p className="mt-2">
-            {unlockedAchievements} de {totalAchievements} logros completados
+            {unlockedAchievements} of {totalAchievements} completed achievements
           </p>
         </CardContent>
       </Card>
       
       <Card>
         <CardHeader>
-          <CardTitle>Logros</CardTitle>
+          <CardTitle>Achievements</CardTitle>
         </CardHeader>
         <CardContent>
           <ul className="space-y-2">
@@ -68,7 +68,7 @@ export function Dashboard() {
                   {achievement.name}
                 </span>
                 {achievement.unlocked && (
-                  <Badge variant="secondary" className="ml-auto">Desbloqueado</Badge>
+                  <Badge variant="secondary" className="ml-auto">Unlucked</Badge>
                 )}
               </li>
             ))}

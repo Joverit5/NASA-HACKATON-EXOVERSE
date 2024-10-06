@@ -8,8 +8,8 @@ type Achievement = {
 
 // Initialize achievements (in a real app, this would be stored in a database)
 let achievements: Achievement[] = [
-  { name: "Descubridor de Supertierras", unlocked: false },
-  { name: "Maestro de Atmósferas", unlocked: false },
+  { name: "Superland Discoverer", unlocked: false },
+  { name: "Master of Atmospheres", unlocked: false },
   { name: "ExoQuest Master", unlocked: false },
 ]
 
