@@ -73,6 +73,10 @@ After starting the development server, open your browser and navigate to `http:/
 - Tailwind CSS
 - shadcn/ui components
 
+## Project Presentation
+
+Youtube Link: https://youtu.be/4QGIdWIk018
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
