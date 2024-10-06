@@ -1,19 +1,19 @@
-"use client";
+'use client'
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useRouter, useSearchParams } from "next/navigation";
-import dynamic from "next/dynamic";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
+import React, { useState, useEffect, useCallback, useMemo } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { useRouter, useSearchParams } from "next/navigation"
+import dynamic from "next/dynamic"
+import { Button } from "@/components/ui/button"
+import { Progress } from "@/components/ui/progress"
+import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   Loader2,
   Star,
@@ -21,100 +21,100 @@ import {
   ChevronRight,
   Trophy,
   RefreshCw,
-} from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+} from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 const CoverParticles = dynamic(() => import("@/components/ui/star_particles"), {
   ssr: false,
   loading: () => <div className="h-screen bg-blue-950" />,
-});
+})
 
 interface Question {
-  id: string;
-  question: string;
-  options: string[];
-  correctAnswer: string;
-  explanation: string;
-  difficulty: string;
+  id: string
+  question: string
+  options: string[]
+  correctAnswer: string
+  explanation: string
+  difficulty: string
 }
 
 export default function ExoQuest() {
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState("");
-  const [isAnswered, setIsAnswered] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [gameOver, setGameOver] = useState(false);
-  const [isVictory, setIsVictory] = useState(false);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [score, setScore] = useState(0)
+  const [selectedAnswer, setSelectedAnswer] = useState("")
+  const [isAnswered, setIsAnswered] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [gameOver, setGameOver] = useState(false)
+  const [isVictory, setIsVictory] = useState(false)
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const difficulty = searchParams
     ? searchParams.get("difficulty") || "all"
-    : "all";
+    : "all"
 
   const shuffleArray = useCallback((array: any[]) => {
-    const shuffled = [...array];
+    const shuffled = [...array]
     for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
     }
-    return shuffled;
-  }, []);
+    return shuffled
+  }, [])
 
   const fetchQuestions = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
+    setIsLoading(true)
+    setError(null)
     try {
-      const response = await fetch(`/api/questions?difficulty=${difficulty}`);
+      const response = await fetch(`/api/questions?difficulty=${difficulty}`)
       if (!response.ok) {
-        throw new Error("Failed to fetch questions");
+        throw new Error("Failed to fetch questions")
       }
-      const data = await response.json();
+      const data = await response.json()
       const randomizedQuestions = shuffleArray(data)
         .slice(0, 10)
         .map((q: Question) => ({
           ...q,
           options: shuffleArray(q.options),
-        }));
-      setQuestions(randomizedQuestions);
+        }))
+      setQuestions(randomizedQuestions)
     } catch (err) {
-      setError("An error occurred when loading questions. Please try again.");
+      setError("An error occurred when loading questions. Please try again.")
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, [difficulty, shuffleArray]);
+  }, [difficulty, shuffleArray])
 
   useEffect(() => {
-    fetchQuestions();
-  }, [fetchQuestions]);
+    fetchQuestions()
+  }, [fetchQuestions])
 
   const handleAnswer = useCallback(
     (answer: string) => {
-      if (isAnswered) return;
-      setSelectedAnswer(answer);
-      setIsAnswered(true);
+      if (isAnswered) return
+      setSelectedAnswer(answer)
+      setIsAnswered(true)
       if (answer === questions[currentQuestionIndex].correctAnswer) {
-        setScore((prevScore) => prevScore + 1);
+        setScore((prevScore) => prevScore + 1)
       }
     },
     [isAnswered, questions, currentQuestionIndex]
-  );
+  )
 
   const handleNext = useCallback(() => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-      setSelectedAnswer("");
-      setIsAnswered(false);
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1)
+      setSelectedAnswer("")
+      setIsAnswered(false)
     } else {
-      setGameOver(true);
-      setIsVictory(score >= 6);
+      setGameOver(true)
+      setIsVictory(score >= 6)
       if (score >= 6) {
-        updateAchievement();
+        updateAchievement()
       }
     }
-  }, [currentQuestionIndex, questions.length, score]);
+  }, [currentQuestionIndex, questions.length, score])
 
   const updateAchievement = useCallback(async () => {
     try {
@@ -124,38 +124,38 @@ export default function ExoQuest() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ name: "ExoQuest Master" }),
-      });
+      })
       if (!response.ok) {
-        throw new Error("Failed to update achievement");
+        throw new Error("Failed to update achievement")
       }
     } catch (error) {
-      console.error("Error updating achievement:", error);
+      console.error("Error updating achievement:", error)
     }
-  }, []);
+  }, [])
 
   const handleRetry = useCallback(() => {
-    setQuestions([]);
-    setCurrentQuestionIndex(0);
-    setScore(0);
-    setSelectedAnswer("");
-    setIsAnswered(false);
-    setGameOver(false);
-    setIsVictory(false);
-    fetchQuestions();
-  }, [fetchQuestions]);
+    setQuestions([])
+    setCurrentQuestionIndex(0)
+    setScore(0)
+    setSelectedAnswer("")
+    setIsAnswered(false)
+    setGameOver(false)
+    setIsVictory(false)
+    fetchQuestions()
+  }, [fetchQuestions])
 
   const getButtonStyle = useCallback(
     (option: string) => {
       if (!isAnswered)
-        return "bg-indigo-700/30 text-white hover:bg-indigo-600/50";
+        return "bg-indigo-700/30 text-white hover:bg-indigo-600/50"
       if (option === questions[currentQuestionIndex].correctAnswer)
-        return "bg-green-500/30 text-white hover:bg-green-600/50";
+        return "bg-green-500/30 text-white hover:bg-green-600/50"
       if (option === selectedAnswer)
-        return "bg-red-500/30 text-white hover:bg-red-600/50";
-      return "bg-indigo-700/30 text-white hover:bg-indigo-600/50";
+        return "bg-red-500/30 text-white hover:bg-red-600/50"
+      return "bg-indigo-700/30 text-white hover:bg-indigo-600/50"
     },
     [isAnswered, questions, currentQuestionIndex, selectedAnswer]
-  );
+  )
 
   const progressPercentage = useMemo(
     () =>
@@ -163,14 +163,14 @@ export default function ExoQuest() {
         ? ((currentQuestionIndex + 1) / questions.length) * 100
         : 0,
     [questions.length, currentQuestionIndex]
-  );
+  )
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-blue-950">
         <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -185,7 +185,7 @@ export default function ExoQuest() {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       </div>
-    );
+    )
   }
 
   if (questions.length === 0) {
@@ -198,7 +198,7 @@ export default function ExoQuest() {
           </AlertDescription>
         </Alert>
       </div>
-    );
+    )
   }
 
   if (gameOver) {
@@ -259,10 +259,10 @@ export default function ExoQuest() {
           </CardFooter>
         </Card>
       </motion.div>
-    );
+    )
   }
 
-  const currentQuestion = questions[currentQuestionIndex];
+  const currentQuestion = questions[currentQuestionIndex]
 
   return (
     <motion.div
@@ -356,5 +356,5 @@ export default function ExoQuest() {
         </CardFooter>
       </Card>
     </motion.div>
-  );
+  )
 }

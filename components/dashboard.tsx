@@ -1,51 +1,47 @@
-"use client";
+'use client'
 
-import { useState, useEffect, useMemo, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Trophy, Star } from "lucide-react";
+import { useState, useEffect, useMemo, useCallback } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Trophy, Star } from "lucide-react"
 
 type Achievement = {
-  name: string;
-  unlocked: boolean;
-};
+  name: string
+  unlocked: boolean
+}
 
 export function Dashboard() {
-  const [achievements, setAchievements] = useState<Achievement[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [achievements, setAchievements] = useState<Achievement[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   const fetchAchievements = useCallback(async () => {
     try {
-      const response = await fetch("/api/achievements");
+      const response = await fetch("/api/achievements")
       if (!response.ok) {
-        throw new Error("Failed to fetch achievements");
+        throw new Error("Failed to fetch achievements")
       }
-      const data = await response.json();
-      setAchievements(data);
+      const data = await response.json()
+      setAchievements(data)
     } catch (error) {
-      console.error("Error fetching achievements:", error);
+      console.error("Error fetching achievements:", error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
-    fetchAchievements();
-  }, [fetchAchievements]);
+    fetchAchievements()
+  }, [fetchAchievements])
 
-  const { unlockedAchievements, totalAchievements, progressPercentage } =
-    useMemo(() => {
-      const unlockedCount = achievements.filter((a) => a.unlocked).length;
-      return {
-        unlockedAchievements: unlockedCount,
-        totalAchievements: achievements.length,
-        progressPercentage:
-          achievements.length > 0
-            ? (unlockedCount / achievements.length) * 100
-            : 0,
-      };
-    }, [achievements]);
+  const { unlockedAchievements, totalAchievements, progressPercentage } = useMemo(() => {
+    const unlockedCount = achievements.filter((a) => a.unlocked).length
+    return {
+      unlockedAchievements: unlockedCount,
+      totalAchievements: achievements.length,
+      progressPercentage: achievements.length > 0 ? (unlockedCount / achievements.length) * 100 : 0,
+    }
+  }, [achievements])
 
   if (isLoading) {
     return (
@@ -56,7 +52,7 @@ export function Dashboard() {
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         />
       </div>
-    );
+    )
   }
 
   return (
@@ -120,9 +116,7 @@ export function Dashboard() {
                   <div className="flex items-center">
                     <Trophy
                       className={`h-5 w-5 mr-3 ${
-                        achievement.unlocked
-                          ? "text-yellow-400"
-                          : "text-gray-400"
+                        achievement.unlocked ? "text-yellow-400" : "text-gray-400"
                       }`}
                     />
                     <span
@@ -134,10 +128,7 @@ export function Dashboard() {
                     </span>
                   </div>
                   {achievement.unlocked && (
-                    <Badge
-                      variant="secondary"
-                      className="bg-indigo-600 text-white"
-                    >
+                    <Badge variant="secondary" className="bg-indigo-600 text-white">
                       Unlocked
                     </Badge>
                   )}
@@ -148,5 +139,5 @@ export function Dashboard() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

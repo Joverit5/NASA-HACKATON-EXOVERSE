@@ -19,8 +19,8 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="/planet-creator" className="text-xl hover:text-blue-400 transition-colors">
-              Planet Creator
+            <Link href="/exocreator" className="text-xl hover:text-blue-400 transition-colors">
+              ExoCreator
             </Link>
           </li>
           <li>
