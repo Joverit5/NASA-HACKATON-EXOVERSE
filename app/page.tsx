@@ -5,6 +5,7 @@ import exoplanetImage from '/app/images/exoplanet.jpg';
 import starsImage from '/app/images/stars.jpg';
 import Lenis from "lenis";
 import { useEffect } from "react";
+import fotoGrupal from "/app/images/grupal.jpg";
 
 export default function Home() {
     useEffect(() => {
@@ -134,6 +135,13 @@ export default function Home() {
                     <p>Isabella Sofía Arrieta Guardo (@arrietai@utb.edu.co)</p>
                     <p>Eduardo Alejandro Negrín Pérez (@enegrin@utb.edu.co)</p>
                     <p>José Fernando González Ortiz (@joseortiz@utb.edu.co)</p>
+                    <div className="md:w-1/3 mt-10">
+                        <img
+                            src={fotoGrupal.src}
+                            alt="Team Photo"
+                            className="w-full h-auto rounded-lg shadow-lg"
+                        />
+                    </div>
                 </section>
             </div>
         </div>
