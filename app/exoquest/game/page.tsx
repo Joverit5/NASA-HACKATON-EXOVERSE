@@ -1,6 +1,10 @@
-import React from 'react';  
+import React, { Suspense } from 'react';  
 import ExoQuest from "@/components/exoquest";
 
 export default function ExoQuestGame() {
-  return <ExoQuest />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ExoQuest />
+    </Suspense>
+  );
 }
