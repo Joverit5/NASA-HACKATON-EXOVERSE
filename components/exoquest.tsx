@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { useRouter, useSearchParams } from "next/navigation"
-import dynamic from "next/dynamic"
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
-import { Badge } from "@/components/ui/badge"
-import { achievementsService } from '@/pages/api/achievements'
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useRouter, useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { achievementsService } from '@/pages/api/achievements';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Loader2,
   Star,
@@ -22,44 +22,43 @@ import {
   ChevronRight,
   Trophy,
   RefreshCw,
-} from "lucide-react"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+} from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const CoverParticles = dynamic(() => import("@/components/ui/star_particles"), {
   ssr: false,
   loading: () => <div className="h-screen bg-blue-950" />,
-})
+});
 
 interface Question {
-  id: string
-  question: string
-  options: string[]
-  correctAnswer: string
-  explanation: string
-  difficulty: string
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswer: string;
+  explanation: string;
+  difficulty: string;
 }
 
 type Achievement = {
-  name: string
-  unlocked: boolean
+  name: string;
+  unlocked: boolean;
 }
 
 export default function ExoQuest() {
-  const [questions, setQuestions] = useState<Question[]>([])
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [score, setScore] = useState(0)
-  const [selectedAnswer, setSelectedAnswer] = useState("")
-  const [isAnswered, setIsAnswered] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [gameOver, setGameOver] = useState(false)
-  const [isVictory, setIsVictory] = useState(false)
-  const [unlockedAchievements, setUnlockedAchievements] = useState<string[]>([])
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const difficulty = searchParams
-    ? searchParams.get("difficulty") || "all"
-    : "all"
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [gameOver, setGameOver] = useState(false);
+  const [isVictory, setIsVictory] = useState(false);
+  const [unlockedAchievements, setUnlockedAchievements] = useState<string[]>([]);
+  const router = useRouter();
+  
+  const searchParams = useSearchParams();
+  const difficulty = searchParams.get("difficulty") || "all";
 
   const shuffleArray = useCallback((array: any[]) => {
     const shuffled = [...array]
