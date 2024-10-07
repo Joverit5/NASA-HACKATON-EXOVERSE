@@ -160,19 +160,14 @@ export default function Home() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
-                                <Image src={David} alt="David" width={200} height={200} className="rounded-full mx-auto mb-4" />
-                                <h3 className="text-xl font-semibold mb-2 text-center">David Sierra Porta</h3>
-                                <p className="text-center text-gray-400">dporta@utb.edu.co</p>
+                                <Image src={Fabian} alt="Fabián" width={200} height={200} className="rounded-full mx-auto mb-4" />
+                                <h3 className="text-xl font-semibold mb-2 text-center">Fabián Camilo Quintero Pareja</h3>
+                                <p className="text-center text-gray-400">parejaf@utb.edu.co</p>
                             </div>
                             <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
                                 <Image src={Santiago} alt="Santiago" width={200} height={200} className="rounded-full mx-auto mb-4" />
                                 <h3 className="text-xl font-semibold mb-2 text-center">Santiago Quintero Pareja</h3>
                                 <p className="text-center text-gray-400">squintero@utb.edu.co</p>
-                            </div>
-                            <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
-                                <Image src={Fabian} alt="Fabián" width={200} height={200} className="rounded-full mx-auto mb-4" />
-                                <h3 className="text-xl font-semibold mb-2 text-center">Fabián Camilo Quintero Pareja</h3>
-                                <p className="text-center text-gray-400">parejaf@utb.edu.co</p>
                             </div>
                             <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
                                 <Image src={Eduardo} alt="Eduardo" width={200} height={200} className="rounded-full mx-auto mb-4" />
@@ -188,6 +183,11 @@ export default function Home() {
                                 <Image src={Jose} alt="José" width={200} height={200} className="rounded-full mx-auto mb-4" />
                                 <h3 className="text-xl font-semibold mb-2 text-center">José Fernando González Ortiz</h3>
                                 <p className="text-center text-gray-400">joseortiz@utb.edu.co</p>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg p-6 shadow-lg transition-transform duration-300 hover:scale-105">
+                                <Image src={David} alt="David" width={200} height={200} className="rounded-full mx-auto mb-4" />
+                                <h3 className="text-xl font-semibold mb-2 text-center">David Sierra Porta</h3>
+                                <p className="text-center text-gray-400">dporta@utb.edu.co</p>
                             </div>
                         </div>
                     </section>
