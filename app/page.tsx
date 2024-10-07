@@ -41,7 +41,7 @@ export default function Home() {
         <div className="bg-black text-white">
             <Navbar />
             
-            {/* Exoplanets Section with Stars Background */}
+            {/* Exoplanets Section with Stars Background Description*/}
             <div className="relative">
                 <div 
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50"
@@ -49,7 +49,7 @@ export default function Home() {
                         backgroundImage: `url(${starsImage.src})`,
                     }}
                 ></div>
-                //Description
+
                 <div className="flex flex-col md:flex-row items-center justify-between p-6 md:p-14 max-w-7xl mx-auto min-h-screen relative z-10">
                     <div className="w-full md:w-1/2 pr-0 md:pr-8 mb-6 md:mb-0">
                         <h1 className="text-4xl font-bold mb-4">Exoplanets</h1>
