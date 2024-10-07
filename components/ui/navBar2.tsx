@@ -47,7 +47,7 @@ export default function Navbar2() {
               </Link>
             </li>
             <li>
-              <Link href="/exoquest" className="text-xl text-white hover:text-blue-400 transition-colors">
+              <Link href="/exoquest/menu" className="text-xl text-white hover:text-blue-400 transition-colors">
                 ExoQuest
               </Link>
             </li>
@@ -71,7 +71,7 @@ export default function Navbar2() {
               </Link>
             </li>
             <li>
-              <Link href="/exoquest" className="block text-xl text-white hover:text-blue-400 transition-colors" onClick={() => setIsOpen(false)}>
+              <Link href="/exoquest/menu" className="block text-xl text-white hover:text-blue-400 transition-colors" onClick={() => setIsOpen(false)}>
                 ExoQuest
               </Link>
             </li>

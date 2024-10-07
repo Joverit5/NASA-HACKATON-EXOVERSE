@@ -11,7 +11,6 @@ import Fabian from "/app/images/Fabián.jpg";
 import Eduardo from "/app/images/Eduardo.jpg"
 import Isabella from "/app/images/Isabella.jpg";
 import Jose from "/app/images/Jose.jpg";
-import grupalPhoto from "/app/images/grupal.jpg";
 import { BookOpen, Brain, Palette, Telescope } from 'lucide-react';
 
 export default function Home() {
