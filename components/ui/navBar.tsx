@@ -2,21 +2,27 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
-
+import { motion, AnimatePresence } from 'framer-motion'
+import { Menu, X, Rocket, Brain, ChartBar, Users } from 'lucide-react'
+import { cn } from "@/lib/utils"
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isSticky, setIsSticky] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsSticky(window.scrollY > 0)
+      setIsScrolled(window.scrollY > 20)
     }
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener("scroll", handleScroll)
     return () => {
-      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener("scroll", handleScroll)
     }
   }, [])
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen)
+  }
+
 
   const handleCreditsClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault()
@@ -27,70 +33,110 @@ export default function Navbar() {
     setIsOpen(false)
   }
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen)
-  }
+  const navItems = [
+    { href: "/exoquest/menu", icon: Rocket, label: "ExoQuest" },
+    { href: "/exocreator", icon: Brain, label: "ExoCreator" },
+    { href: "/exovis", icon: ChartBar, label: "ExoVis" },
+  ]
 
   return (
-    <nav className={`${isSticky ? 'fixed top-0 left-0 right-0 bg-black bg-opacity-90' : 'bg-transparent'} p-4 transition-all duration-300 z-50`}>
-      <div className="container mx-auto">
+    <motion.nav
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-md transition-all duration-300",
+        isScrolled ? "py-2" : "py-4"
+      )}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+    >
+      <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold tracking-tighter">
+          <Link href="/" className="text-2xl font-bold tracking-tighter text-white hover:text-primary transition-colors">
             Exoverse
           </Link>
           <div className="md:hidden">
-            <button onClick={toggleMenu} className="text-white focus:outline-none">
+            <button
+              onClick={toggleMenu}
+              className="text-white focus:outline-none"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+            >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
-          <ul className="hidden md:flex md:space-x-6">
+          <ul className="hidden md:flex md:space-x-6 items-center">
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <NavItem {...item} />
+              </li>
+            ))}
             <li>
-              <Link href="/exoquest/menu" className="text-xl hover:text-blue-400 transition-colors">
-                ExoQuest
-              </Link>
-            </li>
-            <li>
-              <Link href="/exocreator" className="text-xl hover:text-blue-400 transition-colors">
-                ExoCreator
-              </Link>
-            </li>
-            <li>
-              <Link href="/exovis" className="text-xl hover:text-blue-400 transition-colors">
-                ExoVis
-              </Link>
-            </li>
-            <li>
-              <a href="#team" onClick={handleCreditsClick} className="text-xl text-white hover:text-blue-400">
-                Credits
+              <a
+                href="#team"
+                onClick={handleCreditsClick}
+                className="flex items-center space-x-2 text-xl text-white hover:text-blue-400 transition-colors"
+              >
+                <Users className="h-5 w-5" />
+                <span>Credits</span>
               </a>
             </li>
           </ul>
         </div>
-        <div className={`md:hidden ${isOpen ? 'block' : 'hidden'} mt-4`}>
-          <ul className="flex flex-col space-y-2">
-            <li>
-              <Link href="/exoquest/menu" className="block text-xl hover:text-blue-400 transition-colors" onClick={() => setIsOpen(false)}>
-                ExoQuest
-              </Link>
-            </li>
-            <li>
-              <Link href="/exocreator" className="block text-xl hover:text-blue-400 transition-colors" onClick={() => setIsOpen(false)}>
-                ExoCreator
-              </Link>
-            </li>
-            <li>
-              <Link href="/exovis" className="block text-xl hover:text-blue-400 transition-colors" onClick={() => setIsOpen(false)}>
-                ExoVis
-              </Link>
-            </li>
-            <li>
-              <a href="#team" onClick={handleCreditsClick} className="block text-xl text-white hover:text-blue-400">
-                Credits
-              </a>
-            </li>
-          </ul>
-        </div>
+        <AnimatePresence>
+          {isOpen && (
+            <MobileMenu
+              navItems={navItems}
+              handleCreditsClick={handleCreditsClick}
+              toggleMenu={toggleMenu}
+            />
+          )}
+        </AnimatePresence>
       </div>
-    </nav>
+    </motion.nav>
   )
 }
+
+const NavItem = ({ href, icon: Icon, label }) => (
+  <Link
+    href={href}
+    className="flex items-center space-x-2 text-xl text-white hover:text-blue-400 transition-colors"
+  >
+    <Icon className="h-5 w-5" />
+    <span>{label}</span>
+  </Link>
+)
+
+const MobileMenu = ({ navItems, handleCreditsClick, toggleMenu }) => (
+  <motion.div
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.2 }}
+    className="md:hidden absolute top-full left-0 right-0 bg-black/90 backdrop-blur-md py-4"
+  >
+    <div className="container mx-auto px-4 flex flex-col space-y-4">
+    <ul className="flex flex-col space-y-2">
+    {navItems.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href}
+          className="flex items-center space-x-2 text-white hover:text-primary transition-colors"
+          onClick={toggleMenu}
+        >
+          <item.icon className="h-4 w-4" />
+          <span>{item.label}</span>
+        </Link>
+      ))}
+      <li>
+        <a
+          href="#team"
+          onClick={handleCreditsClick}
+          className="flex items-center space-x-2 text-white hover:text-primary transition-colors"
+        >
+          <Users className="h-5 w-5" />
+          <span>Credits</span>
+        </a>
+      </li>
+    </ul>
+    </div>
+  </motion.div>
+)
