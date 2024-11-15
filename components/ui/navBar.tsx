@@ -5,6 +5,17 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Rocket, Brain, ChartBar, Users } from 'lucide-react'
 import { cn } from "@/lib/utils"
+interface NavItemProps {
+  href: string;
+  icon: React.ElementType; 
+  label: string;
+}
+interface MobileMenuProps {
+  navItems: NavItemProps[];
+  handleCreditsClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  toggleMenu: () => void;
+}
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -95,7 +106,7 @@ export default function Navbar() {
   )
 }
 
-const NavItem = ({ href, icon: Icon, label }) => (
+const NavItem: React.FC<NavItemProps> = ({ href, icon: Icon, label }) => (
   <Link
     href={href}
     className="flex items-center space-x-2 text-xl text-white hover:text-blue-400 transition-colors"
@@ -103,9 +114,9 @@ const NavItem = ({ href, icon: Icon, label }) => (
     <Icon className="h-5 w-5" />
     <span>{label}</span>
   </Link>
-)
+);
 
-const MobileMenu = ({ navItems, handleCreditsClick, toggleMenu }) => (
+const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, handleCreditsClick, toggleMenu }) => (
   <motion.div
     initial={{ opacity: 0, y: -20 }}
     animate={{ opacity: 1, y: 0 }}
