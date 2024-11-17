@@ -3,28 +3,19 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef, Suspense } from 'react'
 import { motion, AnimatePresence } from "framer-motion"
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { OrbitControls, Stars, useTexture, SpotLight } from '@react-three/drei'
+import { OrbitControls, Stars, useTexture, SpotLight, Environment, AccumulativeShadows, RandomizedLight, ContactShadows } from '@react-three/drei'
 import * as THREE from 'three'
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ChevronLeft, Trophy } from "lucide-react"
+import { ChevronLeft, Trophy, Sun, Satellite as SatelliteIcon, CircleDot, HelpCircle, Maximize2 } from "lucide-react"
 import Link from "next/link"
-import { achievementsService } from '@/pages/api/achievements'
 
 const contrastColors = [
   '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98FB98',
   '#DDA0DD', '#F0E68C', '#FF69B4', '#20B2AA', '#B0E0E6',
 ]
-
-type Achievement = {
-  name: string
-  unlocked: boolean
-}
 
 const createProceduralTexture = (type: string, color: string) => {
   const canvas = document.createElement('canvas')
@@ -123,9 +114,9 @@ const Planet: React.FC<PlanetProps> = ({ radius, color, planetType, satelliteCou
   })
 
   const ringDistances = useMemo(() => {
-    let distances = [radius + 1.8]
+    let distances = [radius + 0.5]
     for (let i = 1; i < ringCount; i++) {
-      distances.push(distances[i-1] + Math.random() * 0.5 + 0.2)
+      distances.push(distances[i-1] + 0.3)
     }
     return distances
   }, [radius, ringCount])
@@ -146,14 +137,14 @@ const Planet: React.FC<PlanetProps> = ({ radius, color, planetType, satelliteCou
       {Array.from({ length: satelliteCount }, (_, i) => (
         <Satellite 
           key={i} 
-          radius={radius * 0.2} 
-          orbitRadius={radius + 1.5 + i * 0.5} 
+          radius={radius * 0.1} 
+          orbitRadius={radius + 1 + i * 0.5} 
           speed={0.5 + i * 0.2}
         />
       ))}
       {ringCount > 0 && ringDistances.map((distance, i) => (
-        <mesh rotation={[-Math.PI / 2, 0, 0]} key={i}>
-          <ringGeometry args={[distance, distance + 0.2, 64]} />
+        <mesh rotation={[Math.PI / 2, 0, 0]} key={i}>
+          <ringGeometry args={[distance, distance + 0.1, 64]} />
           <meshStandardMaterial color={contrastColors[i % contrastColors.length]} side={THREE.DoubleSide} transparent opacity={0.7} />
         </mesh>
       ))}
@@ -169,7 +160,6 @@ interface StarProps {
 }
 
 const Star: React.FC<StarProps> = ({ color, intensity, distance, size }) => {
-  const { scene } = useThree()
   const lightRef = useRef<THREE.PointLight>(null!)
   const glowRef = useRef<THREE.Mesh>(null!)
 
@@ -200,58 +190,243 @@ const Star: React.FC<StarProps> = ({ color, intensity, distance, size }) => {
   )
 }
 
-interface SceneLightProps {
-  color: THREE.Color
-  intensity: number
-}
-
-const SceneLight: React.FC<SceneLightProps> = ({ color, intensity }) => {
+const PlanetControls = ({ activeTab, onTabChange, planetProps, onPropChange }) => {
   return (
-    <SpotLight
-      position={[10, 10, 10]}
-      angle={0.3}
-      penumbra={1}
-      intensity={intensity * 5}
-      color={color.getHexString()}
-      castShadow
-      shadow-mapSize={[2048, 2048]}
-    />
+    <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10 w-auto max-w-md">
+      <div className="bg-gray-800/80 backdrop-blur-md rounded-full p-2 flex gap-2">
+        <Button
+          variant={activeTab === 'planet' ? 'default' : 'ghost'}
+          size="lg"
+          className="rounded-full"
+          onClick={() => onTabChange('planet')}
+        >
+          <CircleDot className="h-5 w-5 mr-2" />
+          Planet
+        </Button>
+        <Button
+          variant={activeTab === 'star' ? 'default' : 'ghost'}
+          size="lg"
+          className="rounded-full"
+          onClick={() => onTabChange('star')}
+        >
+          <Sun className="h-5 w-5 mr-2" />
+          Star
+        </Button>
+        <Button
+          variant={activeTab === 'system' ? 'default' : 'ghost'}
+          size="lg"
+          className="rounded-full"
+          onClick={() => onTabChange('system')}
+        >
+          <SatelliteIcon className="h-5 w-5 mr-2" />
+          System
+        </Button>
+      </div>
+
+      <AnimatePresence mode="wait">
+        {activeTab === 'planet' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="mt-4 bg-gray-800/80 backdrop-blur-md rounded-2xl p-6 flex gap-6"
+          >
+            <div className="space-y-3">
+              <div>
+                <label className="text-sm text-white/80 mb-2 block">Size</label>
+                <Slider
+                  min={0.5}
+                  max={2}
+                  step={0.1}
+                  value={[planetProps.radius]}
+                  onValueChange={([value]) => onPropChange('radius', value)}
+                  className="w-40"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-white/80 mb-2 block">Color</label>
+                <div className="flex flex-wrap gap-2">
+                  {contrastColors.map((color, index) => (
+                    <button
+                      key={index}
+                      className={`w-6 h-6 rounded-full ${planetProps.color === color ? 'ring-2 ring-white' : ''}`}
+                      style={{ backgroundColor: color }}
+                      onClick={() => onPropChange('color', color)}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant={planetProps.type === 'rock' ? 'default' : 'outline'}
+                  size="sm"
+                  className="rounded-full"
+                  onClick={() => {
+                    onPropChange('type', 'rock')
+                    onPropChange('textureType', 'rock')
+                  }}
+                >
+                  Rocky
+                </Button>
+                <Button
+                  variant={planetProps.type === 'gas' ? 'default' : 'outline'}
+                  size="sm"
+                  className="rounded-full"
+                  onClick={() => {
+                    onPropChange('type', 'gas')
+                    onPropChange('textureType', 'gas')
+                  }}
+                >
+                  Gas
+                </Button>
+                <Button
+                  variant={planetProps.type === 'water' ? 'default' : 'outline'}
+                  size="sm"
+                  className="rounded-full"
+                  onClick={() => {
+                    onPropChange('type', 'water')
+                    onPropChange('textureType', 'water')
+                  }}
+                >
+                  Ocean
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {activeTab === 'star' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="mt-4 bg-gray-800/80 backdrop-blur-md rounded-2xl p-6 flex gap-6"
+          >
+            <div className="space-y-3">
+              <div>
+                <label className="text-sm text-white/80 mb-2 block">Distance</label>
+                <Slider
+                  min={20}
+                  max={100}
+                  step={1}
+                  value={[planetProps.starDistance]}
+                  onValueChange={([value]) => onPropChange('starDistance', value)}
+                  className="w-40"
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant={planetProps.starType === 'redDwarf' ? 'default' : 'outline'}
+                  size="sm"
+                  className="rounded-full"
+                  onClick={() => onPropChange('starType', 'redDwarf')}
+                >
+                  Red Dwarf
+                </Button>
+                <Button
+                  variant={planetProps.starType === 'yellowDwarf' ? 'default' : 'outline'}
+                  size="sm"
+                  className="rounded-full"
+                  onClick={() => onPropChange('starType', 'yellowDwarf')}
+                >
+                  Yellow Dwarf
+                </Button>
+                <Button
+                  variant={planetProps.starType === 'giant' ? 'default' : 'outline'}
+                  size="sm"
+                  className="rounded-full"
+                  onClick={() => onPropChange('starType', 'giant')}
+                >
+                  Giant
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {activeTab === 'system' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="mt-4 bg-gray-800/80  backdrop-blur-md rounded-2xl p-6 flex gap-6"
+          >
+            <div className="space-y-3">
+              <div>
+                <label className="text-sm text-white/80 mb-2 block">Satellites</label>
+                <Slider
+                  min={0}
+                  max={5}
+                  step={1}
+                  value={[planetProps.satelliteCount]}
+                  onValueChange={([value]) => onPropChange('satelliteCount', value)}
+                  className="w-40"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-white/80 mb-2 block">Rings</label>
+                <Slider
+                  min={0}
+                  max={5}
+                  step={1}
+                  value={[planetProps.ringCount]}
+                  onValueChange={([value]) => onPropChange('ringCount', value)}
+                  className="w-40"
+                />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   )
 }
 
-export default function ExoCreator() {
-  const [radius, setRadius] = useState(1)
-  const [color, setColor] = useState(contrastColors[0])
-  const [planetType, setPlanetType] = useState<'water' | 'rock' | 'gas'>('water')
-  const [satelliteCount, setSatelliteCount] = useState(1)
-  const [ringCount, setRingCount] = useState(0)
-  const [starType, setStarType] = useState<'redDwarf' | 'yellowDwarf' | 'giant'>('yellowDwarf')
-  const [textureType, setTextureType] = useState('water')
-  const [starDistance, setStarDistance] = useState(50)
+const EnhancedLighting = () => {
+  return (
+    <>
+      <Environment preset="sunset" />
+      <AccumulativeShadows temporal frames={100} scale={10}>
+        <RandomizedLight amount={8} radius={4} position={[5, 5, -10]} />
+      </AccumulativeShadows>
+      <ContactShadows
+        opacity={0.5}
+        scale={10}
+        blur={1}
+        far={10}
+        resolution={256}
+        color="#000000"
+      />
+      <ambientLight intensity={0.8} />
+      <pointLight position={[10, 10, 10]} intensity={1.5} />
+      <pointLight position={[-10, -10, -10]} intensity={0.5} />
+    </>
+  )
+}
+
+const ExoCreator: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('planet')
+  const [planetProps, setPlanetProps] = useState({
+    radius: 1,
+    type: 'rock',
+    color: '#4ECDC4',
+    satelliteCount: 1,
+    ringCount: 0,
+    starType: 'yellowDwarf',
+    starDistance: 50,
+    textureType: 'rock'
+  })
   const [planetInfo, setPlanetInfo] = useState<string | null>(null)
   const [showAchievement, setShowAchievement] = useState(false)
   const [achievementName, setAchievementName] = useState("")
-  const [unlockedAchievements, setUnlockedAchievements] = useState<string[]>([])
-  const [planetCount, setPlanetCount] = useState(0)
+  const [hasUnlockedAchievement, setHasUnlockedAchievement] = useState(false)
 
-  useEffect(() => {
-    fetchAchievements()
-  }, [])
-
-const fetchAchievements = async () => {
-    try {
-      const response = await fetch('/api/achievements')
-      if (response.ok) {
-        const achievements = await response.json()
-        setUnlockedAchievements(achievements.filter((a: Achievement) => a.unlocked).map((a: Achievement) => a.name))
-      }
-    } catch (error) {
-      console.error('Error fetching achievements:', error)
-    }
+  const handlePropChange = (prop: string, value: any) => {
+    setPlanetProps(prev => ({ ...prev, [prop]: value }))
   }
 
   const starColor = useMemo(() => {
-    switch (starType) {
+    switch (planetProps.starType) {
       case 'redDwarf':
         return new THREE.Color(0xff4500)
       case 'yellowDwarf':
@@ -261,10 +436,10 @@ const fetchAchievements = async () => {
       default:
         return new THREE.Color(0xffff00)
     }
-  }, [starType])
+  }, [planetProps.starType])
 
   const starIntensity = useMemo(() => {
-    switch (starType) {
+    switch (planetProps.starType) {
       case 'redDwarf':
         return 12
       case 'yellowDwarf':
@@ -274,10 +449,10 @@ const fetchAchievements = async () => {
       default:
         return 18
     }
-  }, [starType])
+  }, [planetProps.starType])
 
   const starSize = useMemo(() => {
-    switch (starType) {
+    switch (planetProps.starType) {
       case 'redDwarf':
         return 3
       case 'yellowDwarf':
@@ -287,7 +462,7 @@ const fetchAchievements = async () => {
       default:
         return 5
     }
-  }, [starType])
+  }, [planetProps.starType])
 
   const generatePlanetInfo = () => {
     const mass = (Math.random() * 10 + 0.1).toFixed(2)
@@ -305,183 +480,99 @@ const fetchAchievements = async () => {
     `
   }
 
-  const handleCreateExoplanet = useCallback(async () => {
+  const handleCreateExoplanet = useCallback(() => {
     setPlanetInfo(generatePlanetInfo())
-    setPlanetCount(prevCount => prevCount + 1)
-    
-    const achievement = achievementsService.unlockAchievement("Master of Atmospheres");
-  if (achievement) {
-    setAchievementName(achievement.name);
-    setShowAchievement(true);
-    setTimeout(() => setShowAchievement(false), 5000);}
+    if (!hasUnlockedAchievement) {
+      setShowAchievement(true)
+      setAchievementName("Master of Atmospheres")
+      setHasUnlockedAchievement(true)
+      setTimeout(() => setShowAchievement(false), 5000)
+    }
+  }, [hasUnlockedAchievement])
 
-  }, []);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="relative"
-    >
-      <div className="flex flex-col md:flex-row h-screen bg-gray-900 text-white p-8">
+    <div className="relative w-full h-screen bg-black">
+      <div className="absolute top-4 left-4 z-10 flex items-center gap-4">
         <Link href="/">
-          <Button variant="outline" size="icon">
-            <ChevronLeft className="h-4 w-4" />
+          <Button variant="ghost" size="icon" className="rounded-full bg-black/50 backdrop-blur-md">
+            <ChevronLeft className="h-5 w-5" />
           </Button>
         </Link>
-        <div className="w-full md:w-1/2 h-64 md:h-full mb-8 md:mb-0">
-          <Canvas shadows camera={{ position: [0, 5, 50], fov: 60 }}>
-            <ambientLight intensity={0.2} />
-            <SceneLight color={starColor} intensity={starIntensity * 0.5} />
-            <Suspense fallback={null}>
-              <Planet 
-                radius={radius} 
-                color={color} 
-                planetType={planetType} 
-                satelliteCount={satelliteCount} 
-                ringCount={ringCount} 
-                textureType={textureType}
-              />
-              <Star color={starColor} intensity={starIntensity} distance={starDistance} size={starSize} />
-            </Suspense>
-            <OrbitControls enableZoom={true} maxDistance={20} minDistance={5} />
-            <Stars radius={300} depth={100} count={5000} factor={4} saturation={0} fade speed={1} />
-          </Canvas>
-        </div>
-        <div className="w-full glassmorphism md:w-1/2 space-y-6 p-6 bg-gray-800 rounded-lg overflow-y-auto">
-          <h2 className="text-2xl font-bold mb-4">Customize Your Exoplanet</h2>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="radius">Radius</Label>
-              <Slider
-                id="radius"
-                min={0.5}
-                max={2}
-                step={0.1}
-                value={[radius]}
-                onValueChange={(value) => setRadius(value[0])}
-              />
-            </div>
-            <div>
-              <Label htmlFor="planetType">Planet Type</Label>
-              <Select value={planetType} onValueChange={(value: 'water' | 'rock' | 'gas') => {
-                setPlanetType(value)
-                setTextureType(value)
-              }}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select planet type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="water">Water</SelectItem>
-                  <SelectItem value="rock">Rock</SelectItem>
-                  <SelectItem value="gas">Gas</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="color">Color</Label>
-              <Select value={color} onValueChange={(value) => setColor(value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select planet color" />
-                </SelectTrigger>
-                <SelectContent>
-                  {contrastColors.map((c, index) => (
-                    <SelectItem key={index} value={c}>
-                      <div className="flex items-center">
-                        <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: c }}></div>
-                        {c}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="satelliteCount">Satellites</Label>
-              <Slider
-                id="satelliteCount"
-                min={0}
-                max={5}
-                step={1}
-                value={[satelliteCount]}
-                onValueChange={(value) => setSatelliteCount(value[0])}
-              />
-            </div>
-            <div>
-              <Label htmlFor="ringCount">Rings</Label>
-              <Slider
-                id="ringCount"
-                min={0}
-                max={5}
-                step={1}
-                value={[ringCount]}
-                onValueChange={(value) => setRingCount(value[0])}
-              />
-            </div>
-            <div>
-              <Label htmlFor="starType">Star Type</Label>
-              <Select value={starType} onValueChange={(value: 'redDwarf' | 'yellowDwarf' | 'giant') => setStarType(value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select star type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="redDwarf">Red Dwarf</SelectItem>
-                  <SelectItem value="yellowDwarf">Yellow Dwarf</SelectItem>
-                  <SelectItem value="giant">Giant</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="starDistance">Star Distance</Label>
-              <Slider
-                id="starDistance"
-                min={20}
-                max={100}
-                step={1}
-                value={[starDistance]}
-                onValueChange={(value) => setStarDistance(value[0])}
-              />
-            </div>
-          </div>
-          <Button 
-            className="w-full mt-4 bg-gray-700" 
-            onClick={handleCreateExoplanet}
-          >
-            Create Exoplanet
-          </Button>
-          {planetInfo && (
-            <Card className="mt-4 bg-gray-700">
-              <CardContent className="p-4">
-                <h3 className="text-xl font-bold mb-2">Exoplanet Information</h3>
-                <pre className="whitespace-pre-wrap">{planetInfo}</pre>
-              </CardContent>
-            </Card>
-          )}
+        <div className="bg-black/50 backdrop-blur-md rounded-full px-4 py-2 text-sm text-white/80">
+          You are 1,799 light-years from Earth
         </div>
       </div>
+
+      <div className="absolute top-4 right-4 z-20 flex gap-2">
+        <Button variant="ghost" size="icon" className="rounded-full bg-black/50 backdrop-blur-md">
+          <HelpCircle className="h-5 w-5" />
+        </Button>
+        <Button variant="ghost" size="icon" className="rounded-full bg-black/50 backdrop-blur-md">
+          <Maximize2 className="h-5 w-5" />
+        </Button>
+      </div>
+
+      <Canvas shadows camera={{ position: [0, 5, 15], fov: 60 }}>
+        <EnhancedLighting />
+        <Suspense fallback={null}>
+          <Planet {...planetProps} />
+          <Star 
+            color={starColor} 
+            intensity={starIntensity} 
+            distance={planetProps.starDistance} 
+            size={starSize} 
+          />
+        </Suspense>
+        <OrbitControls enableZoom={true} maxDistance={20} minDistance={5} />
+        <Stars radius={300} depth={100} count={5000} factor={4} saturation={0} fade speed={1} />
+      </Canvas>
+
+      <PlanetControls
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        planetProps={planetProps}
+        onPropChange={handlePropChange}
+      />
+
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+        <Button
+          className="bg-primary hover:bg-primary/90"
+          onClick={handleCreateExoplanet}
+        >
+          Generate Planet Info
+        </Button>
+      </div>
+
+      {planetInfo && (
+        <Card className="absolute bottom-4 right-4 w-80 bg-gray-800/80 backdrop-blur-md text-white border-none">
+          <CardContent className="p-4">
+            <h3 className="text-xl font-bold mb-2">Planet Information</h3>
+            <pre className="whitespace-pre-wrap text-sm">{planetInfo}</pre>
+          </CardContent>
+        </Card>
+      )}
+
       <AnimatePresence>
         {showAchievement && (
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
-            className="fixed bottom-4 right-4 bg-indigo-900 text-white p-4 rounded-lg shadow-lg flex items-center space-x-3"
+            className="fixed top-4 right-4 bg-gray-800/80 backdrop-blur-md text-white p-4 rounded-2xl shadow-lg flex items-center space-x-3"
           >
             <Trophy className="h-6 w-6 text-yellow-400" />
             <div>
-              <Badge variant="secondary" className="bg-indigo-700 text-white mb-2">
+              <Badge variant="secondary" className="bg-white/20 text-white mb-2">
                 Achievement Unlocked!
               </Badge>
               <p>You've unlocked the {achievementName} achievement!</p>
             </div>
-            <button onClick={() => setShowAchievement(false)} className="text-indigo-300 hover:text-white">
-              &times;
-            </button>
           </motion.div>
         )}
       </AnimatePresence>
-      </motion.div>
+    </div>
   )
 }
+
+export default ExoCreator
