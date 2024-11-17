@@ -378,7 +378,7 @@ const ExoCreator: React.FC = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full bg-black/50 backdrop-blur-md"
+            className="rounded-full bg-white/50 backdrop-blur-md"
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
@@ -392,14 +392,14 @@ const ExoCreator: React.FC = () => {
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full bg-black/50 backdrop-blur-md"
+          className="rounded-full bg-white/50 backdrop-blur-md"
         >
           <HelpCircle className="h-5 w-5" />
         </Button>
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full bg-black/50 backdrop-blur-md"
+          className="rounded-full bg-white/50 backdrop-blur-md"
         >
           <Maximize2 className="h-5 w-5" />
         </Button>

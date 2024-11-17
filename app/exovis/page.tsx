@@ -177,7 +177,7 @@ export default function ExoplanetCatalog() {
                   onMouseLeave={() => setHoveredPlanet(null)}
                 >
                   <CardHeader>
-                    <CardTitle className="text-xl text-center">{planet.name}</CardTitle>
+                    <CardTitle className="text-xl text-center text-white">{planet.name}</CardTitle>
                   </CardHeader>
                   <CardContent className="flex flex-col items-center">
                     <div className="relative w-64 h-64 mb-4">
@@ -205,7 +205,7 @@ export default function ExoplanetCatalog() {
                               exit={{ opacity: 0, y: 10 }}
                               className="absolute inset-0 bg-black/80 flex items-center justify-center p-4 text-center"
                             >
-                              <p className="text-sm">{planet.description}</p>
+                              <p className="text-sm text-white">{planet.description}</p>
                             </motion.div>
                           )}
                         </AnimatePresence>
