@@ -139,14 +139,6 @@ export default function ExoplanetCatalog() {
       setShowAchievement(true);
       setTimeout(() => setShowAchievement(false), 5000);
     }
-
-    const handlePlanetClick = (planetName: string) => {
-      if (showInfoBox === planetName) {
-        setShowInfoBox(null)
-      } else {
-        setShowInfoBox(planetName)
-      }
-    }
   return (
     
     <div className="min-h-screen bg-gradient-to-b from-[#0f0c29] via-[#302b63] to-[#24243e] text-white relative">

@@ -21,6 +21,7 @@ import {
   ContactShadows,
 } from "@react-three/drei";
 import * as THREE from "three";
+import { achievementsService } from '@/pages/api/achievements'
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent } from "@/components/ui/card";
@@ -53,6 +54,11 @@ const contrastColors = [
   "#20B2AA",
   "#B0E0E6",
 ];
+type Achievement = {
+  name: string
+  unlocked: boolean
+}
+
 
 const createProceduralTexture = (type: string, color: string) => {
   const canvas = document.createElement("canvas");
@@ -301,7 +307,21 @@ const ExoCreator: React.FC = () => {
   const [showAchievement, setShowAchievement] = useState(false);
   const [achievementName, setAchievementName] = useState("");
   const [hasUnlockedAchievement, setHasUnlockedAchievement] = useState(false);
+  useEffect(() => {
+    fetchAchievements()
+  }, [])
 
+const fetchAchievements = async () => {
+    try {
+      const response = await fetch('/api/achievements')
+      if (response.ok) {
+        const achievements = await response.json()
+        setHasUnlockedAchievement(achievements.filter((a: Achievement) => a.unlocked).map((a: Achievement) => a.name))
+      }
+    } catch (error) {
+      console.error('Error fetching achievements:', error)
+    }
+  }
   const handlePropChange = (prop: string, value: any) => {
     setPlanetProps((prev) => ({ ...prev, [prop]: value }));
   };
@@ -363,13 +383,14 @@ const ExoCreator: React.FC = () => {
 
   const handleCreateExoplanet = useCallback(() => {
     setPlanetInfo(generatePlanetInfo());
-    if (!hasUnlockedAchievement) {
+    const achievement = achievementsService.unlockAchievement("Master of Atmospheres");
+    if (achievement) {
+      setAchievementName(achievement.name);
       setShowAchievement(true);
-      setAchievementName("Master of Atmospheres");
-      setHasUnlockedAchievement(true);
-      setTimeout(() => setShowAchievement(false), 5000);
-    }
-  }, [hasUnlockedAchievement]);
+      setTimeout(() => setShowAchievement(false), 5000);}
+  
+    }, []);
+  
 
   return (
     <div className="relative w-full h-screen bg-black">
@@ -462,6 +483,7 @@ const ExoCreator: React.FC = () => {
                 Achievement Unlocked!
               </Badge>
               <p>You've unlocked the {achievementName} achievement!</p>
+             
             </div>
           </motion.div>
         )}
