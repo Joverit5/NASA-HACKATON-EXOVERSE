@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, MotionValue } from "framer-motion"
 import { useRef, useEffect } from "react"
 import Image from "next/image"
 import { Star } from 'lucide-react'
-import planet1 from "@/app/images/Poltergeist.webp"
+import planet1 from "@/app/images/poltergeist.webp"
 import tess from "/app/images/tessinspacerender16by9-jpg.webp";
 import planet2 from "@/app/images/pegasib.webp"
 import planet3 from "@/app/images/Gliese.webp"
