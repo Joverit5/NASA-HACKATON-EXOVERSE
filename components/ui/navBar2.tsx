@@ -51,8 +51,8 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold tracking-tighter text-white hover:text-primary transition-colors">
-            Exoverse
+        <Link href="/" className="flex items-center gap-2">
+            <span className="text-3xl font-bold">Exoverse</span>
           </Link>
           <div className="md:hidden">
             <button

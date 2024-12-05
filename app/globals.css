@@ -11,6 +11,22 @@ body {
     text-wrap: balance;
   }
 }
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.clip-triangle {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
 
 .glassmorphism {
   background: rgba(255, 255, 255, 0.05);
