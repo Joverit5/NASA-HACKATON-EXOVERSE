@@ -1,9 +1,10 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useMediaQuery } from "react-responsive";
 import Navbar from "@/components/ui/navBar";
-import { BookOpen, Brain, Palette, Telescope } from "lucide-react";
+import { BookOpen, Brain, Palette, Telescope } from 'lucide-react';
 import PayPalButton from "@/components/ui/paypalbutton";
 import FeaturesSection from "@/components/ui/feature-section"
 import TeamMember from "@/components/ui/teammember";
@@ -19,6 +20,7 @@ import Jose from "/app/images/Jose.jpg";
 import exoplanetImage from "/app/images/exoplanet.webp";
 import HistorySection from "@/components/ui/history-section";
 
+
 export default function Home() {
   const { scrollYProgress } = useScroll();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,13 +29,17 @@ export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
   const historyRef = useRef<HTMLDivElement>(null);
   const benefitsRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
   // Transform values for parallax effects
   const heroY = useTransform(scrollYProgress, [0, 0.3], ["0%", "50%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
   const planetScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.2]);
   const textY = useTransform(scrollYProgress, [0, 0.3], ["0%", "-30%"]);
-
+  const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
+  const heroYSpring = useSpring(heroY, springConfig);
+  const planetScaleSpring = useSpring(planetScale, springConfig);
+  const textYSpring = useSpring(textY, springConfig);
   const features = [
     {
       icon: BookOpen,
@@ -109,46 +115,57 @@ export default function Home() {
 
     requestAnimationFrame(raf);
   }, []);
-
+  const sectionTransition = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  };
   return (
     <main className="relative min-h-screen overflow-hidden bg-black text-white">
       <Navbar />
       <ScrollProgress progress={scrollYProgress} />
 
     {/* Hero Section with Parallax */}
-<motion.div
-  ref={heroRef}
-  className="relative min-h-screen flex items-center"
-  style={{ y: heroY, opacity: heroOpacity }}
->
+    <motion.div
+        ref={heroRef}
+        className="relative min-h-screen flex items-center"
+        style={{ y: heroYSpring, opacity: heroOpacity }}
+      >
   {/* Background Gradient Overlay */}
   <div
-    className="absolute inset-0 pointer-events-none"
-    style={{
-      background: "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 10))",
-      zIndex: 1, // Asegúrate de que esté encima del fondo
-    }}
-  ></div>
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 10))",
+            zIndex: 1,
+          }}
+        ></div>
 
   {/* Background Stars Layer */}
   <div
-    className="absolute inset-0 bg-cover opacity-20"
-    style={{
-      backgroundImage: `url(${backgroundImage.src})`,
-    }}
-  />
+  className="absolute inset-[-38%] bg-cover opacity-30 transform sm:translate-x-0 -translate-x-[20%]"
+  style={{
+            backgroundImage: `url(${backgroundImage.src})`,
+          }}
+        />
+
 
   {/* Floating Planet Layer */}
   <motion.div
-    className="absolute right-[-45%] top-0 w-[90%] h-[120%]"
-    style={{ scale: planetScale }}
+    className="absolute right-[-40%] translate-x-1/2 top-[20%] h-auto sm:top-[-10%] sm:right-[-20%] w-[100%] sm:w-[80%] md:w-[60%]"
+    style={{ scale: planetScaleSpring }}
   >
     <Image
       src={exoplanetImage}
       alt="Exoplanet"
-      fill
-      className="object-cover"
+      layout="responsive"
       priority
+      className="object-contain"
     />
   </motion.div>
 
@@ -163,7 +180,7 @@ export default function Home() {
       transition={{ duration: 1.2 }}
       className="max-w-3xl"
     >
-      <h1 className="text-7xl md:text-8xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
+      <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
         Exploring Exoplanets
       </h1>
       <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
