@@ -59,7 +59,6 @@ type Achievement = {
   unlocked: boolean
 }
 
-
 const createProceduralTexture = (type: string, color: string) => {
   const canvas = document.createElement("canvas");
   canvas.width = 1024;
@@ -308,7 +307,7 @@ const ExoCreator: React.FC = () => {
   const [achievementName, setAchievementName] = useState("");
   const [hasUnlockedAchievement, setHasUnlockedAchievement] = useState(false);
   useEffect(() => {
-    fetchAchievements()
+    fetchAchievements()// 3 seconds loading time, adjust as needed
   }, [])
 
 const fetchAchievements = async () => {

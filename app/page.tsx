@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useMediaQuery } from "react-responsive";
@@ -11,17 +11,14 @@ import TeamMember from "@/components/ui/teammember";
 import ScrollProgress from "@/components/ui/scrollprogress";
 import backgroundImage from "/app/images/background.webp";
 import Lenis from "lenis";
-import David from "/app/images/David.png";
-import Santiago from "/app/images/Santiago.jpg";
-import Fabian from "/app/images/Fabián.jpg";
-import Eduardo from "/app/images/Eduardo.jpg";
-import Isabella from "/app/images/Isabella.jpg";
-import Jose from "/app/images/Jose.jpg";
 import exoplanetImage from "/app/images/exoplanet.webp";
 import HistorySection from "@/components/ui/history-section";
 import { EnhancedStatisticsSection } from "@/components/ui/statistics-section";
+import ParallaxStars from "@/components/ui/ParallaxStars";
+import { LoadingScreen } from "@/components/loadingScreen";
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
   const { scrollYProgress } = useScroll();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -66,39 +63,6 @@ export default function Home() {
         "A dynamic portal connecting you to the latest exoplanet discoveries.",
     },
   ];
-
-  const teamMembers = [
-    {
-      name: "Fabián Camilo Quintero Pareja",
-      email: "parejaf@utb.edu.co",
-      image: Fabian.src,
-    },
-    {
-      name: "Santiago Quintero Pareja",
-      email: "squintero@utb.edu.co",
-      image: Santiago.src,
-    },
-    {
-      name: "Eduardo Alejandro Negrín Pérez",
-      email: "enegrin@utb.edu.co",
-      image: Eduardo.src,
-    },
-    {
-      name: "Isabella Sofía Arrieta Guardo",
-      email: "arrietai@utb.edu.co",
-      image: Isabella.src,
-    },
-    {
-      name: "José Fernando González Ortiz",
-      email: "joseortiz@utb.edu.co",
-      image: Jose.src,
-    },
-    {
-      name: "David Sierra Porta",
-      email: "dporta@utb.edu.co",
-      image: David.src,
-    },
-  ];
   useEffect(() => {
     // Initialize smooth scroll
     const lenis = new Lenis({
@@ -114,7 +78,15 @@ export default function Home() {
     }
 
     requestAnimationFrame(raf);
+
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); // 3 seconds loading time, adjust as needed
+
+    return () => clearTimeout(timer);
   }, []);
+
   const sectionTransition = {
     hidden: { opacity: 0, y: 50 },
     visible: { 
@@ -126,6 +98,11 @@ export default function Home() {
       }
     }
   };
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-black text-white">
       <Navbar />
@@ -201,9 +178,10 @@ export default function Home() {
         <HistorySection />
       </section>
 
-      {/* Team Section with Floating Cards */}
+      {/* Team Section with Carousel */}
+      <ParallaxStars />
       <section className="relative py-32">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black opacity-90" />
+        <div className="absolute inset-0 opacity-90" />
         <div className="container mx-auto px-4 relative z-10">
           <motion.h2
             initial={{ opacity: 0 }}
@@ -213,19 +191,12 @@ export default function Home() {
           >
             Our Development Team
           </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-              >
-                <TeamMember {...member} />
-              </motion.div>
-            ))}
-          </div>
         </div>
+      </section>
+
+      <ParallaxStars />    
+      <section id="credits" className="relative">
+        <TeamMember />
       </section>
 
       <PayPalButton />

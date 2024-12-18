@@ -21,6 +21,7 @@ import K2 from "/app/images/K2.png"
 import Cancri from "/app/images/Cancri.png"
 import HAT from "/app/images/HAT.png"
 import Navbar2 from "@/components/ui/navBar2";
+import { LoadingScreen } from "@/components/loadingScreen";
 const CoverParticles = dynamic(() => import("@/components/ui/star_particles"), {
   ssr: false,
   loading: () => <div className="h-screen bg-blue-950" />,
@@ -98,6 +99,7 @@ const exoplanets = [
 ]
 
 export default function ExoplanetCatalog() {
+  const [isLoading, setIsLoading] = useState(true);
   const [unlockedAchievements, setUnlockedAchievements] = useState<string[]>([])
   const [showAchievement, setShowAchievement] = useState(false)
   const [achievementName, setAchievementName] = useState("")
@@ -114,6 +116,13 @@ export default function ExoplanetCatalog() {
       requestAnimationFrame(raf)
     }
     requestAnimationFrame(raf)
+
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); // 3 seconds loading time, adjust as needed
+
+    return () => clearTimeout(timer);
   }, []);
     const fetchAchievements = async () => {
       try {
@@ -138,6 +147,9 @@ export default function ExoplanetCatalog() {
       setShowAchievement(true);
       setTimeout(() => setShowAchievement(false), 5000);
     }
+    if (isLoading) {
+        return <LoadingScreen />;
+      }
   return (
     
     <div className="min-h-screen bg-gradient-to-b from-[#0f0c29] via-[#302b63] to-[#24243e] text-white relative">
