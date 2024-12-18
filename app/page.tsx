@@ -19,7 +19,7 @@ import Isabella from "/app/images/Isabella.jpg";
 import Jose from "/app/images/Jose.jpg";
 import exoplanetImage from "/app/images/exoplanet.webp";
 import HistorySection from "@/components/ui/history-section";
-
+import { EnhancedStatisticsSection } from "@/components/ui/statistics-section";
 
 export default function Home() {
   const { scrollYProgress } = useScroll();
@@ -131,14 +131,14 @@ export default function Home() {
       <Navbar />
       <ScrollProgress progress={scrollYProgress} />
 
-    {/* Hero Section with Parallax */}
-    <motion.div
+      {/* Hero Section with Parallax */}
+      <motion.div
         ref={heroRef}
         className="relative min-h-screen flex items-center"
         style={{ y: heroYSpring, opacity: heroOpacity }}
       >
-  {/* Background Gradient Overlay */}
-  <div
+        {/* Background Gradient Overlay */}
+        <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background: "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 10))",
@@ -146,53 +146,55 @@ export default function Home() {
           }}
         ></div>
 
-  {/* Background Stars Layer */}
-  <div
-  className="absolute inset-[-38%] bg-cover opacity-30 transform sm:translate-x-0 -translate-x-[20%]"
-  style={{
+        {/* Background Stars Layer */}
+        <div
+          className="absolute inset-[-38%] bg-cover opacity-30 transform sm:translate-x-0 -translate-x-[20%]"
+          style={{
             backgroundImage: `url(${backgroundImage.src})`,
           }}
         />
 
+        {/* Floating Planet Layer */}
+        <motion.div
+          className="absolute right-[-40%] translate-x-1/2 top-[20%] h-auto sm:top-[-10%] sm:right-[-20%] w-[100%] sm:w-[80%] md:w-[60%]"
+          style={{ scale: planetScaleSpring }}
+        >
+          <Image
+            src={exoplanetImage}
+            alt="Exoplanet"
+            layout="responsive"
+            priority
+            className="object-contain"
+          />
+        </motion.div>
 
-  {/* Floating Planet Layer */}
-  <motion.div
-    className="absolute right-[-40%] translate-x-1/2 top-[20%] h-auto sm:top-[-10%] sm:right-[-20%] w-[100%] sm:w-[80%] md:w-[60%]"
-    style={{ scale: planetScaleSpring }}
-  >
-    <Image
-      src={exoplanetImage}
-      alt="Exoplanet"
-      layout="responsive"
-      priority
-      className="object-contain"
-    />
-  </motion.div>
+        {/* Content Layer */}
+        <motion.div
+          className="container mx-auto px-6 relative z-20"
+          style={{ y: textY }}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2 }}
+            className="max-w-3xl"
+          >
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
+              Exploring Exoplanets
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
+              ExoVerse is an international educational platform dedicated to
+              exploring and understanding planets beyond our solar system.
+            </p>
+          </motion.div>
+        </motion.div>
+      </motion.div>
 
-  {/* Content Layer */}
-  <motion.div
-    className="container mx-auto px-6 relative z-20"
-    style={{ y: textY }}
-  >
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1.2 }}
-      className="max-w-3xl"
-    >
-      <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
-        Exploring Exoplanets
-      </h1>
-      <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
-        ExoVerse is an international educational platform dedicated to
-        exploring and understanding planets beyond our solar system.
-      </p>
-    </motion.div>
-  </motion.div>
-</motion.div>
+      {/* Features Section with Floating Cards */}
+      <FeaturesSection features={features} />
 
-{/* Features Section with Floating Cards */}
-<FeaturesSection features={features} />
+      {/* Enhanced Statistics Section */}
+      <EnhancedStatisticsSection />
 
       {/* History Section with Floating Cards */}
       <section id="history" ref={historyRef} className="relative py-32">
@@ -230,3 +232,4 @@ export default function Home() {
     </main>
   );
 }
+

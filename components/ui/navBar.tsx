@@ -3,18 +3,18 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Rocket, Brain, ChartBar, Users } from "lucide-react";
+import { Menu, X, Rocket, Brain, BarChartIcon as ChartBar, Users } from 'lucide-react';
 import { cn } from "@/lib/utils";
+
 interface NavItemProps {
   href: string;
   icon: React.ElementType;
   label: string;
 }
+
 interface MobileMenuProps {
   navItems: NavItemProps[];
-  handleCreditsClick: (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ) => void;
+  handleCreditsClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   toggleMenu: () => void;
 }
 
@@ -47,17 +47,26 @@ export default function Navbar() {
     setIsOpen(false);
   };
 
-  const navItems = [
+  const leftNavItems = [
     { href: "/exoquest/menu", icon: Rocket, label: "ExoQuest" },
     { href: "/exocreator", icon: Brain, label: "ExoCreator" },
+  ];
+
+  const rightNavItems = [
     { href: "/exovis", icon: ChartBar, label: "ExoVis" },
+    { 
+      href: "#team", 
+      icon: Users, 
+      label: "Credits",
+      onClick: handleCreditsClick 
+    },
   ];
 
   return (
     <motion.nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 bg-black/50  backdrop-blur-md  transition-all duration-300",
-        isScrolled ? "py-2" : "py-4"
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4",
+        isScrolled ? "bg-black/50 backdrop-blur-md" : "bg-transparent"
       )}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -65,9 +74,16 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-2">
-            <span className="text-3xl font-bold">Exoverse</span>
-          </Link>
+          {/* Left Navigation */}
+          <ul className="hidden md:flex md:flex-1 md:items-center md:space-x-16">
+            {leftNavItems.map((item) => (
+              <li key={item.href}>
+                <NavItem {...item} />
+              </li>
+            ))}
+          </ul>
+
+          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
@@ -77,28 +93,38 @@ export default function Navbar() {
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
-          <ul className="hidden md:flex md:space-x-6 items-center">
-            {navItems.map((item) => (
+
+          {/* Center Logo */}
+          <Link href="/" className="flex items-center gap-2 md:flex-none md:absolute md:left-1/2 md:-translate-x-1/2">
+            <span className="text-4xl font-bold">Exoverse</span>
+          </Link>
+
+          {/* Right Navigation */}
+          <ul className="hidden md:flex md:flex-1 md:items-center md:justify-end md:space-x-16">
+            {rightNavItems.map((item) => (
               <li key={item.href}>
-                <NavItem {...item} />
+                {item.onClick ? (
+                  <a
+                    href={item.href}
+                    onClick={item.onClick}
+                    className="flex items-center space-x-2 text-xl text-white hover:text-blue-400 transition-colors px-8"
+                  >
+                    <item.icon className="h-5 w-5" />
+                    <span>{item.label}</span>
+                  </a>
+                ) : (
+                  <NavItem {...item} />
+                )}
               </li>
             ))}
-            <li>
-              <a
-                href="#team"
-                onClick={handleCreditsClick}
-                className="flex items-center space-x-2 text-xl text-white hover:text-blue-400 transition-colors"
-              >
-                <Users className="h-5 w-5" />
-                <span>Credits</span>
-              </a>
-            </li>
           </ul>
         </div>
+
+        {/* Mobile Menu */}
         <AnimatePresence>
           {isOpen && (
             <MobileMenu
-              navItems={navItems}
+              navItems={[...leftNavItems, ...rightNavItems]}
               handleCreditsClick={handleCreditsClick}
               toggleMenu={toggleMenu}
             />
@@ -112,7 +138,7 @@ export default function Navbar() {
 const NavItem: React.FC<NavItemProps> = ({ href, icon: Icon, label }) => (
   <Link
     href={href}
-    className="flex items-center space-x-2 text-xl text-white hover:text-blue-400 transition-colors"
+    className="flex items-center space-x-2 text-xl text-white hover:text-blue-400 transition-colors px-8"
   >
     <Icon className="h-5 w-5" />
     <span>{label}</span>
@@ -144,17 +170,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
             <span>{item.label}</span>
           </Link>
         ))}
-        <li>
-          <a
-            href="#team"
-            onClick={handleCreditsClick}
-            className="flex items-center space-x-2 text-white hover:text-primary transition-colors"
-          >
-            <Users className="h-5 w-5" />
-            <span>Credits</span>
-          </a>
-        </li>
       </ul>
     </div>
   </motion.div>
 );
+
