@@ -21,7 +21,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Joverit5/NASA-HACKATON-EXOVERSE.git">
-    <img src="images/planet.png" alt="Logo" width="80" height="80">
+    <img src="images/planet.webp" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">EXOVERSE</h3>

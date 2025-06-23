@@ -1,106 +1,93 @@
-"use client";
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useMediaQuery } from "react-responsive";
-import Navbar from "@/components/ui/navBar";
-import { BookOpen, Brain, Palette, Telescope } from 'lucide-react';
-import PayPalButton from "@/components/ui/paypalbutton";
-import FeaturesSection from "@/components/ui/feature-section"
-import TeamMember from "@/components/ui/teammember";
-import ScrollProgress from "@/components/ui/scrollprogress";
-import backgroundImage from "/app/images/background.webp";
-import Lenis from "lenis";
-import exoplanetImage from "/app/images/exoplanet.webp";
-import HistorySection from "@/components/ui/history-section";
-import { EnhancedStatisticsSection } from "@/components/ui/statistics-section";
-import ParallaxStars from "@/components/ui/ParallaxStars";
-import { LoadingScreen } from "@/components/loadingScreen";
+"use client"
+import { useEffect, useRef, useState, Suspense } from "react"
+import Image from "next/image"
+import { motion, useScroll, useTransform, useSpring } from "framer-motion"
+import { useMediaQuery } from "react-responsive"
+import Navbar from "@/src/components/ui/navBar"
+import { BookOpen, Brain, Palette, Telescope } from "lucide-react"
+import PayPalButton from "@/src/components/ui/paypalbutton"
+import dynamic from "next/dynamic"
+import { LoadingScreen } from "@/src/components/loadingScreen"
+import ScrollProgress from "@/src/components/ui/scrollprogress"
+
+// Optimización: Lazy loading de componentes pesados
+const FeaturesSection = dynamic(() => import("@/src/components/ui/feature-section"), {
+  ssr: false,
+  loading: () => <div className="h-96 bg-transparent" />,
+})
+
+const HistorySection = dynamic(() => import("@/src/components/ui/history-section"), {
+  ssr: false,
+  loading: () => <div className="h-96 bg-transparent" />,
+})
+
+const EnhancedStatisticsSection = dynamic(
+  () => import("@/src/components/ui/statistics-section").then((mod) => mod.EnhancedStatisticsSection),
+  {
+    ssr: false,
+    loading: () => <div className="h-96 bg-transparent" />,
+  },
+)
+
+const CosmicCreditsSection = dynamic(() => import("@/src/components/ui/cosmic-credits"), {
+  ssr: false,
+  loading: () => <div className="h-screen bg-transparent" />,
+})
+
+
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
-  const { scrollYProgress } = useScroll();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(true)
+  const { scrollYProgress } = useScroll()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const heroRef = useRef<HTMLDivElement>(null)
+  const isMobile = useMediaQuery({ maxWidth: 768 })
 
-  // Multiple parallax refs for different sections
-  const heroRef = useRef<HTMLDivElement>(null);
-  const historyRef = useRef<HTMLDivElement>(null);
-  const benefitsRef = useRef<HTMLDivElement>(null);
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  // Optimización: Usar useSpring para animaciones más suaves
+  const heroY = useTransform(scrollYProgress, [0, 0.3], ["0%", "30%"])
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  const planetScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1])
+  const textY = useTransform(scrollYProgress, [0, 0.3], ["0%", "-20%"])
 
-  // Transform values for parallax effects
-  const heroY = useTransform(scrollYProgress, [0, 0.3], ["0%", "50%"]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
-  const planetScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.2]);
-  const textY = useTransform(scrollYProgress, [0, 0.3], ["0%", "-30%"]);
-  const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
-  const heroYSpring = useSpring(heroY, springConfig);
-  const planetScaleSpring = useSpring(planetScale, springConfig);
-  const textYSpring = useSpring(textY, springConfig);
+  const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 }
+  const heroYSpring = useSpring(heroY, springConfig)
+  const planetScaleSpring = useSpring(planetScale, springConfig)
+  const textYSpring = useSpring(textY, springConfig)
+
   const features = [
     {
       icon: BookOpen,
       title: "Information Hub",
-      description:
-        "A fascinating resource that unveils the basics and captivating history of exoplanets.",
+      description: "A fascinating resource that unveils the basics and captivating history of exoplanets.",
     },
     {
       icon: Brain,
       title: "ExoQuest",
-      description:
-        "An interactive trivia adventure that challenges and expands your cosmic knowledge.",
+      description: "An interactive trivia adventure that challenges and expands your cosmic knowledge.",
     },
     {
       icon: Palette,
       title: "ExoCreator",
-      description:
-        "A unique tool empowering you to craft your own exoplanets, fueling your creativity.",
+      description: "A unique tool empowering you to craft your own exoplanets, fueling your creativity.",
     },
     {
       icon: Telescope,
       title: "ExoVis",
-      description:
-        "A dynamic portal connecting you to the latest exoplanet discoveries.",
+      description: "A dynamic portal connecting you to the latest exoplanet discoveries.",
     },
-  ];
+  ]
+
   useEffect(() => {
-    // Initialize smooth scroll
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: "vertical",
-      smoothWheel: true,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    // Simulate loading time
+    // Optimización: Reducir tiempo de carga
     const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000); // 3 seconds loading time, adjust as needed
+      setIsLoading(false)
+    }, 600)
 
-    return () => clearTimeout(timer);
-  }, []);
-
-  const sectionTransition = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
-    }
-  };
+    return () => clearTimeout(timer)
+  }, [])
 
   if (isLoading) {
-    return <LoadingScreen />;
+    return <LoadingScreen />
   }
 
   return (
@@ -108,99 +95,117 @@ export default function Home() {
       <Navbar />
       <ScrollProgress progress={scrollYProgress} />
 
-      {/* Hero Section with Parallax */}
+      {/* Hero Section con transición suave */}
       <motion.div
         ref={heroRef}
-        className="relative min-h-screen flex items-center"
+        className="hero-container relative flex items-center"
         style={{ y: heroYSpring, opacity: heroOpacity }}
       >
-        {/* Background Gradient Overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 10))",
-            zIndex: 1,
-          }}
-        ></div>
+        {/* Fondo con video optimizado */}
+        <div className="absolute inset-0 z-0">
+          <div className="optimized-video-container w-full h-full">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-cover opacity-30"
+              poster="/images/stars-bg.webp" 
+            >
+              <source src="/videos/space-background.mp4" type="video/mp4" />
+              <source src="/videos/space-background.webm" type="video/webm" />
+              {/* Fallback para navegadores que no soportan video */}
+              <Image
+                src="/images/stars-bg.webp"
+                alt="Deep space background with nebulae and stars"
+                fill
+                priority
+                quality={95}
+                sizes="100vw"
+                className="object-cover opacity-30"
+              />
+            </video>
+          </div>
+          {/* Difuminación negra gradual en la parte inferior */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black" />
+          <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-black via-black/100 to-transparent" />
+        </div>
 
-        {/* Background Stars Layer */}
-        <div
-          className="absolute inset-[-38%] bg-cover opacity-30 transform sm:translate-x-0 -translate-x-[20%]"
-          style={{
-            backgroundImage: `url(${backgroundImage.src})`,
-          }}
-        />
-
-        {/* Floating Planet Layer */}
+        {/* Planeta con dimensiones fijas para evitar layout shifts */}
         <motion.div
-          className="absolute right-[-40%] translate-x-1/2 top-[20%] h-auto sm:top-[-10%] sm:right-[-20%] w-[100%] sm:w-[80%] md:w-[60%]"
+          className="absolute right-[-20%] top-[-5%] w-[600px] h-[600px] md:w-[1200px] md:h-[1100px]"
           style={{ scale: planetScaleSpring }}
         >
-          <Image
-            src={exoplanetImage}
-            alt="Exoplanet"
-            layout="responsive"
-            priority
-            className="object-contain"
-          />
+          <div className="image-container">
+            <Image
+              src="/images/exoplanet.webp"
+              alt="Detailed exoplanet with atmospheric effects"
+              fill
+              priority
+              quality={95}
+              sizes="(max-width: 768px) 600px, 800px"
+              className="object-contain"
+            />
+          </div>
         </motion.div>
 
-        {/* Content Layer */}
-        <motion.div
-          className="container mx-auto px-6 relative z-20"
-          style={{ y: textY }}
-        >
+        {/* Contenido del hero */}
+        <motion.div className="container mx-auto px-6 relative z-20" style={{ y: textYSpring }}>
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="max-w-3xl"
           >
-            <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 leading-tight">
               Exploring Exoplanets
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
-              ExoVerse is an international educational platform dedicated to
-              exploring and understanding planets beyond our solar system.
+            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-2xl">
+              ExoVerse is an international educational platform dedicated to exploring and understanding planets beyond
+              our solar system.
             </p>
           </motion.div>
         </motion.div>
       </motion.div>
 
-      {/* Features Section with Floating Cards */}
-      <FeaturesSection features={features} />
+      {/* Transición suave entre hero y features */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-10" />
 
-      {/* Enhanced Statistics Section */}
-      <EnhancedStatisticsSection />
+      {/* Features Section con transición */}
+      <div className="relative -mt-16 pt-32">
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent" />
+        <Suspense fallback={<div className="h-96 bg-transparent" />}>
+          <FeaturesSection features={features} />
+        </Suspense>
+      </div>
 
-      {/* History Section with Floating Cards */}
-      <section id="history" ref={historyRef} className="relative py-32">
-        <HistorySection />
+      {/* Statistics Section con transición */}
+      <div className="relative -mt-16 pt-32">
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent" />
+        <Suspense fallback={<div className="h-96 bg-transparent" />}>
+          <EnhancedStatisticsSection />
+        </Suspense>
+      </div>
+
+      {/* History Section con transición */}
+      <section id="history" className="relative -mt-16 pt-32">
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent" />
+        <Suspense fallback={<div className="h-96 bg-transparent" />}>
+          <HistorySection />
+        </Suspense>
       </section>
 
-      {/* Team Section with Carousel */}
-      <ParallaxStars />
-      <section className="relative py-32">
-        <div className="absolute inset-0 opacity-90" />
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            className="text-5xl md:text-6xl font-bold mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400"
-          >
-            Our Development Team
-          </motion.h2>
-        </div>
-      </section>
-
-      <ParallaxStars />    
-      <section id="credits" className="relative">
-        <TeamMember />
+      {/* Credits Section con transición suave */}
+      <section id="credits" className="relative -mt-16 pt-32">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black" />
+        <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-black via-black/100 to-transparent" />
+        <Suspense fallback={<div className="h-screen bg-transparent" />}>
+          <CosmicCreditsSection />
+        </Suspense>
       </section>
 
       <PayPalButton />
     </main>
-  );
+  )
 }
-
