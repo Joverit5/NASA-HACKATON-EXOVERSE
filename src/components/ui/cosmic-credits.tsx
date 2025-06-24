@@ -3,44 +3,9 @@
 import { useRef, useState } from "react"
 import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion"
 import Image from "next/image"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Circle, Github, Linkedin, Mail, User } from "lucide-react"
 import { teamMembers } from "@/src/data/team-members"
-
-const ConstellationLine = ({
-  start,
-  end,
-  delay = 0,
-}: {
-  start: { x: number; y: number }
-  end: { x: number; y: number }
-  delay?: number
-}) => (
-  <motion.svg
-    className="absolute inset-0 w-full h-full pointer-events-none"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 1, delay }}
-  >
-    <motion.line
-      x1={`${start.x}%`}
-      y1={`${start.y}%`}
-      x2={`${end.x}%`}
-      y2={`${end.y}%`}
-      stroke="url(#constellation-gradient)"
-      strokeWidth="2"
-      initial={{ pathLength: 0, opacity: 0 }}
-      animate={{ pathLength: 1, opacity: 0.6 }}
-      transition={{ duration: 2, delay, ease: "easeInOut" }}
-    />
-    <defs>
-      <linearGradient id="constellation-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.8" />
-        <stop offset="50%" stopColor="#60A5FA" stopOpacity="0.6" />
-        <stop offset="100%" stopColor="#93C5FD" stopOpacity="0.4" />
-      </linearGradient>
-    </defs>
-  </motion.svg>
-)
 
 const FloatingNebula = ({
   className,
@@ -66,215 +31,6 @@ const FloatingNebula = ({
   />
 )
 
-const TeamMemberCard = ({ member, index }: { member: (typeof teamMembers)[0]; index: number }) => {
-  const [isHovered, setIsHovered] = useState(false)
-  const cardRef = useRef<HTMLDivElement>(null)
-  const isInView = useInView(cardRef, { once: true, margin: "-50px" })
-
-  return (
-    <motion.div
-      ref={cardRef}
-      className="group relative"
-      initial={{ opacity: 0, y: 50, scale: 0.9 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Carta principal con glassmorphism mejorado */}
-      <motion.div
-        className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl"
-        whileHover={{ scale: 1.02, y: -5 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-      >
-        {/* Efecto de brillo en hover */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-transparent to-purple-500/20 opacity-0"
-          animate={{ opacity: isHovered ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-        />
-
-        {/* Header con imagen */}
-        <div className="relative h-48 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-purple-600/30" />
-          <Image
-            src={member.image || "/placeholder.svg"}
-            alt={member.name}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
-            sizes="300px"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-          {/* Icono flotante */}
-          <motion.div
-            className="absolute top-4 right-4 p-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20"
-            animate={{ rotate: isHovered ? 360 : 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <User className="w-5 h-5 text-white" />
-          </motion.div>
-        </div>
-
-        {/* Contenido */}
-        <div className="p-6 space-y-4">
-          <div className="space-y-2">
-            <h3 className="text-xl font-bold text-white leading-tight">{member.name}</h3>
-            <p className="text-sm text-blue-300 font-medium leading-relaxed">{member.role}</p>
-          </div>
-
-          {/* Línea decorativa */}
-          <motion.div
-            className="h-px bg-gradient-to-r from-blue-500 to-purple-500"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: isInView ? 1 : 0 }}
-            transition={{ duration: 0.8, delay: index * 0.1 + 0.3 }}
-          />
-
-          {/* Enlaces sociales */}
-          <div className="flex gap-3 pt-2">
-            <motion.div
-              className="p-2 bg-white/5 hover:bg-white/15 rounded-xl transition-all duration-300 cursor-pointer border border-white/10 hover:border-white/20"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Github className="w-4 h-4 text-white" />
-            </motion.div>
-            <motion.div
-              className="p-2 bg-white/5 hover:bg-white/15 rounded-xl transition-all duration-300 cursor-pointer border border-white/10 hover:border-white/20"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Linkedin className="w-4 h-4 text-white" />
-            </motion.div>
-            <motion.div
-              className="p-2 bg-white/5 hover:bg-white/15 rounded-xl transition-all duration-300 cursor-pointer border border-white/10 hover:border-white/20"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Mail className="w-4 h-4 text-white" />
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Efecto de partículas en hover */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {[...Array(6)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-blue-400 rounded-full"
-              style={{
-                left: `${20 + i * 15}%`,
-                top: `${30 + (i % 2) * 40}%`,
-              }}
-              animate={{
-                y: [-10, -20, -10],
-                opacity: [0.5, 1, 0.5],
-                scale: [1, 1.5, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                delay: i * 0.2,
-              }}
-            />
-          ))}
-        </motion.div>
-      </motion.div>
-
-      {/* Sombra dinámica */}
-      <motion.div
-        className="absolute inset-0 -z-10 bg-blue-500/20 rounded-3xl blur-xl"
-        animate={{
-          scale: isHovered ? 1.1 : 0.95,
-          opacity: isHovered ? 0.6 : 0.3,
-        }}
-        transition={{ duration: 0.3 }}
-      />
-    </motion.div>
-  )
-}
-
-const InteractiveBluePoint = ({ member }: { member: (typeof teamMembers)[0] }) => {
-  const [isHovered, setIsHovered] = useState(false)
-  const pointRef = useRef<HTMLDivElement>(null)
-  const isInView = useInView(pointRef, { once: true, margin: "-100px" })
-
-  return (
-    <motion.div
-      ref={pointRef}
-      className="absolute cursor-pointer z-20"
-      style={{
-        transform: "translate(-50%, -50%)",
-      }}
-      initial={{ scale: 0, opacity: 0 }}
-      animate={isInView ? { scale: 1, opacity: 1 } : {}}
-      transition={{ duration: 0.8, delay: Math.random() * 2 }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Punto azul principal */}
-      <motion.div
-        className="relative"
-        animate={{
-          scale: isHovered ? 1.3 : 1,
-        }}
-        transition={{ duration: 0.3 }}
-      >
-        <Circle
-          className="w-6 h-6 text-blue-400 fill-blue-400"
-          style={{ filter: "drop-shadow(0 0 8px rgba(59, 130, 246, 0.8))" }}
-        />
-
-        {/* Efecto de brillo pulsante */}
-        <motion.div
-          className="absolute inset-0 bg-blue-400 rounded-full blur-md"
-          animate={{
-            opacity: [0.4, 0.8, 0.4],
-            scale: [0.8, 1.6, 0.8],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "easeInOut",
-          }}
-        />
-
-        {/* Anillos concéntricos */}
-        <motion.div
-          className="absolute inset-0 border-2 border-blue-400/30 rounded-full"
-          animate={{
-            scale: [1, 2, 1],
-            opacity: [0.6, 0, 0.6],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "easeOut",
-          }}
-        />
-      </motion.div>
-
-      {/* Tooltip con nombre */}
-      <motion.div
-        className="absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/80 backdrop-blur-sm rounded-lg border border-white/20 whitespace-nowrap"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{
-          opacity: isHovered ? 1 : 0,
-          y: isHovered ? 0 : 10,
-        }}
-        transition={{ duration: 0.2 }}
-      >
-        <p className="text-sm text-white font-medium">{member.name}</p>
-      </motion.div>
-    </motion.div>
-  )
-}
 
 const BlueParticleField = () => {
   return (
@@ -335,54 +91,108 @@ export default function CosmicCreditsSection() {
       {/* Contenido principal */}
       <div className="relative z-10 min-h-screen flex flex-col justify-center py-20">
         {/* Título */}
-        <motion.div
-          className="text-center mb-20"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          viewport={{ once: true }}
-        >
-          <motion.h2
-            className="text-6xl md:text-8xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-600"
-            animate={{
-              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
-          >
-            Cosmic Architects
-          </motion.h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Meet the stellar team behind ExoVerse, where passion for astronomy meets cutting-edge technology
-          </p>
-        </motion.div>
+        <section id = "credits" className="py-24 relative">
+          <div className="container mx-auto px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  Our Stellar Team
+                </span>
+              </h2>
+              <p className=" id=credits text-xl text-slate-300 max-w-3xl mx-auto">
+                Meet the brilliant minds behind ExoVerse, where passion for astronomy meets cutting-edge technology
+              </p>
+            </motion.div>
 
-        {/* Grid de tarjetas del equipo */}
-        <div className="container mx-auto px-6 mb-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {teamMembers.map((member, index) => (
-              <TeamMemberCard key={member.id} member={member} index={index} />
-            ))}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center max-w-4xl mx-auto">
+              {teamMembers.map((member, index) => (
+                <motion.div
+                  key={member.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="w-full max-w-[280px]"
+                >
+                  <Card className="aspect-square w-full bg-slate-900/50 border-slate-700/50 backdrop-blur-sm hover:bg-slate-800/50 transition-all duration-300 group overflow-hidden">
+                    <CardContent className="p-6 h-full flex flex-col justify-center">
+                      <div className="relative mb-4">
+                        <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 p-0.5">
+                          <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center overflow-hidden">
+                            <Image
+                              src={member.image || "/placeholder.svg"}
+                              alt={member.name}
+                              width={80}
+                              height={80}
+                              className="object-cover w-full h-full rounded-full"
+                              priority={index < 3}
+                            />
+                          </div>
+                        </div>
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400/20 to-purple-500/20 blur-xl group-hover:blur-2xl transition-all duration-300" />
+                      </div>
+
+                      <div className="text-center space-y-2 flex-1 flex flex-col justify-center">
+                        <h3 className="text-base font-semibold text-white group-hover:text-cyan-300 transition-colors duration-300 leading-tight">
+                          {member.name}
+                        </h3>
+                        <p className="text-xs text-slate-400 leading-tight">{member.email}</p>
+                        <div className="flex justify-center gap-3 pt-3">
+                          {member.github ? (
+                            <a
+                              href={member.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 bg-white/5 hover:bg-white/15 rounded-lg transition-all duration-300 border border-white/10 hover:border-white/20"
+                            >
+                              <Github className="w-4 h-4 text-white" />
+                            </a>
+                          ) : (
+                            <span className="p-1.5 bg-white/5 rounded-lg border border-white/10 opacity-40 cursor-not-allowed">
+                              <Github className="w-4 h-4 text-white" />
+                            </span>
+                          )}
+                          {member.linkedin ? (
+                            <a
+                              href={member.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 bg-white/5 hover:bg-white/15 rounded-lg transition-all duration-300 border border-white/10 hover:border-white/20"
+                            >
+                              <Linkedin className="w-4 h-4 text-white" />
+                            </a>
+                          ) : (
+                            <span className="p-1.5 bg-white/5 rounded-lg border border-white/10 opacity-40 cursor-not-allowed">
+                              <Linkedin className="w-4 h-4 text-white" />
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+            {/* Mensaje final */}
+            <motion.div
+              className="text-center px-4"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              viewport={{ once: true }}
+            >
+                <div className="h-8" />
+                <p className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                Together, we're pushing the boundaries of space education and making the wonders of the universe accessible
+                to everyone. Join us on this incredible journey through the cosmos.
+                </p>
+            </motion.div>
           </div>
-        </div>
-
-
-        {/* Mensaje final */}
-        <motion.div
-          className="text-center px-4"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          viewport={{ once: true }}
-        >
-          <p className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            Together, we're pushing the boundaries of space education and making the wonders of the universe accessible
-            to everyone. Join us on this incredible journey through the cosmos.
-          </p>
-        </motion.div>
+        </section>
       </div>
     </section>
   )

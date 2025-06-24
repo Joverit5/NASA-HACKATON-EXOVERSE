@@ -10,7 +10,7 @@ import { Button } from "@/src/components/ui/button"
 import { Badge } from "@/src/components/ui/badge"
 import { Trophy, Info, Star, X } from "lucide-react"
 import Lenis from "@studio-freight/lenis"
-import { achievementsService } from "@/src/pages/api/achievements"
+import { achievementsService } from '@/src/lib/achievementsService'
 import keplerImage from "/public/images/kepler.webp"
 import proximaCentauri from "/public/images/proximaCentauri.webp"
 import HD from "/public/images/HD.webp"

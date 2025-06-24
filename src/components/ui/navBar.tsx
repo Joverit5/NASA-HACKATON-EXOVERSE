@@ -40,7 +40,7 @@ export default function Navbar() {
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {
     e.preventDefault();
-    const section = document.getElementById("team");
+    const section = document.getElementById("credits");
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
     }
@@ -55,7 +55,7 @@ export default function Navbar() {
   const rightNavItems = [
     { href: "/exovis", icon: ChartBar, label: "ExoVis" },
     { 
-      href: "#team", 
+      href: "#credits", 
       icon: Users, 
       label: "Credits",
       onClick: handleCreditsClick 

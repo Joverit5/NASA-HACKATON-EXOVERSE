@@ -1,5 +1,4 @@
-// lib/services/achievements.ts
-
+// achievementsService para frontend (localStorage)
 export interface Achievement {
   name: string;
   description: string;
@@ -29,7 +28,6 @@ const INITIAL_ACHIEVEMENTS: Achievement[] = [
 
 export const achievementsService = {
   initializeAchievements() {
-    localStorage.clear();
     if (typeof window !== 'undefined') {
       const existingAchievements = localStorage.getItem(ACHIEVEMENTS_KEY);
       if (!existingAchievements) {
@@ -54,7 +52,6 @@ export const achievementsService = {
     if (typeof window !== 'undefined') {
       const achievements = this.getAllAchievements();
       const achievementIndex = achievements.findIndex(a => a.name === name);
-      
       if (achievementIndex !== -1 && !achievements[achievementIndex].unlocked) {
         achievements[achievementIndex].unlocked = true;
         achievements[achievementIndex].unlockedAt = new Date().toISOString();

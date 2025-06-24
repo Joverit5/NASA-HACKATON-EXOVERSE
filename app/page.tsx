@@ -129,7 +129,6 @@ export default function Home() {
           </div>
           {/* Difuminación negra gradual en la parte inferior */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black" />
-          <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-black via-black/100 to-transparent" />
         </div>
 
         {/* Planeta con dimensiones fijas para evitar layout shifts */}
@@ -137,7 +136,7 @@ export default function Home() {
           className="absolute right-[-20%] top-[-5%] w-[600px] h-[600px] md:w-[1200px] md:h-[1100px]"
           style={{ scale: planetScaleSpring }}
         >
-          <div className="image-container">
+          <div className="image-container ">
             <Image
               src="/images/exoplanet.webp"
               alt="Detailed exoplanet with atmospheric effects"
@@ -147,7 +146,9 @@ export default function Home() {
               sizes="(max-width: 768px) 600px, 800px"
               className="object-contain"
             />
+            
           </div>
+          
         </motion.div>
 
         {/* Contenido del hero */}
@@ -197,7 +198,7 @@ export default function Home() {
       </section>
 
       {/* Credits Section con transición suave */}
-      <section id="credits" className="relative -mt-16 pt-32">
+      <section className="relative -mt-16 pt-32">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black" />
         <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-black via-black/100 to-transparent" />
         <Suspense fallback={<div className="h-screen bg-transparent" />}>

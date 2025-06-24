@@ -4,7 +4,8 @@ import path from 'path'
 export default function handler(req, res) {
   try {
     const { difficulty } = req.query;
-    const jsonDirectory = path.join(process.cwd(), 'exoplanet-questions.json')
+    // Corrige la ruta al archivo JSON
+    const jsonDirectory = path.join(process.cwd(), 'src', 'data', 'exoplanet-questions.json')
     const fileContents = fs.readFileSync(jsonDirectory, 'utf8')
     let questions = JSON.parse(fileContents)
     

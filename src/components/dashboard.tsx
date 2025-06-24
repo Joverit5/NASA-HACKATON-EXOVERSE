@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { Badge } from "@/src/components/ui/badge"
 import { Trophy, Star } from "lucide-react"
-import { achievementsService, Achievement as AchievementType } from '@/src/api/achievements'
+import { achievementsService, Achievement as AchievementType } from '@/src/pages/api/achievements'
 
 export function Dashboard() {
   const [achievements, setAchievements] = useState<AchievementType[]>([])

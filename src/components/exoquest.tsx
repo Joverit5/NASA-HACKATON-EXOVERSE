@@ -7,7 +7,7 @@ import dynamic from "next/dynamic"
 import { Button } from "@/src/components/ui/button"
 import { Progress } from "@/src/components/ui/progress"
 import { Badge } from "@/src/components/ui/badge"
-import { achievementsService } from '@/src/api/achievements'
+import { achievementsService } from '@/src/lib/achievementsService'
 import {
   Card,
   CardContent,
@@ -338,7 +338,7 @@ const fetchAchievements = async () => {
               variant="outline"
               className="flex items-center gap-1 border-white/30 text-white"
             >
-              <Star className="w-4 w-4" />
+              <Star className="w-4" />
               Score: {score}
             </Badge>
             <Badge variant="outline" className="border-white/30 text-white">
