@@ -34,8 +34,6 @@ const CosmicCreditsSection = dynamic(() => import("@/src/components/ui/cosmic-cr
   loading: () => <div className="h-screen bg-transparent" />,
 })
 
-
-
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
   const { scrollYProgress } = useScroll()
@@ -198,15 +196,20 @@ export default function Home() {
       </section>
 
       {/* Credits Section con transición suave */}
-      <section className="relative -mt-16 pt-32">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black" />
-        <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-black via-black/100 to-transparent" />
+      <section id="credits" className="relative -mt-16 pt-32">
         <Suspense fallback={<div className="h-screen bg-transparent" />}>
           <CosmicCreditsSection />
         </Suspense>
       </section>
 
       <PayPalButton />
+      <footer className="p-4 text-center text-indigo-200 relative z-10">
+        <div className="flex justify-center space-x-8 text-sm text-white/40">
+                <span>© {new Date().getFullYear()} Exoverse</span>
+                <span>•</span>
+                <span>Exploring the cosmos</span>
+        </div>
+      </footer>
     </main>
   )
 }

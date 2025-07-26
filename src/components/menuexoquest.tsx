@@ -152,9 +152,11 @@ export default function ExoPlanetPlatform() {
       </main>
 
       <footer className="p-4 text-center text-indigo-200 relative z-10">
-        <p>
-          &copy; 2024 ExoVerse. Exploring the cosmos, one question at a time.
-        </p>
+        <div className="flex justify-center space-x-8 text-sm text-white/40">
+                <span>© {new Date().getFullYear()} Exoverse</span>
+                <span>•</span>
+                <span>Exploring the cosmos</span>
+        </div>
       </footer>
     </motion.div>
   );

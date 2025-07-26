@@ -74,10 +74,12 @@ export default function CosmicCreditsSection() {
   const parallaxYSpring = useSpring(parallaxY, { stiffness: 100, damping: 30 })
 
   return (
+    
     <section
       ref={containerRef}
       className="relative min-h-screen overflow-hidden bg-gradient-to-b from-black via-blue-950/10 to-black"
     >
+      
       {/* Nebulosas flotantes de fondo */}
       <FloatingNebula className="w-96 h-96 bg-gradient-to-r from-blue-500 to-cyan-500 top-10 left-10" delay={0} />
       <FloatingNebula className="w-80 h-80 bg-gradient-to-r from-indigo-500 to-blue-500 top-1/3 right-20" delay={2} />

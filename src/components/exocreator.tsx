@@ -21,7 +21,7 @@ import {
   ContactShadows,
 } from "@react-three/drei";
 import * as THREE from "three";
-import { achievementsService } from '@/src/pages/api/achievements'
+import { achievementsService } from '@/src/lib/achievementsService'
 import { Button } from "@/src/components/ui/button";
 import { Slider } from "@/src/components/ui/slider";
 import { Card, CardContent } from "@/src/components/ui/card";

@@ -36,16 +36,7 @@ export default function Navbar() {
     setIsOpen(!isOpen);
   };
 
-  const handleCreditsClick = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-    const section = document.getElementById("credits");
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
-    setIsOpen(false);
-  };
+
 
   const leftNavItems = [
     { href: "/exoquest/menu", icon: Rocket, label: "ExoQuest" },
@@ -55,10 +46,9 @@ export default function Navbar() {
   const rightNavItems = [
     { href: "/exovis", icon: ChartBar, label: "ExoVis" },
     { 
-      href: "#credits", 
+      href: "/#credits", 
       icon: Users, 
-      label: "Credits",
-      onClick: handleCreditsClick 
+      label: "Credits"
     },
   ];
 
@@ -103,18 +93,7 @@ export default function Navbar() {
           <ul className="hidden md:flex md:flex-1 md:items-center md:justify-end md:space-x-16">
             {rightNavItems.map((item) => (
               <li key={item.href}>
-                {item.onClick ? (
-                  <a
-                    href={item.href}
-                    onClick={item.onClick}
-                    className="flex items-center space-x-2 text-xl text-white hover:text-blue-400 transition-colors px-8"
-                  >
-                    <item.icon className="h-5 w-5" />
-                    <span>{item.label}</span>
-                  </a>
-                ) : (
-                  <NavItem {...item} />
-                )}
+                <NavItem {...item} />
               </li>
             ))}
           </ul>
@@ -125,7 +104,6 @@ export default function Navbar() {
           {isOpen && (
             <MobileMenu
               navItems={[...leftNavItems, ...rightNavItems]}
-              handleCreditsClick={handleCreditsClick}
               toggleMenu={toggleMenu}
             />
           )}
@@ -145,9 +123,8 @@ const NavItem: React.FC<NavItemProps> = ({ href, icon: Icon, label }) => (
   </Link>
 );
 
-const MobileMenu: React.FC<MobileMenuProps> = ({
+const MobileMenu: React.FC<Omit<MobileMenuProps, 'handleCreditsClick'>> = ({
   navItems,
-  handleCreditsClick,
   toggleMenu,
 }) => (
   <motion.div
