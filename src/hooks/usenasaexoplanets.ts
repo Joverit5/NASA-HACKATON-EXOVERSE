@@ -143,10 +143,16 @@ export function useNasaExoplanets() {
             : "This distant world represents one of the many diverse planetary systems in our galaxy."
         }${sourceInfo}`
 
+        // sy_dist está en parsecs, convertir a años luz (1 pc ≈ 3.26156 ly)
+        let distanceLy = "Unknown";
+        if (sy_dist && !isNaN(Number(sy_dist))) {
+          const ly = Number.parseFloat(sy_dist) * 3.26156;
+          distanceLy = `${ly.toFixed(1)} ly`;
+        }
         return {
           name: pl_name || "Unknown",
           hostStar: hostname || "Unknown",
-          distance: sy_dist ? `${Number.parseFloat(sy_dist).toFixed(1)} ly` : "Unknown",
+          distance: distanceLy,
           radius: pl_rade ? `${Number.parseFloat(pl_rade).toFixed(2)} R⊕` : "Unknown",
           mass: pl_masse ? `${Number.parseFloat(pl_masse).toFixed(2)} M⊕` : "Unknown",
           orbitalPeriod: pl_orbper ? `${Number.parseFloat(pl_orbper).toFixed(1)} days` : "Unknown",
