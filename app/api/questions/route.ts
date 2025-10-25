@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const difficulty = searchParams.get('difficulty');
-    const jsonDirectory = path.join(process.cwd(), 'src', 'data', 'exoplanet-questions.json');
+    const jsonDirectory = path.join(process.cwd(), 'src', 'data', 'exoplanet_questions.json');
     const fileContents = await fs.readFile(jsonDirectory, 'utf8');
     let questions = JSON.parse(fileContents);
 

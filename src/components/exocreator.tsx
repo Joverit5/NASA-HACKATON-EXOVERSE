@@ -60,6 +60,9 @@ type Achievement = {
 }
 
 const createProceduralTexture = (type: string, color: string) => {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return new THREE.Texture();
+  }
   const canvas = document.createElement("canvas");
   canvas.width = 1024;
   canvas.height = 512;

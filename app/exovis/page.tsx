@@ -30,17 +30,29 @@ import { useNasaExoplanets } from "@/src/hooks/usenasaexoplanets"
 
 export default function ExovizCatalog() {
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedType, setSelectedType] = useState("All")
-  const [selectedHabitability, setSelectedHabitability] = useState("All")
-  const [sortBy, setSortBy] = useState("name")
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const searchTimeoutRef = useRef<NodeJS.Timeout>()
 
-  const { exoplanets, loading, error, hasMore, totalCount, loadMore, refetch, searchGlobal, isSearching } =
-    useNasaExoplanets()
+  const {
+    exoplanets,
+    loading,
+    error,
+    hasMore,
+    totalCount,
+    loadMore,
+    refetch,
+    searchGlobal,
+    isSearching,
+    setCurrentTypeFilter,
+    setCurrentHabitabilityFilter,
+    setCurrentSortBy,
+    currentTypeFilter,
+    currentHabitabilityFilter,
+    currentSortBy,
+  } = useNasaExoplanets()
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -99,7 +111,7 @@ export default function ExovizCatalog() {
 
         // Debounced global search
         searchTimeoutRef.current = setTimeout(() => {
-          searchGlobal(value, selectedType, selectedHabitability, sortBy)
+          searchGlobal(value)
         }, 500)
       } else {
         setShowSuggestions(false)
@@ -108,21 +120,11 @@ export default function ExovizCatalog() {
         }
       }
     },
-    [exoplanets, searchGlobal, selectedType, selectedHabitability, sortBy, refetch],
+    [exoplanets, searchGlobal, refetch],
   )
 
   // Handle filter changes
-  const handleFilterChange = useCallback(() => {
-    if (searchTerm.length >= 2) {
-      searchGlobal(searchTerm, selectedType, selectedHabitability, sortBy)
-    } else {
-      refetch()
-    }
-  }, [searchTerm, selectedType, selectedHabitability, sortBy, searchGlobal, refetch])
-
-  useEffect(() => {
-    handleFilterChange()
-  }, [selectedType, selectedHabitability, sortBy])
+  // Los filtros y el orden se aplican solo en el frontend usando los setters del hook
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
@@ -251,7 +253,7 @@ export default function ExovizCatalog() {
                           onClick={() => {
                             setSearchTerm(suggestion)
                             setShowSuggestions(false)
-                            searchGlobal(suggestion, selectedType, selectedHabitability, sortBy)
+                            searchGlobal(suggestion)
                           }}
                         >
                           <div className="flex items-center gap-2">
@@ -268,8 +270,8 @@ export default function ExovizCatalog() {
                 <div className="relative">
                   <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/40 w-5 h-5" />
                   <select
-                    value={selectedType}
-                    onChange={(e) => setSelectedType(e.target.value)}
+                    value={currentTypeFilter}
+                    onChange={(e) => setCurrentTypeFilter(e.target.value)}
                     className="pl-12 pr-8 py-3 bg-white/10 border border-white/20 text-white rounded-xl h-12 w-full appearance-none cursor-pointer"
                   >
                     {planetTypes.map((type) => (
@@ -284,8 +286,8 @@ export default function ExovizCatalog() {
                 {/* Habitability Filter */}
                 <div className="relative">
                   <select
-                    value={selectedHabitability}
-                    onChange={(e) => setSelectedHabitability(e.target.value)}
+                    value={currentHabitabilityFilter}
+                    onChange={(e) => setCurrentHabitabilityFilter(e.target.value)}
                     className="px-4 py-3 bg-white/10 border border-white/20 text-white rounded-xl h-12 w-full appearance-none cursor-pointer"
                   >
                     {habitabilityOptions.map((option) => (
@@ -309,11 +311,11 @@ export default function ExovizCatalog() {
                 ].map((option) => (
                   <Button
                     key={option.value}
-                    variant={sortBy === option.value ? "default" : "ghost"}
+                    variant={currentSortBy === option.value ? "default" : "ghost"}
                     size="sm"
-                    onClick={() => setSortBy(option.value)}
+                    onClick={() => setCurrentSortBy(option.value)}
                     className={`text-xs ${
-                      sortBy === option.value
+                      currentSortBy === option.value
                         ? "bg-white text-black"
                         : "text-white/60 hover:text-white hover:bg-white/10"
                     }`}

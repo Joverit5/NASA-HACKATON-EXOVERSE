@@ -1,25 +1,19 @@
-// Archivo movido desde app/exocreator/page.tsx
-"use client"
+"use client";
 
-import ExoCreator from '@/src/components/exocreator'
+import dynamic from "next/dynamic";
 import { LoadingScreen } from "@/src/components/loadingScreen";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-export default function ExoCreatorPage() {
+const ExoCreator = dynamic(() => import("@/src/components/exocreator"), { ssr: false });
+
+export default function ExoCreatorClient() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000); // 3 seconds loading time, adjust as needed
-
+    const timer = setTimeout(() => setIsLoading(false), 3000);
     return () => clearTimeout(timer);
-  }, [])
+  }, []);
 
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
-
-  return <ExoCreator />
+  if (isLoading) return <LoadingScreen />;
+  return <ExoCreator />;
 }
