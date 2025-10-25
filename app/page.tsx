@@ -150,24 +150,27 @@ export default function Home() {
         </motion.div>
 
         {/* Contenido del hero */}
-        <motion.div className="container mx-auto px-6 relative z-20" style={{ y: textYSpring }}>
+        <motion.div
+          className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20 py-20 sm:py-24 md:py-32"
+          style={{ y: textYSpring }}
+        >
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="max-w-3xl"
           >
-            <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 sm:mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 leading-tight">
               Exploring Exoplanets
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-2xl">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-300 leading-relaxed max-w-2xl">
               ExoVerse is an international educational platform dedicated to exploring and understanding planets beyond
               our solar system.
             </p>
           </motion.div>
         </motion.div>
       </motion.div>
-
+      
       {/* Transición suave entre hero y features */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-10" />
 
