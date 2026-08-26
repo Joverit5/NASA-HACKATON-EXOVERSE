@@ -26,7 +26,7 @@ const TwinklingStar = ({ delay = 0, scale = 1 }: { delay?: number; scale?: numbe
 )
 
 interface Feature {
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string }>;
   title: string;
   description: string;
 }

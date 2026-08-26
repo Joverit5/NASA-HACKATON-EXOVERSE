@@ -8,7 +8,7 @@ import { cn } from "@/src/utils/utils";
 
 interface NavItemProps {
   href: string;
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string }>;
   label: string;
 }
 

@@ -9,9 +9,9 @@ import tess from "@/public/images/tessinspacerender16by9-jpg.webp";
 import planet2 from "@/public/images/pegasib.webp"
 import planet3 from "@/public/images/Gliese.webp"
 import Kepler from "@/public/images/Kepler2.webp"
-import exoplanetImage from "/public/images/exoplanet.webp";
-import centauri from "/public/images/proximaCentauri.webp";
-import telescope from "/public/images/telescope.webp";
+import exoplanetImage from "@/public/images/exoplanet.webp";
+import centauri from "@/public/images/proximaCentauri.webp";
+import telescope from "@/public/images/telescope.webp";
 // Custom Star component with random twinkling animation
 const TwinklingStar = ({ delay = 0, scale = 1 }: { delay?: number; scale?: number }) => (
   <motion.div

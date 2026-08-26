@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 
 interface FeatureCardProps {
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string }>;
   title: string;
   description: string;
 }
