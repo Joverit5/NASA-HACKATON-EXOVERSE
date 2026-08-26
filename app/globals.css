@@ -266,3 +266,40 @@
     animation: none;
   }
 }
+
+/* --- The curve as navigation ---------------------------------------------
+   Scroll position maps to time along the transit. This runs entirely on the
+   compositor via a scroll-driven animation: no requestAnimationFrame, no JS
+   animation runtime, and the cost does not grow with the number of curves.
+
+   The @supports guard matters. Where scroll-driven animations are unavailable
+   the playhead simply rests at mid-transit, which is a legitimate still frame
+   of the same drawing rather than a broken one. */
+
+@keyframes curve-scrub {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(1200px);
+  }
+}
+
+.curve-playhead {
+  transform: translateX(600px);
+}
+
+@supports (animation-timeline: scroll()) {
+  .curve-playhead {
+    animation: curve-scrub linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+/* The scene stops entirely under reduced motion; it does not merely shorten. */
+@media (prefers-reduced-motion: reduce) {
+  .curve-playhead {
+    animation: none;
+    transform: translateX(600px);
+  }
+}

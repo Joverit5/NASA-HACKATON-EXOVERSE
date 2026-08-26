@@ -34,7 +34,20 @@ export interface ProcessedExoplanet {
   description: string
   /** Number of published references in the archive for this planet. Real provenance. */
   sources: number
+  /** Stellar radius in solar radii, needed to compute a real transit depth. */
+  stellarRadius: number | null
+  /** Stellar effective temperature in K, which sets the star's colour. */
+  stellarTemp: number | null
+  /**
+   * Fractional transit depth, (Rp / R*)^2 — the fraction of starlight the planet
+   * blocks. This is the quantity the whole visual direction is built on: the dip
+   * IS the planet. Null when either radius is missing.
+   */
+  transitDepth: number | null
 }
+
+/** Earth radii per solar radius. */
+const EARTH_RADII_PER_SOLAR = 109.076
 
 const TAP_URL = "https://exoplanetarchive.ipac.caltech.edu/TAP/sync"
 const PARSEC_TO_LY = 3.26156
@@ -62,6 +75,8 @@ interface RawPlanet {
   pl_eqt: number | null
   disc_year: number | null
   discoverymethod: string | null
+  st_rad: number | null
+  st_teff: number | null
 }
 
 async function tapQuery<T>(query: string, signal?: AbortSignal): Promise<T[]> {
@@ -180,6 +195,12 @@ function process(raw: RawPlanet, referenceCount: number): ProcessedExoplanet {
     habitability,
     description,
     sources: referenceCount,
+    stellarRadius: raw.st_rad ?? null,
+    stellarTemp: raw.st_teff ?? null,
+    transitDepth:
+      raw.pl_rade !== null && raw.st_rad !== null && raw.st_rad > 0
+        ? Math.pow(raw.pl_rade / EARTH_RADII_PER_SOLAR / raw.st_rad, 2)
+        : null,
   }
 }
 
@@ -189,7 +210,7 @@ let inflight: Promise<ProcessedExoplanet[]> | null = null
 async function load(): Promise<ProcessedExoplanet[]> {
   const [rows, refCounts] = await Promise.all([
     tapQuery<RawPlanet>(
-      "SELECT pl_name,hostname,sy_dist,pl_rade,pl_masse,pl_orbper,pl_eqt,disc_year,discoverymethod FROM pscomppars",
+      "SELECT pl_name,hostname,sy_dist,pl_rade,pl_masse,pl_orbper,pl_eqt,disc_year,discoverymethod,st_rad,st_teff FROM pscomppars",
     ),
     // Real provenance: how many published references the archive holds per planet.
     tapQuery<{ pl_name: string; nrefs: number }>("SELECT pl_name, COUNT(*) AS nrefs FROM ps GROUP BY pl_name").catch(
@@ -298,4 +319,36 @@ export function queryCatalog(all: ProcessedExoplanet[], q: CatalogQuery): Catalo
 function parseDistance(distance: string): number {
   const n = Number.parseFloat(distance)
   return Number.isNaN(n) ? Number.POSITIVE_INFINITY : n
+}
+
+/**
+ * The planet the landing page opens on.
+ *
+ * It has to be a transiting world with a real measured depth, well enough studied
+ * that its numbers are trustworthy, and with a dip deep enough to read at a glance.
+ * Picked from the archive rather than hard-coded, so the hero cannot go stale or
+ * point at a planet whose parameters were later revised away.
+ */
+export async function getFeaturedPlanet(): Promise<ProcessedExoplanet | null> {
+  let catalog: ProcessedExoplanet[]
+  try {
+    catalog = await getCatalog()
+  } catch {
+    return null
+  }
+
+  const candidates = catalog.filter(
+    (p) =>
+      p.discoveryMethod === "Transit" &&
+      p.transitDepth !== null &&
+      p.transitDepth > 0.0008 &&
+      p.sources >= 8 &&
+      p.orbitalPeriod !== "Not available" &&
+      p.distance !== "Not available",
+  )
+  if (candidates.length === 0) return null
+
+  // Best studied first; ties broken by the deeper, more legible transit.
+  candidates.sort((a, b) => b.sources - a.sources || (b.transitDepth ?? 0) - (a.transitDepth ?? 0))
+  return candidates[0]
 }
