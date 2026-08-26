@@ -4,68 +4,68 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-  }
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    /* Ground and surfaces — see DESIGN.md, "The Two Blacks Rule" */
+    --background: 240 10% 4%;
+    --foreground: 240 10% 96%;
+    --card: 240 10% 10%;
+    --card-foreground: 240 10% 96%;
+    --popover: 240 10% 8%;
+    --popover-foreground: 240 10% 96%;
+    /* Signal Violet / Aurora Violet — interaction states only, never surfaces */
+    --primary: 260 100% 70%;
+    --primary-foreground: 240 10% 10%;
+    --secondary: 260 60% 30%;
+    --secondary-foreground: 240 10% 96%;
+    --muted: 240 10% 20%;
+    --muted-foreground: 240 10% 80%;
+    --accent: 280 100% 70%;
+    --accent-foreground: 240 10% 10%;
+    --destructive: 0 100% 60%;
+    --destructive-foreground: 240 10% 96%;
+    /* Panel Edge (#374151) — the only border color on opaque surfaces */
+    --border: 217 19% 27%;
+    --input: 217 19% 27%;
+    --ring: 260 100% 70%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 240 10% 2%;
+    --foreground: 240 10% 98%;
+    --card: 240 10% 8%;
+    --card-foreground: 240 10% 98%;
+    --popover: 240 10% 6%;
+    --popover-foreground: 240 10% 98%;
+    --primary: 260 100% 80%;
+    --primary-foreground: 240 10% 10%;
+    --secondary: 260 60% 20%;
+    --secondary-foreground: 240 10% 98%;
+    --muted: 240 10% 15%;
+    --muted-foreground: 240 10% 85%;
+    --accent: 280 100% 80%;
+    --accent-foreground: 240 10% 10%;
+    --destructive: 0 100% 70%;
+    --destructive-foreground: 240 10% 98%;
+    --border: 217 19% 27%;
+    --input: 217 19% 27%;
+    --ring: 260 100% 80%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --radius: 0.5rem;
   }
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
   }
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {
@@ -97,14 +97,6 @@ body {
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
 }
 
-/* Optimización de fuentes para evitar layout shifts */
-@font-face {
-  font-family: "ExoFont";
-  src: url("/fonts/GeistMonoVF.woff") format("woff"), url("/fonts/GeistVF.woff") format("woff");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap; /* Evita layout shifts */
-}
 
 /* Optimización de animaciones usando transform y opacity */
 @keyframes float-optimized {
@@ -138,15 +130,6 @@ body {
   }
 }
 
-/* Glassmorphism optimizado */
-.glassmorphism-enhanced {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
 .cosmic-card {
   background: linear-gradient(
     135deg,
@@ -161,10 +144,8 @@ body {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* Optimización de scroll suave */
-html {
-  scroll-behavior: smooth;
-}
+/* Smooth scrolling is owned by Lenis (src/components/smoothscroll.tsx).
+   CSS scroll-behavior must stay off: the two fight over the same scroll position. */
 
 /* Contenedor con aspect ratio fijo para evitar layout shifts */
 .hero-container {
@@ -230,41 +211,35 @@ html {
   perspective: 1000px;
 }
 
-/* Nuevas variables CSS para colores personalizados de Tailwind */
-:root {
-  --background: 240 10% 4%;
-  --foreground: 240 10% 96%;
-  --card: 240 10% 10%;
-  --card-foreground: 240 10% 96%;
-  --popover: 240 10% 8%;
-  --popover-foreground: 240 10% 96%;
-  --primary: 260 100% 70%;
-  --primary-foreground: 240 10% 10%;
-  --secondary: 260 60% 30%;
-  --secondary-foreground: 240 10% 96%;
-  --muted: 240 10% 20%;
-  --muted-foreground: 240 10% 80%;
-  --accent: 280 100% 70%;
-  --accent-foreground: 240 10% 10%;
-  --destructive: 0 100% 60%;
-  --destructive-foreground: 240 10% 96%;
+
+/* --- ExoVis catalog performance -------------------------------------------
+   Two costs scale with the number of accumulated cards. Both are handled here
+   rather than in JS so they cost the same at 50 cards as at 5,000. */
+
+/* The planet orbit. Previously a framer-motion `animate={{rotate:360}}` loop per
+   card, i.e. one main-thread RAF callback per card. As a CSS animation on a
+   transform it runs on the compositor and never touches the main thread. */
+@keyframes planet-orbit {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.dark {
-  --background: 240 10% 2%;
-  --foreground: 240 10% 98%;
-  --card: 240 10% 8%;
-  --card-foreground: 240 10% 98%;
-  --popover: 240 10% 6%;
-  --popover-foreground: 240 10% 98%;
-  --primary: 260 100% 80%;
-  --primary-foreground: 240 10% 10%;
-  --secondary: 260 60% 20%;
-  --secondary-foreground: 240 10% 98%;
-  --muted: 240 10% 15%;
-  --muted-foreground: 240 10% 85%;
-  --accent: 280 100% 80%;
-  --accent-foreground: 240 10% 10%;
-  --destructive: 0 100% 70%;
-  --destructive-foreground: 240 10% 98%;
+.planet-orbit {
+  animation: planet-orbit 20s linear infinite;
+}
+
+/* Browser-native virtualization. Offscreen cards skip style, layout and paint
+   entirely; contain-intrinsic-size keeps their reserved height so the scrollbar
+   stays honest and infinite scroll doesn't thrash. */
+.catalog-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 460px;
+}
+
+/* DESIGN.md: ambient motion stops under reduced motion, it does not shorten. */
+@media (prefers-reduced-motion: reduce) {
+  .planet-orbit {
+    animation: none;
+  }
 }

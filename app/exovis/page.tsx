@@ -116,11 +116,12 @@ export default function ExovizCatalog() {
       } else {
         setShowSuggestions(false)
         if (value === "") {
-          refetch()
+          // Clearing the box clears the search only; the user's filters stand.
+          searchGlobal("")
         }
       }
     },
-    [exoplanets, searchGlobal, refetch],
+    [exoplanets, searchGlobal],
   )
 
   // Handle filter changes
@@ -130,7 +131,7 @@ export default function ExovizCatalog() {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  const planetTypes = useMemo(() => ["All", "Terrestrial", "Sub-Neptune", "Neptune-like", "Gas Giant", "Hot Jupiter"], []);
+  const planetTypes = useMemo(() => ["All", "Terrestrial", "Super-Earth", "Mini-Neptune", "Neptune-like", "Gas Giant", "Hot Jupiter"], []);
   const habitabilityOptions = useMemo(() => ["All", "Potentially Habitable", "Not Habitable"], []);
   const habitablePlanets = useMemo(() => exoplanets.filter((p) => p.habitability === "Potentially Habitable").length, [exoplanets]);
   const totalSources = useMemo(() => exoplanets.reduce((sum, planet) => sum + planet.sources, 0), [exoplanets]);
@@ -338,7 +339,7 @@ export default function ExovizCatalog() {
                   </span>
                 )}
                 <div className="text-xs text-white/40 mt-1">
-                  Duplicates automatically combined • {totalSources.toLocaleString()} total sources processed
+                  {totalSources.toLocaleString()} published references behind these planets
                 </div>
               </div>
             </div>
@@ -417,7 +418,7 @@ export default function ExovizCatalog() {
                       : "You've reached the end of the exoplanet catalog"}
                   </p>
                   <p className="text-white/40 mt-2">
-                    Total: {exoplanets.length.toLocaleString()} unique exoplanets from {totalSources.toLocaleString()}{" "}
+                    Total: {exoplanets.length.toLocaleString()} exoplanets shown, from {totalSources.toLocaleString()}{" "}
                     sources
                   </p>
                 </div>
@@ -504,6 +505,7 @@ const ExoplanetCard = React.memo(function ExoplanetCard({ planet, index }: { pla
 
   return (
     <motion.div
+      className="catalog-card"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: (index % 12) * 0.05 }}
@@ -543,14 +545,14 @@ const ExoplanetCard = React.memo(function ExoplanetCard({ planet, index }: { pla
         <CardContent className="flex flex-col items-center px-4 pb-4">
           {/* Planet Visualization */}
           <div className="relative w-24 h-24 mb-4 flex items-center justify-center">
-            <motion.div
-              className="w-16 h-16 rounded-full relative"
+            {/* CSS-driven orbit: one framer-motion loop per card put N RAF
+                callbacks on the main thread. See .planet-orbit in globals.css. */}
+            <div
+              className="planet-orbit w-16 h-16 rounded-full relative"
               style={{
                 background: `radial-gradient(circle at 30% 30%, ${colors.secondary}, ${colors.primary})`,
                 boxShadow: `0 0 20px ${colors.glow}40`,
               }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
             >
               {/* Rings for gas giants */}
               {(planet.type === "Gas Giant" || planet.type === "Neptune-like") && (
@@ -573,7 +575,7 @@ const ExoplanetCard = React.memo(function ExoplanetCard({ planet, index }: { pla
                   }}
                 />
               )}
-            </motion.div>
+            </div>
           </div>
 
           {/* Basic Info */}

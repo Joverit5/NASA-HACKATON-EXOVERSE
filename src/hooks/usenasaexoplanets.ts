@@ -1,328 +1,151 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
+import type { ProcessedExoplanet } from "@/src/lib/exoplanetCatalog"
 
-export interface ProcessedExoplanet {
-  name: string
-  hostStar: string
-  distance: string
-  radius: string
-  mass: string
-  orbitalPeriod: string
-  temperature: number | null
-  discoveryYear: number | null
-  discoveryMethod: string
-  type: string
-  habitability: "Potentially Habitable" | "Not Habitable"
-  description: string
-  sources: number // Number of sources/entries combined
+export type { ProcessedExoplanet }
+
+/**
+ * ExoVis catalog state.
+ *
+ * Search, filtering, sorting and paging are all resolved server-side against the
+ * full classified catalog (see src/lib/exoplanetCatalog.ts). Previously the hook
+ * merged duplicate rows and sorted client-side over whatever happened to be loaded,
+ * which meant a filter only ever applied to the first page — and `loadMore` and
+ * `searchGlobal` passed hard-coded "All"/"All"/"name", so the user's filter and sort
+ * never reached the server at all.
+ */
+
+const BATCH_SIZE = 60
+
+interface CatalogResponse {
+  planets: ProcessedExoplanet[]
+  total: number
+  offset: number
+  limit: number
+  hasMore: boolean
+  catalogSize: number
+  error?: string
+  details?: string
 }
 
 export function useNasaExoplanets() {
-  const [originalExoplanets, setOriginalExoplanets] = useState<ProcessedExoplanet[]>([])
   const [exoplanets, setExoplanets] = useState<ProcessedExoplanet[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [hasMore, setHasMore] = useState(true)
   const [offset, setOffset] = useState(0)
   const [totalCount, setTotalCount] = useState<number | null>(null)
+  const [matchCount, setMatchCount] = useState<number | null>(null)
   const [isSearching, setIsSearching] = useState(false)
-  const [currentSearch, setCurrentSearch] = useState<string>("")
-  const [currentTypeFilter, setCurrentTypeFilter] = useState<string>("All")
-  const [currentHabitabilityFilter, setCurrentHabitabilityFilter] = useState<string>("All")
-  const [currentSortBy, setCurrentSortBy] = useState<string>("name")
 
-  const BATCH_SIZE = 100
+  const [currentSearch, setCurrentSearch] = useState("")
+  const [currentTypeFilter, setCurrentTypeFilter] = useState("All")
+  const [currentHabitabilityFilter, setCurrentHabitabilityFilter] = useState("All")
+  const [currentSortBy, setCurrentSortBy] = useState("name")
 
-  const combineExoplanetData = useCallback((duplicates: any[]): any => {
-    // Ordenar por completitud
-    const sortedDuplicates = duplicates.sort((a, b) => {
-      const aNonNull = a.filter((val: any) => val !== null && val !== undefined && val !== "" && val !== "NaN").length;
-      const bNonNull = b.filter((val: any) => val !== null && val !== undefined && val !== "" && val !== "NaN").length;
-      return bNonNull - aNonNull;
-    });
-    const combined = [...sortedDuplicates[0]];
-    for (let i = 1; i < sortedDuplicates.length; i++) {
-      const duplicate = sortedDuplicates[i];
-      for (let j = 0; j < combined.length; j++) {
-        if (
-          (!combined[j] || combined[j] === "" || combined[j] === null || combined[j] === "NaN") &&
-          duplicate[j] &&
-          duplicate[j] !== "" &&
-          duplicate[j] !== null &&
-          duplicate[j] !== "NaN"
-        ) {
-          combined[j] = duplicate[j];
-        }
-        // Mantener el año más antiguo
-        if (j === 7 && duplicate[j] && combined[j]) {
-          combined[j] = Math.min(Number(combined[j]), Number(duplicate[j]));
-        }
-      }
-    }
-    // Métodos de descubrimiento combinados
-    const methods = duplicates
-      .map((d) => d[8])
-      .filter((method, index, arr) => method && arr.indexOf(method) === index)
-      .join(", ");
-    combined[8] = methods || combined[8];
-    return combined;
-  }, []);
+  /** Guards against a slow early response overwriting a newer query's results. */
+  const requestId = useRef(0)
+  const abortRef = useRef<AbortController | null>(null)
 
-  const processExoplanetData = useCallback(
-    (rawData: any[]): ProcessedExoplanet[] => {
-      // Agrupar por nombre
-      const planetGroups = rawData.reduce((groups: { [key: string]: any[] }, planet) => {
-        const planetName = planet[0];
-        if (!planetName) return groups;
-        if (!groups[planetName]) {
-          groups[planetName] = [];
-        }
-        groups[planetName].push(planet);
-        return groups;
-      }, {});
-
-      // Physical classification and NaN handling
-      const processedPlanets = Object.entries(planetGroups).map(([planetName, duplicates]) => {
-        const combinedData = duplicates.length > 1 ? combineExoplanetData(duplicates) : duplicates[0];
-        const [pl_name, hostname, sy_dist, pl_rade, pl_masse, pl_orbper, pl_eqt, disc_year, discoverymethod] = combinedData;
-
-        // Utility for displaying numbers
-        const safeNum = (val: any, decimals = 2, unit = "") => {
-          const num = Number.parseFloat(val);
-          return !val || isNaN(num) ? "Not available" : `${num.toFixed(decimals)}${unit}`;
-        };
-
-        // Improved physical classification
-        let type = "Unknown";
-        const radius = Number.parseFloat(pl_rade);
-        const mass = Number.parseFloat(pl_masse);
-        if (!isNaN(radius) && !isNaN(mass)) {
-          if (radius < 1.5 && mass < 5) {
-            type = "Terrestrial";
-          } else if (radius < 2.0 && mass < 10) {
-            type = "Super-Earth";
-          } else if (radius < 4.0 && mass < 20) {
-            type = "Mini-Neptune";
-          } else if (radius < 6.0 && mass < 50) {
-            type = "Neptune-like";
-          } else if (radius >= 6.0 || mass >= 50) {
-            type = "Gas Giant";
-          }
-        } else if (!isNaN(radius)) {
-          if (radius < 1.5) {
-            type = "Terrestrial";
-          } else if (radius < 2.0) {
-            type = "Super-Earth";
-          } else if (radius < 4.0) {
-            type = "Mini-Neptune";
-          } else if (radius < 6.0) {
-            type = "Neptune-like";
-          } else {
-            type = "Gas Giant";
-          }
-        } else if (!isNaN(mass)) {
-          if (mass < 5) {
-            type = "Terrestrial";
-          } else if (mass < 10) {
-            type = "Super-Earth";
-          } else if (mass < 20) {
-            type = "Mini-Neptune";
-          } else if (mass < 50) {
-            type = "Neptune-like";
-          } else {
-            type = "Gas Giant";
-          }
-        }
-
-        // Hot Jupiter
-        const temperature = Number.parseFloat(pl_eqt);
-        if (!isNaN(temperature) && temperature > 1000 && type === "Gas Giant") {
-          type = "Hot Jupiter";
-        }
-
-        // Habitability mejorada
-        let habitability: "Potentially Habitable" | "Not Habitable" = "Not Habitable";
-        if (
-          (type === "Terrestrial" || type === "Super-Earth") &&
-          (
-            (!isNaN(temperature) && temperature >= 200 && temperature <= 350) ||
-            temperature === null // Si no hay temperatura, pero el tipo es adecuado
-          )
-        ) {
-          habitability = "Potentially Habitable";
-        }
-
-        // Description
-        const sourceInfo = duplicates.length > 1 ? ` (Combined from ${duplicates.length} sources)` : "";
-        const description = `${pl_name} is a ${type.toLowerCase()} exoplanet orbiting ${hostname}. ${
-          habitability === "Potentially Habitable"
-            ? "This world shows potential for habitability with temperatures that could support liquid water."
-            : "This distant world represents the diversity of planetary systems in our galaxy."
-        }${sourceInfo}`;
-
-        // Distance in light years
-        let distanceLy = "Not available";
-        if (sy_dist && !isNaN(Number(sy_dist))) {
-          const ly = Number.parseFloat(sy_dist) * 3.26156;
-          distanceLy = `${ly.toFixed(1)} ly`;
-        }
-
-        return {
-          name: pl_name || "Unknown",
-          hostStar: hostname || "Unknown",
-          distance: distanceLy,
-          radius: safeNum(pl_rade, 2, " R⊕"),
-          mass: safeNum(pl_masse, 2, " M⊕"),
-          orbitalPeriod: safeNum(pl_orbper, 1, " days"),
-          temperature: !isNaN(temperature) ? temperature : null,
-          discoveryYear: disc_year && !isNaN(Number(disc_year)) ? Number.parseInt(disc_year) : null,
-          discoveryMethod: discoverymethod || "Unknown",
-          type,
-          habitability,
-          description,
-          sources: duplicates.length,
-        };
-      });
-
-      return processedPlanets;
-    },
-    [combineExoplanetData],
-  );
-
-  const fetchExoplanets = useCallback(
+  const fetchPage = useCallback(
     async (
-      searchTerm = "",
-      typeFilter = "All",
-      habitabilityFilter = "All",
-      sortBy = "name",
-      currentOffset = 0,
-      append = false,
+      searchTerm: string,
+      typeFilter: string,
+      habitabilityFilter: string,
+      sortBy: string,
+      currentOffset: number,
+      append: boolean,
     ) => {
+      const id = ++requestId.current
+      abortRef.current?.abort()
+      const controller = new AbortController()
+      abortRef.current = controller
+
+      if (!append) setLoading(true)
+      setError(null)
+
       try {
-        if (!append) {
-          setLoading(true);
-          setError(null);
-        }
         const params = new URLSearchParams({
-          limit: BATCH_SIZE.toString(),
-          offset: currentOffset.toString(),
           searchTerm,
-        });
-        const response = await fetch(`/api/exoplanets?${params}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          typeFilter,
+          habitabilityFilter,
+          sortBy,
+          offset: String(currentOffset),
+          limit: String(BATCH_SIZE),
+        })
+
+        const res = await fetch(`/api/exoplanets?${params}`, { signal: controller.signal })
+        const data: CatalogResponse = await res.json()
+
+        if (!res.ok || data.error) {
+          throw new Error(data.details || data.error || `HTTP ${res.status}`)
         }
-        const data = await response.json();
-        if (data.error) {
-          throw new Error(data.details || data.error);
-        }
-        let processedData = processExoplanetData(data.data || []);
-        if (append) {
-          setOriginalExoplanets((prev) => {
-            const combined = [...prev, ...processedData];
-            const uniquePlanets = combined.reduce((unique: ProcessedExoplanet[], planet) => {
-              const existing = unique.find((p) => p.name === planet.name);
-              if (!existing) {
-                unique.push(planet);
-              } else {
-                if (planet.sources > existing.sources) {
-                  const index = unique.indexOf(existing);
-                  unique[index] = planet;
-                }
-              }
-              return unique;
-            }, []);
-            return uniquePlanets;
-          });
-        } else {
-          setOriginalExoplanets(processedData);
-        }
-        setTotalCount(data.totalCount);
-        setHasMore(data.hasMore);
-        setOffset(currentOffset + BATCH_SIZE);
+        // A newer query has been issued since this one started.
+        if (id !== requestId.current) return
+
+        setExoplanets((prev) => (append ? [...prev, ...data.planets] : data.planets))
+        setHasMore(data.hasMore)
+        setOffset(currentOffset + data.planets.length)
+        setMatchCount(data.total)
+        setTotalCount(data.catalogSize)
       } catch (err: any) {
-        console.error("Error fetching exoplanets:", err);
-        setError(err.message || "No se pudo obtener datos de exoplanetas");
+        if (err?.name === "AbortError" || id !== requestId.current) return
+        setError(err?.message || "Could not reach the exoplanet catalog.")
+        if (!append) {
+          setExoplanets([])
+          setHasMore(false)
+        }
       } finally {
-        setLoading(false);
-        setIsSearching(false);
+        if (id === requestId.current) {
+          setLoading(false)
+          setIsSearching(false)
+        }
       }
     },
-    [processExoplanetData],
-  );
+    [],
+  )
 
   const loadMore = useCallback(() => {
-    if (!loading && hasMore) {
-      fetchExoplanets(currentSearch, "All", "All", "name", offset, true)
-    }
-  }, [loading, hasMore, currentSearch, offset, fetchExoplanets])
+    if (loading || !hasMore) return
+    fetchPage(currentSearch, currentTypeFilter, currentHabitabilityFilter, currentSortBy, offset, true)
+  }, [loading, hasMore, currentSearch, currentTypeFilter, currentHabitabilityFilter, currentSortBy, offset, fetchPage])
 
   const searchGlobal = useCallback(
     (searchTerm: string) => {
       setIsSearching(true)
       setCurrentSearch(searchTerm)
-      setOffset(0)
-      fetchExoplanets(searchTerm, "All", "All", "name", 0, false)
     },
-    [fetchExoplanets],
+    [],
   )
 
   const refetch = useCallback(() => {
-    setOffset(0)
     setCurrentSearch("")
-    fetchExoplanets("", "All", "All", "name", 0, false)
-  }, [fetchExoplanets])
+    setCurrentTypeFilter("All")
+    setCurrentHabitabilityFilter("All")
+    setCurrentSortBy("name")
+    fetchPage("", "All", "All", "name", 0, false)
+  }, [fetchPage])
 
+  // Any change to the query resets to the first page and refetches. This is the one
+  // place a query change is handled, so filters and sort can no longer disagree with
+  // what was actually requested.
   useEffect(() => {
-    fetchExoplanets()
-  }, [])
+    setOffset(0)
+    fetchPage(currentSearch, currentTypeFilter, currentHabitabilityFilter, currentSortBy, 0, false)
+  }, [currentSearch, currentTypeFilter, currentHabitabilityFilter, currentSortBy, fetchPage])
 
-  // Efecto para filtrar y ordenar en frontend
-  useEffect(() => {
-    let filtered = [...originalExoplanets];
-    if (currentTypeFilter !== "All") {
-      filtered = filtered.filter((p) => p.type === currentTypeFilter);
-    }
-    if (currentHabitabilityFilter !== "All") {
-      filtered = filtered.filter((p) =>
-        currentHabitabilityFilter === "Potentially Habitable"
-          ? p.habitability === "Potentially Habitable"
-          : p.habitability === "Not Habitable"
-      );
-    }
-    if (currentSortBy === "name") {
-      filtered = filtered.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (currentSortBy === "distance") {
-      filtered = filtered.sort((a, b) => {
-        const da = parseFloat((a.distance || "").replace(/[^\d\.]/g, ""));
-        const db = parseFloat((b.distance || "").replace(/[^\d\.]/g, ""));
-        if (isNaN(da)) return 1;
-        if (isNaN(db)) return -1;
-        return da - db;
-      });
-    } else if (currentSortBy === "year") {
-      filtered = filtered.sort((a, b) => {
-        if (!a.discoveryYear) return 1;
-        if (!b.discoveryYear) return -1;
-        return b.discoveryYear - a.discoveryYear;
-      });
-    } else if (currentSortBy === "habitability") {
-      filtered = filtered.sort((a, b) => {
-        if (a.habitability === b.habitability) return 0;
-        if (a.habitability === "Potentially Habitable") return -1;
-        return 1;
-      });
-    }
-    setExoplanets(filtered);
-  }, [originalExoplanets, currentTypeFilter, currentHabitabilityFilter, currentSortBy]);
+  useEffect(() => () => abortRef.current?.abort(), [])
 
   return {
     exoplanets,
     loading,
     error,
     hasMore,
+    /** Size of the whole archive catalog. */
     totalCount,
+    /** How many planets match the current query. */
+    matchCount,
     loadMore,
     refetch,
     searchGlobal,
@@ -335,4 +158,3 @@ export function useNasaExoplanets() {
     currentSortBy,
   }
 }
- 

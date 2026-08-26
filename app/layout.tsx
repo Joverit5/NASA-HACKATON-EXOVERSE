@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata, Viewport } from "next"
 import localFont from "next/font/local"
 import "./globals.css"
+import SmoothScroll from "@/src/components/smoothscroll"
 
 const geistSans = localFont({
   src: "../src/fonts/GeistVF.woff",
@@ -46,7 +47,10 @@ export default function RootLayout({
         <link rel="preload" href="/images/exoplanet.webp" as="image" />
         <link rel="preload" href="/images/stars-bg.webp" as="image" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <SmoothScroll />
+        {children}
+      </body>
     </html>
   )
 }

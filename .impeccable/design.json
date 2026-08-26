@@ -1,0 +1,262 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-26T00:00:00.000Z",
+  "title": "Design System: ExoVerse",
+  "extensions": {
+    "colorMeta": {
+      "void-black": {
+        "role": "neutral",
+        "displayName": "Void Black",
+        "canonical": "oklch(0.0% 0.000 0.0)",
+        "tonalRamp": ["oklch(15.0% 0.000 0.0)", "oklch(26.4% 0.000 0.0)", "oklch(37.9% 0.000 0.0)", "oklch(49.3% 0.000 0.0)", "oklch(60.7% 0.000 0.0)", "oklch(72.1% 0.000 0.0)", "oklch(83.6% 0.000 0.0)", "oklch(95.0% 0.000 0.0)"]
+      },
+      "deep-space": {
+        "role": "neutral",
+        "displayName": "Deep Space",
+        "canonical": "oklch(14.1% 0.004 285.8)",
+        "tonalRamp": ["oklch(15.0% 0.002 285.8)", "oklch(26.4% 0.003 285.8)", "oklch(37.9% 0.004 285.8)", "oklch(49.3% 0.004 285.8)", "oklch(60.7% 0.004 285.8)", "oklch(72.1% 0.004 285.8)", "oklch(83.6% 0.003 285.8)", "oklch(95.0% 0.002 285.8)"]
+      },
+      "graphite-panel": {
+        "role": "neutral",
+        "displayName": "Graphite Panel",
+        "canonical": "oklch(21.0% 0.032 264.7)",
+        "tonalRamp": ["oklch(15.0% 0.018 264.7)", "oklch(26.4% 0.025 264.7)", "oklch(37.9% 0.029 264.7)", "oklch(49.3% 0.031 264.7)", "oklch(60.7% 0.031 264.7)", "oklch(72.1% 0.029 264.7)", "oklch(83.6% 0.025 264.7)", "oklch(95.0% 0.018 264.7)"]
+      },
+      "panel-edge": {
+        "role": "neutral",
+        "displayName": "Panel Edge",
+        "canonical": "oklch(37.3% 0.031 259.7)",
+        "tonalRamp": ["oklch(15.0% 0.017 259.7)", "oklch(26.4% 0.024 259.7)", "oklch(37.9% 0.028 259.7)", "oklch(49.3% 0.030 259.7)", "oklch(60.7% 0.030 259.7)", "oklch(72.1% 0.028 259.7)", "oklch(83.6% 0.024 259.7)", "oklch(95.0% 0.017 259.7)"]
+      },
+      "starlight": {
+        "role": "neutral",
+        "displayName": "Starlight",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": ["oklch(15.0% 0.000 89.9)", "oklch(26.4% 0.000 89.9)", "oklch(37.9% 0.000 89.9)", "oklch(49.3% 0.000 89.9)", "oklch(60.7% 0.000 89.9)", "oklch(72.1% 0.000 89.9)", "oklch(83.6% 0.000 89.9)", "oklch(95.0% 0.000 89.9)"]
+      },
+      "starlight-dim": {
+        "role": "neutral",
+        "displayName": "Starlight Dim",
+        "canonical": "oklch(87.2% 0.009 258.3)",
+        "tonalRamp": ["oklch(15.0% 0.005 258.3)", "oklch(26.4% 0.007 258.3)", "oklch(37.9% 0.009 258.3)", "oklch(49.3% 0.009 258.3)", "oklch(60.7% 0.009 258.3)", "oklch(72.1% 0.009 258.3)", "oklch(83.6% 0.007 258.3)", "oklch(95.0% 0.005 258.3)"]
+      },
+      "starlight-faint": {
+        "role": "neutral",
+        "displayName": "Starlight Faint",
+        "canonical": "oklch(71.4% 0.019 261.3)",
+        "tonalRamp": ["oklch(15.0% 0.011 261.3)", "oklch(26.4% 0.015 261.3)", "oklch(37.9% 0.018 261.3)", "oklch(49.3% 0.019 261.3)", "oklch(60.7% 0.019 261.3)", "oklch(72.1% 0.018 261.3)", "oklch(83.6% 0.015 261.3)", "oklch(95.0% 0.011 261.3)"]
+      },
+      "violet-primary": {
+        "role": "primary",
+        "displayName": "Signal Violet",
+        "canonical": "oklch(64.0% 0.217 294.9)",
+        "tonalRamp": ["oklch(15.0% 0.123 294.9)", "oklch(26.4% 0.169 294.9)", "oklch(37.9% 0.200 294.9)", "oklch(49.3% 0.215 294.9)", "oklch(60.7% 0.215 294.9)", "oklch(72.1% 0.200 294.9)", "oklch(83.6% 0.169 294.9)", "oklch(95.0% 0.123 294.9)"]
+      },
+      "violet-accent": {
+        "role": "primary",
+        "displayName": "Aurora Violet",
+        "canonical": "oklch(69.4% 0.228 312.7)",
+        "tonalRamp": ["oklch(15.0% 0.129 312.7)", "oklch(26.4% 0.178 312.7)", "oklch(37.9% 0.210 312.7)", "oklch(49.3% 0.226 312.7)", "oklch(60.7% 0.226 312.7)", "oklch(72.1% 0.210 312.7)", "oklch(83.6% 0.178 312.7)", "oklch(95.0% 0.129 312.7)"]
+      },
+      "violet-deep": {
+        "role": "primary",
+        "displayName": "Violet Deep",
+        "canonical": "oklch(33.9% 0.144 292.0)",
+        "tonalRamp": ["oklch(15.0% 0.082 292.0)", "oklch(26.4% 0.112 292.0)", "oklch(37.9% 0.133 292.0)", "oklch(49.3% 0.143 292.0)", "oklch(60.7% 0.143 292.0)", "oklch(72.1% 0.133 292.0)", "oklch(83.6% 0.112 292.0)", "oklch(95.0% 0.082 292.0)"]
+      },
+      "habitable-green": {
+        "role": "secondary",
+        "displayName": "Habitable Green",
+        "canonical": "oklch(80.0% 0.182 151.7)",
+        "tonalRamp": ["oklch(15.0% 0.103 151.7)", "oklch(26.4% 0.142 151.7)", "oklch(37.9% 0.168 151.7)", "oklch(49.3% 0.180 151.7)", "oklch(60.7% 0.180 151.7)", "oklch(72.1% 0.168 151.7)", "oklch(83.6% 0.142 151.7)", "oklch(95.0% 0.103 151.7)"]
+      },
+      "hostile-red": {
+        "role": "secondary",
+        "displayName": "Hostile Red",
+        "canonical": "oklch(71.1% 0.166 22.2)",
+        "tonalRamp": ["oklch(15.0% 0.094 22.2)", "oklch(26.4% 0.129 22.2)", "oklch(37.9% 0.153 22.2)", "oklch(49.3% 0.165 22.2)", "oklch(60.7% 0.165 22.2)", "oklch(72.1% 0.153 22.2)", "oklch(83.6% 0.129 22.2)", "oklch(95.0% 0.094 22.2)"]
+      },
+      "data-blue": {
+        "role": "secondary",
+        "displayName": "Data Blue",
+        "canonical": "oklch(71.4% 0.143 254.6)",
+        "tonalRamp": ["oklch(15.0% 0.081 254.6)", "oklch(26.4% 0.112 254.6)", "oklch(37.9% 0.132 254.6)", "oklch(49.3% 0.142 254.6)", "oklch(60.7% 0.142 254.6)", "oklch(72.1% 0.132 254.6)", "oklch(83.6% 0.112 254.6)", "oklch(95.0% 0.081 254.6)"]
+      },
+      "stellar-gold": {
+        "role": "secondary",
+        "displayName": "Stellar Gold",
+        "canonical": "oklch(86.1% 0.173 91.9)",
+        "tonalRamp": ["oklch(15.0% 0.098 91.9)", "oklch(26.4% 0.135 91.9)", "oklch(37.9% 0.159 91.9)", "oklch(49.3% 0.172 91.9)", "oklch(60.7% 0.172 91.9)", "oklch(72.1% 0.159 91.9)", "oklch(83.6% 0.135 91.9)", "oklch(95.0% 0.098 91.9)"]
+      },
+      "planet-blue": {
+        "role": "tertiary",
+        "displayName": "Planet Blue",
+        "canonical": "oklch(54.6% 0.215 262.9)",
+        "tonalRamp": ["oklch(15.0% 0.122 262.9)", "oklch(26.4% 0.167 262.9)", "oklch(37.9% 0.198 262.9)", "oklch(49.3% 0.213 262.9)", "oklch(60.7% 0.213 262.9)", "oklch(72.1% 0.198 262.9)", "oklch(83.6% 0.167 262.9)", "oklch(95.0% 0.122 262.9)"]
+      },
+      "star-amber": {
+        "role": "tertiary",
+        "displayName": "Star Amber",
+        "canonical": "oklch(68.1% 0.142 75.8)",
+        "tonalRamp": ["oklch(15.0% 0.080 75.8)", "oklch(26.4% 0.111 75.8)", "oklch(37.9% 0.131 75.8)", "oklch(49.3% 0.141 75.8)", "oklch(60.7% 0.141 75.8)", "oklch(72.1% 0.131 75.8)", "oklch(83.6% 0.111 75.8)", "oklch(95.0% 0.080 75.8)"]
+      },
+      "system-violet": {
+        "role": "tertiary",
+        "displayName": "System Violet",
+        "canonical": "oklch(55.8% 0.252 302.3)",
+        "tonalRamp": ["oklch(15.0% 0.143 302.3)", "oklch(26.4% 0.197 302.3)", "oklch(37.9% 0.232 302.3)", "oklch(49.3% 0.250 302.3)", "oklch(60.7% 0.250 302.3)", "oklch(72.1% 0.232 302.3)", "oklch(83.6% 0.197 302.3)", "oklch(95.0% 0.143 302.3)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The single page title. Carries the monochrome light wash. One per page." },
+      "headline": { "displayName": "Headline", "purpose": "Section openers." },
+      "title": { "displayName": "Title", "purpose": "Card and panel headings." },
+      "readout": { "displayName": "Readout", "purpose": "Archive figures and creator values. Light weight at large size — an instrument display, never a headline." },
+      "lede": { "displayName": "Lede", "purpose": "The one paragraph under a display heading, in Starlight Dim, capped near 65ch." },
+      "body": { "displayName": "Body", "purpose": "Panel copy, explanations, descriptions." },
+      "label": { "displayName": "Label", "purpose": "Control labels, badges, captions, metadata. Set in Starlight Faint." },
+      "mono": { "displayName": "Mono", "purpose": "Geist Mono. Coordinates, identifiers, and raw archive values where alignment matters." }
+    },
+    "shadows": [
+      { "name": "lit-panel", "value": "0 20px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)", "purpose": "The signature. Every floating control panel, modal, and primary card. The inset highlight is the load-bearing half." },
+      { "name": "lit-surface", "value": "0 8px 32px 0 rgba(31,38,135,0.37), inset 0 1px 0 rgba(255,255,255,0.1)", "purpose": "Lighter variant for in-flow cards. The faint blue cast is what makes it read as cast light rather than dirt." },
+      { "name": "data-glow", "value": "0 0 20px <semantic-color>40", "purpose": "Rendered celestial objects only — planet spheres and atmospheres. Never applied to UI chrome." }
+    ],
+    "motion": [
+      { "name": "chrome-response", "value": "300ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Every interface state change. The chrome's entire motion budget." },
+      { "name": "chrome-sheet", "value": "200ms ease-out", "purpose": "Mobile menu and panel sheets entering as a 20px rise and fade." },
+      { "name": "content-entry", "value": "600ms ease-out, 50ms stagger, viewport once", "purpose": "Cards and sections rising 50px into view on scroll, then completely still." },
+      { "name": "hero-spring", "value": "spring(stiffness 100, damping 30, restDelta 0.001)", "purpose": "Scroll-linked hero parallax — planet scale, text drift, hero fade." },
+      { "name": "nav-spring", "value": "spring(stiffness 300, damping 30)", "purpose": "The navigation bar dropping in on mount." },
+      { "name": "scene-orbit", "value": "20s linear infinite", "purpose": "Planet rotation in ExoVis cards and the creator scene." },
+      { "name": "scene-ambient", "value": "3s+ ease-in-out infinite", "purpose": "Perpetual scene loops — float, cosmic-glow, nebula-drift. Must stop entirely under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The default action. Graphite pill, no color at rest — a primary action is not information.",
+      "html": "<button class=\"ds-btn-primary\">Explore Catalog</button>",
+      "css": ".ds-btn-primary { background: #111827; color: #FFFFFF; font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; line-height: 1.4; height: 40px; padding: 0 24px; border: 1px solid #374151; border-radius: 9999px; cursor: pointer; transition: background 300ms cubic-bezier(0.4,0,0.2,1), border-color 300ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-primary:hover { background: #374151; border-color: #4B5563; } .ds-btn-primary:focus-visible { outline: 2px solid #9966FF; outline-offset: 2px; } .ds-btn-primary:active { background: #1F2937; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Tertiary and repeated actions — sort controls, dismissals, pagination. Recessive at rest, resolves on approach.",
+      "html": "<button class=\"ds-btn-ghost\">Discovery Year</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: #9CA3AF; font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; height: 40px; padding: 0 24px; border: none; border-radius: 9999px; cursor: pointer; transition: background 300ms cubic-bezier(0.4,0,0.2,1), color 300ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-ghost:hover { background: #111827; color: #FFFFFF; } .ds-btn-ghost:focus-visible { outline: 2px solid #9966FF; outline-offset: 2px; } .ds-btn-ghost[aria-pressed=\"true\"] { background: #FFFFFF; color: #000000; }"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "ExoVis archive search. Leading icon inset 16px, trailing slot for spinner or clear.",
+      "html": "<div class=\"ds-field\"><svg class=\"ds-field-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><input class=\"ds-input-search\" type=\"text\" placeholder=\"Search ANY exoplanet or host star...\" /></div>",
+      "css": ".ds-field { position: relative; display: block; } .ds-field-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; color: #9CA3AF; pointer-events: none; } .ds-input-search { width: 100%; height: 48px; padding: 0 48px; background: #111827; color: #FFFFFF; font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; transition: border-color 300ms cubic-bezier(0.4,0,0.2,1); } .ds-input-search::placeholder { color: #9CA3AF; } .ds-input-search:focus { outline: 2px solid #9966FF; outline-offset: 2px; border-color: rgba(255,255,255,0.4); }"
+    },
+    {
+      "name": "Subsystem Tab Pills",
+      "kind": "chip",
+      "refersTo": "tab-pill",
+      "description": "ExoCreator's subsystem switch. The one sanctioned saturated fill on chrome — the hue answers 'what am I editing'.",
+      "html": "<div class=\"ds-tabs\"><button class=\"ds-tab ds-tab--planet ds-tab--active\">Planet</button><button class=\"ds-tab ds-tab--star\">Star</button><button class=\"ds-tab ds-tab--system\">System</button></div>",
+      "css": ".ds-tabs { display: flex; gap: 8px; } .ds-tab { background: transparent; color: #D1D5DB; font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; height: 36px; padding: 0 16px; border: none; border-radius: 9999px; cursor: pointer; transition: background 300ms cubic-bezier(0.4,0,0.2,1), color 300ms cubic-bezier(0.4,0,0.2,1); } .ds-tab:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; } .ds-tab:focus-visible { outline: 2px solid #9966FF; outline-offset: 2px; } .ds-tab--planet.ds-tab--active { background: #2563EB; color: #FFFFFF; } .ds-tab--star.ds-tab--active { background: #CA8A04; color: #FFFFFF; } .ds-tab--system.ds-tab--active { background: #9333EA; color: #FFFFFF; }"
+    },
+    {
+      "name": "Data Badge",
+      "kind": "chip",
+      "refersTo": "badge-habitable",
+      "description": "Semantic classification on a planet card. Always the three-part chord: 20% fill, 30% border, full-strength text.",
+      "html": "<div class=\"ds-badges\"><span class=\"ds-badge ds-badge--habitable\">Potentially Habitable</span><span class=\"ds-badge ds-badge--hostile\">Not Habitable</span><span class=\"ds-badge ds-badge--source\">3 sources</span></div>",
+      "css": ".ds-badges { display: flex; gap: 8px; flex-wrap: wrap; } .ds-badge { display: inline-flex; align-items: center; font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; line-height: 1.4; padding: 2px 10px; border-radius: 9999px; border: 1px solid; } .ds-badge--habitable { background: rgba(74,222,128,0.2); border-color: rgba(74,222,128,0.3); color: #4ADE80; } .ds-badge--hostile { background: rgba(248,113,113,0.2); border-color: rgba(248,113,113,0.3); color: #F87171; } .ds-badge--source { background: rgba(96,165,250,0.2); border-color: rgba(96,165,250,0.3); color: #60A5FA; }"
+    },
+    {
+      "name": "Readout Card",
+      "kind": "card",
+      "refersTo": "card-readout",
+      "description": "The archive statistic tile. Readout figure over a Starlight Faint label — the number is the object, the label its caption.",
+      "html": "<div class=\"ds-readout\"><svg class=\"ds-readout-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z\"/></svg><div class=\"ds-readout-value\">5,847</div><div class=\"ds-readout-label\">Unique Exoplanets</div></div>",
+      "css": ".ds-readout { background: rgba(17,24,39,0.95); border: 1px solid #374151; border-radius: 16px; padding: 24px; text-align: center; box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37), inset 0 1px 0 rgba(255,255,255,0.1); transition: background 300ms cubic-bezier(0.4,0,0.2,1), border-color 300ms cubic-bezier(0.4,0,0.2,1); } .ds-readout:hover { background: rgba(31,41,55,0.95); border-color: #4B5563; } .ds-readout-icon { width: 32px; height: 32px; margin: 0 auto 16px; color: #FFFFFF; } .ds-readout-value { font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 1.875rem; font-weight: 300; line-height: 1.1; color: #FFFFFF; margin-bottom: 8px; } .ds-readout-label { font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; color: #9CA3AF; }"
+    },
+    {
+      "name": "Floating Control Panel",
+      "kind": "custom",
+      "refersTo": "panel-floating",
+      "description": "ExoCreator's signature surface. A console standing in front of a live 3D scene — opaque, hairlined, lit along its top edge.",
+      "html": "<div class=\"ds-panel\"><div class=\"ds-panel-head\"><h3 class=\"ds-panel-title\">Planet Properties</h3><button class=\"ds-panel-close\" aria-label=\"Close panel\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M18 6 6 18M6 6l12 12\"/></svg></button></div><label class=\"ds-panel-label\" for=\"ds-size\">Planet Size</label><input class=\"ds-panel-range\" id=\"ds-size\" type=\"range\" min=\"0.5\" max=\"2\" step=\"0.1\" value=\"1.2\" /><div class=\"ds-panel-value\">1.2 R⊕</div></div>",
+      "css": ".ds-panel { width: 384px; max-width: 100%; background: rgba(17,24,39,0.95); border: 1px solid #374151; border-radius: 16px; padding: 24px; color: #FFFFFF; box-shadow: 0 20px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2); } .ds-panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; } .ds-panel-title { font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 1.25rem; font-weight: 600; line-height: 1.4; margin: 0; } .ds-panel-close { display: grid; place-items: center; width: 32px; height: 32px; background: transparent; color: #9CA3AF; border: none; border-radius: 9999px; cursor: pointer; transition: background 300ms cubic-bezier(0.4,0,0.2,1), color 300ms cubic-bezier(0.4,0,0.2,1); } .ds-panel-close svg { width: 16px; height: 16px; } .ds-panel-close:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; } .ds-panel-label { display: block; font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; color: #9CA3AF; margin-bottom: 12px; } .ds-panel-range { width: 100%; height: 4px; background: #374151; border-radius: 9999px; appearance: none; cursor: pointer; } .ds-panel-range::-webkit-slider-thumb { appearance: none; width: 16px; height: 16px; background: #FFFFFF; border-radius: 9999px; } .ds-panel-range::-moz-range-thumb { width: 16px; height: 16px; background: #FFFFFF; border: none; border-radius: 9999px; } .ds-panel-range:focus-visible { outline: 2px solid #9966FF; outline-offset: 4px; } .ds-panel-value { font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 1.875rem; font-weight: 300; line-height: 1.1; margin-top: 8px; }"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Fixed top bar. Transparent over the hero, materializing to graphite with blur once scrolled past 20px. Wordmark dead center, navigation split symmetrically.",
+      "html": "<nav class=\"ds-nav ds-nav--scrolled\"><ul class=\"ds-nav-side\"><li><a class=\"ds-nav-item\" href=\"#\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91 0z\"/><path d=\"m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z\"/></svg><span>ExoQuest</span></a></li><li><a class=\"ds-nav-item\" href=\"#\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"13.5\" cy=\"6.5\" r=\"2.5\"/><circle cx=\"19\" cy=\"13\" r=\"2.5\"/><circle cx=\"6\" cy=\"12\" r=\"3\"/><circle cx=\"12\" cy=\"19\" r=\"2.5\"/></svg><span>ExoCreator</span></a></li></ul><a class=\"ds-nav-mark\" href=\"#\">Exoverse</a><ul class=\"ds-nav-side ds-nav-side--end\"><li><a class=\"ds-nav-item\" href=\"#\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M3 3v18h18M7 16v-5M12 16V8M17 16v-9\"/></svg><span>ExoVis</span></a></li></ul></nav>",
+      "css": ".ds-nav { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 24px; background: rgba(17,24,39,0.5); backdrop-filter: blur(12px); transition: background 300ms cubic-bezier(0.4,0,0.2,1); } .ds-nav-side { display: flex; align-items: center; gap: 32px; list-style: none; margin: 0; padding: 0; flex: 1; } .ds-nav-side--end { justify-content: flex-end; } .ds-nav-item { display: inline-flex; align-items: center; gap: 8px; font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 1.25rem; color: #FFFFFF; text-decoration: none; transition: color 300ms cubic-bezier(0.4,0,0.2,1); } .ds-nav-item svg { width: 20px; height: 20px; } .ds-nav-item:hover { color: #60A5FA; } .ds-nav-item:focus-visible { outline: 2px solid #9966FF; outline-offset: 4px; border-radius: 4px; } .ds-nav-mark { font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 2.25rem; font-weight: 700; color: #FFFFFF; text-decoration: none; white-space: nowrap; }"
+    },
+    {
+      "name": "Planet Card",
+      "kind": "card",
+      "refersTo": null,
+      "description": "The ExoVis catalog unit. Graphite card carrying a rendered planet sphere with Data Glow, semantic badges, and Readout figures.",
+      "html": "<article class=\"ds-planet-card\"><div class=\"ds-planet-badges\"><span class=\"ds-badge ds-badge--type\">Gas Giant</span><span class=\"ds-badge ds-badge--habitable\">Habitable</span></div><h3 class=\"ds-planet-name\">Kepler-452 b</h3><div class=\"ds-planet-meta\">Discovered 2015</div><div class=\"ds-planet-orb\"></div><dl class=\"ds-planet-stats\"><div><dt>Distance</dt><dd>1,402 ly</dd></div><div><dt>Radius</dt><dd>1.63 R⊕</dd></div></dl></article>",
+      "css": ".ds-planet-card { position: relative; background: rgba(17,24,39,0.95); border: 1px solid #374151; border-radius: 16px; padding: 24px; color: #FFFFFF; box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37), inset 0 1px 0 rgba(255,255,255,0.1); transition: border-color 300ms cubic-bezier(0.4,0,0.2,1); } .ds-planet-card:hover { border-color: #4B5563; } .ds-planet-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; } .ds-badge { display: inline-flex; align-items: center; font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; padding: 2px 10px; border-radius: 9999px; border: 1px solid; } .ds-badge--type { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: #FFFFFF; } .ds-badge--habitable { background: rgba(74,222,128,0.2); border-color: rgba(74,222,128,0.3); color: #4ADE80; } .ds-planet-name { font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 1.125rem; font-weight: 300; margin: 0 0 4px; } .ds-planet-meta { font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; color: #9CA3AF; } .ds-planet-orb { width: 64px; height: 64px; margin: 24px auto; border-radius: 9999px; background: radial-gradient(circle at 30% 30%, #87CEEB, #4A90E2); box-shadow: 0 0 20px rgba(74,222,128,0.25); animation: ds-orbit 20s linear infinite; } @keyframes ds-orbit { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .ds-planet-orb { animation: none; } } .ds-planet-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 0; padding-top: 16px; border-top: 1px solid #374151; } .ds-planet-stats dt { font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; color: #9CA3AF; margin-bottom: 4px; } .ds-planet-stats dd { font-family: 'Geist Sans', ui-sans-serif, system-ui, sans-serif; font-size: 1.25rem; font-weight: 300; margin: 0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Planetarium",
+    "overview": "The room is dark and the show is already running. Above and behind everything, a real sky moves — drifting stars, a rotating planet, a nebula wash that never quite settles. In front of it float instrument panels: solid graphite slabs with a bright hairline along their top edge, the way a lit object looks in a dark room. The visitor is seated in the dome, and the interface is the console in front of them, not the thing they came to see.\n\nThat division governs everything. The scene is generous, continuous, and theatrical: it uses scale, depth, and perpetual slow motion to make someone feel small in a good way. The chrome is disciplined to the point of near-invisibility: graphite, starlight, hairline edges, controls that resolve only when approached. The two never trade jobs. When a panel starts performing — a gradient headline, a colored button, a pulsing card — it stops being a console and becomes a competing light source, and the dome loses its illusion.\n\nColor is the strictest rule in the system. ExoVerse handles real archive data whose meaning is often carried by hue: whether a world could hold life, what class of planet it is, which subsystem you're editing. A saturated color therefore has to mean something. Chrome is graphite and starlight; hue is reserved for data. This is not minimalism as taste — it's the only way a green badge can be trusted to say \"potentially habitable\" instead of \"we liked green here.\"",
+    "keyCharacteristics": [
+      "Opaque graphite panels with a lit top edge, never translucent glass",
+      "Two blacks: void black for the sky, graphite for every panel",
+      "Saturated color exclusively as data semantics; chrome is achromatic",
+      "Perpetual ambient motion in the scene; sub-300ms input-response motion in the chrome",
+      "Controls recessive at rest, fully resolved on approach",
+      "Sections joined by black gradient seams — the sky is never cut"
+    ],
+    "rules": [
+      { "name": "The Instrument Panel Rule", "body": "A saturated hue may appear only where it encodes something a caption would otherwise have to spell out: habitability, planet class, provenance, achievement, or which subsystem is active. If removing the color would cost the visitor no information, the color is decoration and must be removed instead.", "section": "colors" },
+      { "name": "The Two Blacks Rule", "body": "The scene is void black (#000000); panels are graphite (#111827 at 90–95%). Never paint a panel pure black — it dissolves into the sky, the lit edge has nothing to sit against, and the room flattens into a page.", "section": "colors" },
+      { "name": "The Data Badge Formula", "body": "Semantic color is always the same three-part chord: fill at 20% opacity, border at 30%, text at full strength. Deviating from the formula makes one badge shout over its siblings.", "section": "colors" },
+      { "name": "The Readout Rule", "body": "Any number the archive supplies is set in Readout (300 weight, ≥1.875rem) with its label directly beneath in Starlight Faint at Label size. The number is the object; the label is its caption. Never bold a data figure — weight makes it look like an opinion.", "section": "typography" },
+      { "name": "The One Gradient Rule", "body": "The only gradient permitted on type is the monochrome white → #9CA3AF wash on a page's single display heading. It reads as light falling across the letters, which is planetarium logic. Hue gradients on text are decoration wearing a data color, and are retired.", "section": "typography" },
+      { "name": "The Weight Distance Rule", "body": "Two adjacent type roles must differ by at least 200 in weight or 1.5× in size. One family means hierarchy has no other way to announce itself.", "section": "typography" },
+      { "name": "The Seam Rule", "body": "No hard edge ever divides two sections. Every junction is a 128px gradient from Void Black to transparent over an overlapping negative margin. If you can see where one section ends, the seam is missing.", "section": "layout" },
+      { "name": "The Two Layouts Rule", "body": "Design for compact and for md-and-up as two deliberate compositions, not one composition that shrinks. The creator's control panels in particular change position and dimension, not just width.", "section": "layout" },
+      { "name": "The Lit-From-Within Rule", "body": "Every raised panel carries inset 0 1px 0 rgba(255,255,255,0.1–0.2) along with its drop shadow. A drop shadow alone is not elevation in this system; it is the top highlight that makes the panel an object.", "section": "elevation" },
+      { "name": "The Glow Is Physical Rule", "body": "Glow means an object emits light — a star, a planet, an atmosphere. A button does not emit light. Data Glow never touches chrome.", "section": "elevation" },
+      { "name": "The Pill Rule", "body": "If a control responds to a click, it is rounded-full. If it holds content, it is a soft rectangle. A rounded-rectangle button is a container pretending to be a control.", "section": "shapes" },
+      { "name": "The Hairline Rule", "body": "All borders are 1px. Emphasis is expressed by raising the border's opacity (white/10 → white/20 → white/30), never by thickening it.", "section": "shapes" },
+      { "name": "The Two Budgets Rule", "body": "The scene loops forever; the chrome never does. Ambient background motion is slow (≥3s) and perpetual; interface motion is ≤300ms and only ever a response to input.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do paint every panel Graphite (#111827) at 90–95% opacity over the sky, with a 1px Panel Edge border and both halves of the Lit Panel shadow.",
+      "Do reserve saturated hue for data semantics — habitability, planet class, provenance, achievement, active subsystem — and follow The Data Badge Formula (20% fill / 30% border / full-strength text).",
+      "Do set archive figures in Readout (300 weight, ≥1.875rem) above a Starlight Faint label.",
+      "Do give the scene a perpetual slow loop (≥3s) and hold the chrome to input-response motion at ≤300ms.",
+      "Do join sections with a 128px black-to-transparent gradient over a -64px overlap.",
+      "Do let controls rest recessive — border at white/10–white/20, text at Starlight Faint — and resolve to full contrast only on hover and focus.",
+      "Do design compact and md-and-up as two deliberate compositions, especially for the creator's control panels.",
+      "Do honor prefers-reduced-motion by stopping every ambient loop, not by shortening it."
+    ],
+    "donts": [
+      "Don't put a hue gradient on type. The blue → purple headings in featurecard.tsx and the cyan → purple → pink treatment in the credits section are retired; only the monochrome white → #9CA3AF display wash survives.",
+      "Don't paint chrome with a semantic color. A violet or indigo button fill makes an action look like a data state.",
+      "Don't build translucent glass panels. backdrop-blur-xl bg-white/5 border-white/10 is the older ExoVis dialect; it is being migrated to opaque graphite, and blur is legibility-only from here on.",
+      "Don't scale chrome on hover. hover:scale-105 on cards and answer buttons is scene behavior applied to a console.",
+      "Don't apply Data Glow to a UI element. Glow means the object emits light; only stars, planets, and atmospheres do.",
+      "Don't paint a panel pure black — it dissolves into the sky and the lit edge loses its ground.",
+      "Don't add a third :root block to globals.css. Two already exist (line 6 and line 234) and the later one silently overrides the first; the cosmic dark values at line 234 are the live tokens.",
+      "Don't leave body { font-family: Arial, Helvetica, sans-serif } in place at globals.css:68. Geist is loaded, preloaded, and exposed as --font-geist-sans, but nothing consumes it — that one declaration is currently overriding the entire type system."
+    ]
+  }
+}

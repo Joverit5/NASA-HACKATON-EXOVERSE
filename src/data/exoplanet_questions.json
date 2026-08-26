@@ -15,7 +15,12 @@
   {
     "id": "2",
     "question": "Which telescope is designed to study the atmospheres of exoplanets in great detail?",
-    "options": ["James Webb", "Hubble", "TESS", "Voyager"],
+    "options": [
+      "James Webb",
+      "Hubble",
+      "TESS",
+      "Voyager"
+    ],
     "correctAnswer": "James Webb",
     "explanation": "The James Webb Space Telescope is equipped to analyze exoplanet atmospheres using advanced spectroscopy.",
     "difficulty": "Easy"
@@ -23,7 +28,12 @@
   {
     "id": "3",
     "question": "Which gas is often considered a potential biomarker in an exoplanet's atmosphere?",
-    "options": ["Oxygen", "Carbon dioxide", "Nitrogen", "Helium"],
+    "options": [
+      "Oxygen",
+      "Carbon dioxide",
+      "Nitrogen",
+      "Helium"
+    ],
     "correctAnswer": "Oxygen",
     "explanation": "Oxygen, when found with other gases like methane, could suggest biological processes on exoplanets.",
     "difficulty": "Easy"
@@ -31,7 +41,12 @@
   {
     "id": "4",
     "question": "Which star system is Proxima Centauri b part of?",
-    "options": ["Alpha Centauri", "TRAPPIST-1", "Solar System", "Sirius"],
+    "options": [
+      "Alpha Centauri",
+      "TRAPPIST-1",
+      "Solar System",
+      "Sirius"
+    ],
     "correctAnswer": "Alpha Centauri",
     "explanation": "Proxima Centauri is part of the Alpha Centauri system, which is the closest star system to Earth.",
     "difficulty": "Easy"
@@ -78,7 +93,12 @@
   {
     "id": "8",
     "question": "Which space telescope discovered thousands of exoplanets using the transit method?",
-    "options": ["Kepler", "Hubble", "James Webb", "Spitzer"],
+    "options": [
+      "Kepler",
+      "Hubble",
+      "James Webb",
+      "Spitzer"
+    ],
     "correctAnswer": "Kepler",
     "explanation": "The Kepler Space Telescope revolutionized exoplanet discovery by using the transit method to find thousands of planets.",
     "difficulty": "Easy"
@@ -86,15 +106,25 @@
   {
     "id": "9",
     "question": "Which planet is known for potentially having conditions similar to Earth?",
-    "options": ["Kepler-186f", "TRAPPIST-1e", "HD 189733 b", "Gliese 581g"],
+    "options": [
+      "Kepler-186f",
+      "TRAPPIST-1e",
+      "HD 189733 b",
+      "Gliese 581g"
+    ],
     "correctAnswer": "Kepler-186f",
-    "explanation": "Kepler-186f is considered potentially Earth-like because of its size and location in its star\u2019s habitable zone.",
+    "explanation": "Kepler-186f is considered potentially Earth-like because of its size and location in its star’s habitable zone.",
     "difficulty": "Easy"
   },
   {
     "id": "10",
     "question": "Which method detects exoplanets by measuring the dip in light as a planet passes in front of its star?",
-    "options": ["Transit", "Radial velocity", "Direct imaging", "Microlensing"],
+    "options": [
+      "Transit",
+      "Radial velocity",
+      "Direct imaging",
+      "Microlensing"
+    ],
     "correctAnswer": "Transit",
     "explanation": "The transit method detects exoplanets by observing the decrease in a star's brightness when a planet crosses in front of it.",
     "difficulty": "Easy"
@@ -115,7 +145,12 @@
   {
     "id": "12",
     "question": "Which planet in our solar system is most similar in size to Earth?",
-    "options": ["Venus", "Mars", "Jupiter", "Saturn"],
+    "options": [
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Saturn"
+    ],
     "correctAnswer": "Venus",
     "explanation": "Venus is nearly the same size and mass as Earth, making it its closest twin in the solar system.",
     "difficulty": "Easy"
@@ -136,7 +171,12 @@
   {
     "id": "14",
     "question": "Which instrument measures light from distant planets?",
-    "options": ["Spectroscope", "Seismograph", "Barometer", "Telescope"],
+    "options": [
+      "Spectroscope",
+      "Seismograph",
+      "Barometer",
+      "Telescope"
+    ],
     "correctAnswer": "Spectroscope",
     "explanation": "A spectroscope splits light into its components, allowing analysis of exoplanet atmospheres and composition.",
     "difficulty": "Easy"
@@ -157,7 +197,12 @@
   {
     "id": "16",
     "question": "What color are the coolest stars?",
-    "options": ["Red", "Blue", "White", "Yellow"],
+    "options": [
+      "Red",
+      "Blue",
+      "White",
+      "Yellow"
+    ],
     "correctAnswer": "Red",
     "explanation": "Red stars are the coolest, while blue stars are the hottest.",
     "difficulty": "Easy"
@@ -191,7 +236,12 @@
   {
     "id": "19",
     "question": "Which planet is considered Earth’s 'sister planet'?",
-    "options": ["Venus", "Mars", "Jupiter", "Mercury"],
+    "options": [
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Mercury"
+    ],
     "correctAnswer": "Venus",
     "explanation": "Venus is similar in size, mass, and proximity to Earth, earning it the nickname 'sister planet'.",
     "difficulty": "Easy"
@@ -199,7 +249,12 @@
   {
     "id": "20",
     "question": "What tool is primarily used to observe distant exoplanets?",
-    "options": ["Space telescopes", "Microscopes", "Compasses", "Thermometers"],
+    "options": [
+      "Space telescopes",
+      "Microscopes",
+      "Compasses",
+      "Thermometers"
+    ],
     "correctAnswer": "Space telescopes",
     "explanation": "Space telescopes, such as Kepler and JWST, allow detailed observation of distant exoplanets.",
     "difficulty": "Easy"
@@ -220,7 +275,12 @@
   {
     "id": "22",
     "question": "Which phenomenon helps with exoplanet detection through gravitational lensing?",
-    "options": ["Microlensing", "Redshift", "Occultation", "Reflection"],
+    "options": [
+      "Microlensing",
+      "Redshift",
+      "Occultation",
+      "Reflection"
+    ],
     "correctAnswer": "Microlensing",
     "explanation": "Microlensing uses the bending of light from a background star by a planet-hosting foreground object.",
     "difficulty": "Intermediate"
@@ -254,7 +314,12 @@
   {
     "id": "25",
     "question": "Which method detects exoplanets by observing a star's slight movement due to gravitational tug from an orbiting planet?",
-    "options": ["Radial velocity", "Transit", "Microlensing", "Direct imaging"],
+    "options": [
+      "Radial velocity",
+      "Transit",
+      "Microlensing",
+      "Direct imaging"
+    ],
     "correctAnswer": "Radial velocity",
     "explanation": "Radial velocity detects the wobble in a star caused by the gravitational pull of an orbiting planet.",
     "difficulty": "Intermediate"
@@ -262,12 +327,16 @@
   {
     "id": "26",
     "question": "Which exoplanet has been dubbed 'lava world' due to its molten surface?",
-    "options": ["55 Cancri e", "Kepler-10b", "TRAPPIST-1d", "GJ 1214 b"],
+    "options": [
+      "55 Cancri e",
+      "Kepler-10b",
+      "TRAPPIST-1d",
+      "GJ 1214 b"
+    ],
     "correctAnswer": "55 Cancri e",
     "explanation": "55 Cancri e is extremely close to its star, resulting in surface temperatures hot enough to melt rock.",
     "difficulty": "Intermediate"
   },
-
   {
     "id": "27",
     "question": "Which of the following exoplanet types is most similar to Neptune in composition?",
@@ -281,7 +350,6 @@
     "explanation": "Mini-Neptunes are smaller versions of Neptune with thick atmospheres of hydrogen and helium.",
     "difficulty": "Intermediate"
   },
-
   {
     "id": "28",
     "question": "Why is the discovery of exoplanets around pulsars surprising?",
@@ -311,7 +379,12 @@
   {
     "id": "22",
     "question": "Which molecule's presence in an exoplanet's atmosphere could suggest volcanic activity?",
-    "options": ["Sulfur dioxide", "Water", "Methane", "Oxygen"],
+    "options": [
+      "Sulfur dioxide",
+      "Water",
+      "Methane",
+      "Oxygen"
+    ],
     "correctAnswer": "Sulfur dioxide",
     "explanation": "Sulfur dioxide can indicate volcanic activity, especially when found in conjunction with other gases.",
     "difficulty": "Hard"
@@ -319,7 +392,12 @@
   {
     "id": "30",
     "question": "Which mission is currently dedicated to finding Earth-sized exoplanets near bright stars?",
-    "options": ["TESS", "Spitzer", "Chandra", "Gaia"],
+    "options": [
+      "TESS",
+      "Spitzer",
+      "Chandra",
+      "Gaia"
+    ],
     "correctAnswer": "TESS",
     "explanation": "The Transiting Exoplanet Survey Satellite (TESS) focuses on locating Earth-sized exoplanets near bright stars.",
     "difficulty": "Intermediate"
@@ -480,7 +558,6 @@
     "explanation": "Some exoplanets, especially hot Jupiters, appear larger than models predict, likely due to atmospheric inflation.",
     "difficulty": "Hard"
   },
-
   {
     "id": "43",
     "question": "What makes direct imaging of exoplanets difficult?",
@@ -494,7 +571,6 @@
     "explanation": "Stars are much brighter than planets, making it challenging to capture planetary light directly.",
     "difficulty": "Hard"
   },
-
   {
     "id": "44",
     "question": "What is the Roche limit in planetary science?",
@@ -508,7 +584,6 @@
     "explanation": "The Roche limit defines the distance within which a planet or moon would disintegrate due to tidal forces.",
     "difficulty": "Hard"
   },
-
   {
     "id": "45",
     "question": "Which spectral feature is used to infer water vapor in exoplanet atmospheres?",
@@ -522,7 +597,6 @@
     "explanation": "Water vapor absorbs light at specific infrared wavelengths, allowing its detection in exoplanet atmospheres.",
     "difficulty": "Hard"
   },
-
   {
     "id": "46",
     "question": "What technique does the James Webb Space Telescope use to analyze exoplanet atmospheres?",
@@ -533,10 +607,9 @@
       "Radar mapping"
     ],
     "correctAnswer": "Transmission spectroscopy",
-    "explanation": "Transmission spectroscopy observes how starlight changes as it passes through an exoplanet\u2019s atmosphere during a transit.",
+    "explanation": "Transmission spectroscopy observes how starlight changes as it passes through an exoplanet’s atmosphere during a transit.",
     "difficulty": "Hard"
   },
-
   {
     "id": "47",
     "question": "What is the significance of the TRAPPIST-1 system?",
@@ -555,7 +628,7 @@
     "question": "What is 'tidal locking' in the context of exoplanets?",
     "options": [
       "One side of the planet always faces its star",
-      "The planet\u2019s orbit is irregular",
+      "The planet’s orbit is irregular",
       "The planet spins rapidly",
       "The planet has multiple moons"
     ],
@@ -563,7 +636,6 @@
     "explanation": "Tidal locking causes one hemisphere of a planet to always face the star, leading to temperature extremes.",
     "difficulty": "Hard"
   },
-
   {
     "id": "49",
     "question": "What is a distinguishing feature of ultrashort period exoplanets?",
@@ -708,17 +780,393 @@
     "difficulty": "Hard"
   },
   {
-  "id": "60",
-  "question": "What is transmission spectroscopy primarily used for in exoplanet research?",
-  "options": [
-    "To analyze a planet's atmosphere during a transit",
-    "To measure the planet's surface temperature directly",
-    "To detect underground oceans",
-    "To calculate the orbital speed of the star"
-  ],
-  "correctAnswer": "To analyze a planet's atmosphere during a transit",
-  "explanation": "Transmission spectroscopy examines starlight passing through a planet’s atmosphere during a transit, revealing its composition and structure.",
-  "difficulty": "Hard"
-}
-
+    "id": "60",
+    "question": "What is transmission spectroscopy primarily used for in exoplanet research?",
+    "options": [
+      "To analyze a planet's atmosphere during a transit",
+      "To measure the planet's surface temperature directly",
+      "To detect underground oceans",
+      "To calculate the orbital speed of the star"
+    ],
+    "correctAnswer": "To analyze a planet's atmosphere during a transit",
+    "explanation": "Transmission spectroscopy examines starlight passing through a planet’s atmosphere during a transit, revealing its composition and structure.",
+    "difficulty": "Hard"
+  },
+  {
+    "id": "61",
+    "question": "What is the 'transit method' of detecting exoplanets?",
+    "options": [
+      "Measuring the dip in a star's brightness as a planet passes in front of it",
+      "Photographing the planet directly with a telescope",
+      "Detecting radio signals emitted by the planet",
+      "Measuring the planet's gravitational pull on nearby comets"
+    ],
+    "correctAnswer": "Measuring the dip in a star's brightness as a planet passes in front of it",
+    "explanation": "When a planet crosses in front of its star from our viewpoint, it blocks a tiny fraction of the light. That periodic dip reveals the planet's size and orbital period.",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "62",
+    "question": "Which space telescope, launched in 2009, was dedicated to finding exoplanets by the transit method?",
+    "options": [
+      "Kepler",
+      "Hubble",
+      "Chandra",
+      "Spitzer"
+    ],
+    "correctAnswer": "Kepler",
+    "explanation": "Kepler stared at a single patch of sky in Cygnus for years, monitoring over 150,000 stars. It confirmed more than 2,600 exoplanets before retiring in 2018.",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "63",
+    "question": "What does 'habitable zone' mean?",
+    "options": [
+      "The orbital range where liquid water could exist on a planet's surface",
+      "The region where a planet has a breathable atmosphere",
+      "The area of a galaxy free from radiation",
+      "The distance at which a planet is visible from Earth"
+    ],
+    "correctAnswer": "The orbital range where liquid water could exist on a planet's surface",
+    "explanation": "Also called the Goldilocks zone. It depends on the star's brightness — a cool red dwarf's habitable zone sits far closer in than the Sun's.",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "64",
+    "question": "What is a 'hot Jupiter'?",
+    "options": [
+      "A gas giant orbiting very close to its star",
+      "A gas giant with active volcanoes",
+      "Jupiter during its summer season",
+      "A star that failed to ignite"
+    ],
+    "correctAnswer": "A gas giant orbiting very close to its star",
+    "explanation": "Hot Jupiters orbit in days rather than years, reaching temperatures over 1,000 K. They were the first kind of exoplanet found because they are the easiest to detect.",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "65",
+    "question": "How many planets are in the TRAPPIST-1 system?",
+    "options": [
+      "Seven",
+      "Three",
+      "Twelve",
+      "Five"
+    ],
+    "correctAnswer": "Seven",
+    "explanation": "TRAPPIST-1 hosts seven Earth-sized rocky planets, three of which orbit within the habitable zone. It is one of the most studied planetary systems known.",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "66",
+    "question": "What does a light-year measure?",
+    "options": [
+      "Distance",
+      "Time",
+      "Brightness",
+      "Mass"
+    ],
+    "correctAnswer": "Distance",
+    "explanation": "A light-year is how far light travels in one year — about 9.46 trillion kilometres. Despite the name, it is a unit of distance, not time.",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "67",
+    "question": "Which telescope, launched in 2021, can analyse exoplanet atmospheres in infrared?",
+    "options": [
+      "James Webb Space Telescope",
+      "Kepler",
+      "TESS",
+      "Gaia"
+    ],
+    "correctAnswer": "James Webb Space Telescope",
+    "explanation": "JWST observes in infrared, letting it detect molecules like water, carbon dioxide and methane in the atmospheres of transiting planets.",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "68",
+    "question": "What is a 'super-Earth'?",
+    "options": [
+      "A rocky planet more massive than Earth but lighter than Neptune",
+      "A planet with stronger gravity than any known world",
+      "An Earth-like planet with a larger moon",
+      "A planet orbiting two stars"
+    ],
+    "correctAnswer": "A rocky planet more massive than Earth but lighter than Neptune",
+    "explanation": "Super-Earths have no analogue in our solar system, yet they are among the most common planet types in the galaxy.",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "69",
+    "question": "What is TESS designed to do?",
+    "options": [
+      "Survey the whole sky for transiting planets around bright nearby stars",
+      "Photograph exoplanets directly",
+      "Measure the expansion of the universe",
+      "Map the surface of Mars"
+    ],
+    "correctAnswer": "Survey the whole sky for transiting planets around bright nearby stars",
+    "explanation": "The Transiting Exoplanet Survey Satellite launched in 2018 and covers far more sky than Kepler, focusing on nearby stars bright enough for follow-up study.",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "70",
+    "question": "What was 51 Pegasi b, discovered in 1995, notable for?",
+    "options": [
+      "The first exoplanet confirmed around a Sun-like star",
+      "The first exoplanet with detected water",
+      "The first directly imaged exoplanet",
+      "The first planet found outside the Milky Way"
+    ],
+    "correctAnswer": "The first exoplanet confirmed around a Sun-like star",
+    "explanation": "Michel Mayor and Didier Queloz found it by radial velocity, earning the 2019 Nobel Prize in Physics. Its existence as a hot Jupiter overturned planet formation theory.",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": "71",
+    "question": "In the radial velocity method, what is actually measured?",
+    "options": [
+      "The Doppler shift in the star's spectrum as it wobbles",
+      "The planet's reflected light",
+      "The star's change in size",
+      "The planet's magnetic field"
+    ],
+    "correctAnswer": "The Doppler shift in the star's spectrum as it wobbles",
+    "explanation": "A planet's gravity tugs its star into a small orbit of its own. That motion shifts the star's spectral lines blue then red, revealing the planet's minimum mass and period.",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": "72",
+    "question": "Why are red dwarf stars popular targets in exoplanet searches?",
+    "options": [
+      "They are small and dim, so planets produce deeper transits and larger wobbles",
+      "They live shorter lives, so planets form faster",
+      "They emit less radiation, making planets safer",
+      "They are the brightest stars in the sky"
+    ],
+    "correctAnswer": "They are small and dim, so planets produce deeper transits and larger wobbles",
+    "explanation": "A planet blocks a much larger fraction of a small star's disc, and tugs a low-mass star harder. Red dwarfs are also the most common stars in the galaxy.",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": "73",
+    "question": "What is tidal locking, common for planets around red dwarfs?",
+    "options": [
+      "The planet always shows the same face to its star",
+      "The planet's orbit slowly shrinks",
+      "The planet's rotation reverses periodically",
+      "The planet is pulled apart by gravity"
+    ],
+    "correctAnswer": "The planet always shows the same face to its star",
+    "explanation": "Close-in planets often lock so one hemisphere is in permanent day and the other permanent night. Whether such a world can hold a stable climate is an open question.",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": "74",
+    "question": "What does transit spectroscopy reveal?",
+    "options": [
+      "The composition of a planet's atmosphere",
+      "The planet's rotation rate",
+      "The age of the host star",
+      "The planet's magnetic field strength"
+    ],
+    "correctAnswer": "The composition of a planet's atmosphere",
+    "explanation": "During a transit, some starlight filters through the planet's atmosphere. Molecules absorb specific wavelengths, leaving fingerprints in the spectrum.",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": "75",
+    "question": "What is the 'radius valley' in exoplanet populations?",
+    "options": [
+      "A scarcity of planets between about 1.5 and 2 Earth radii",
+      "A gap in orbital distances around Sun-like stars",
+      "A region of the galaxy with no detected planets",
+      "The minimum size a planet can have"
+    ],
+    "correctAnswer": "A scarcity of planets between about 1.5 and 2 Earth radii",
+    "explanation": "Discovered in Kepler data, this gap likely marks where stellar radiation stripped the atmospheres off small planets, separating rocky super-Earths from gas-rich mini-Neptunes.",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": "76",
+    "question": "What is a circumbinary planet?",
+    "options": [
+      "A planet orbiting two stars",
+      "A planet with two moons",
+      "A planet with a double atmosphere",
+      "A planet that orbits backwards"
+    ],
+    "correctAnswer": "A planet orbiting two stars",
+    "explanation": "Kepler-16 b was the first confirmed, orbiting a pair of stars every 229 days. Such planets were once thought dynamically impossible.",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": "77",
+    "question": "What does the equilibrium temperature of an exoplanet estimate?",
+    "options": [
+      "The temperature from stellar heating alone, ignoring atmosphere",
+      "The temperature measured at the planet's core",
+      "The maximum temperature ever recorded there",
+      "The temperature of the host star's surface"
+    ],
+    "correctAnswer": "The temperature from stellar heating alone, ignoring atmosphere",
+    "explanation": "It is a theoretical baseline. A real atmosphere can raise surface temperature substantially — Venus sits far hotter than its equilibrium value.",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": "78",
+    "question": "Why is direct imaging of exoplanets so difficult?",
+    "options": [
+      "The star is billions of times brighter than the planet",
+      "Planets emit no light at all",
+      "Planets move too fast to photograph",
+      "Earth's atmosphere blocks all planetary light"
+    ],
+    "correctAnswer": "The star is billions of times brighter than the planet",
+    "explanation": "It is like spotting a firefly beside a lighthouse. Coronagraphs and starshades block the starlight so the planet becomes visible.",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": "79",
+    "question": "What is a mini-Neptune?",
+    "options": [
+      "A planet smaller than Neptune with a thick hydrogen-helium envelope",
+      "A moon of Neptune",
+      "A rocky planet with no atmosphere",
+      "A failed star"
+    ],
+    "correctAnswer": "A planet smaller than Neptune with a thick hydrogen-helium envelope",
+    "explanation": "Mini-Neptunes sit above the radius valley, typically 2 to 4 Earth radii. Like super-Earths, they have no solar system counterpart.",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": "80",
+    "question": "What was the first system where exoplanets were confirmed, in 1992?",
+    "options": [
+      "PSR B1257+12, a pulsar",
+      "51 Pegasi",
+      "Alpha Centauri",
+      "Tau Ceti"
+    ],
+    "correctAnswer": "PSR B1257+12, a pulsar",
+    "explanation": "Aleksander Wolszczan and Dale Frail found planets orbiting a millisecond pulsar by timing its pulses — three years before the first planet around a normal star.",
+    "difficulty": "Hard"
+  },
+  {
+    "id": "81",
+    "question": "What are transit timing variations used for?",
+    "options": [
+      "Detecting unseen planets through gravitational tugs on a transiting one",
+      "Measuring a star's rotation period",
+      "Calibrating telescope clocks",
+      "Determining a planet's colour"
+    ],
+    "correctAnswer": "Detecting unseen planets through gravitational tugs on a transiting one",
+    "explanation": "If transits arrive early or late, another body is perturbing the orbit. TTVs also yield planet masses without any radial velocity measurement.",
+    "difficulty": "Hard"
+  },
+  {
+    "id": "82",
+    "question": "What is gravitational microlensing, as used to find exoplanets?",
+    "options": [
+      "A foreground star's gravity magnifies a background star, and a planet adds a brief spike",
+      "A planet bends light from its own star",
+      "A black hole reveals nearby planets",
+      "Gravity waves are measured from planetary collisions"
+    ],
+    "correctAnswer": "A foreground star's gravity magnifies a background star, and a planet adds a brief spike",
+    "explanation": "Microlensing is sensitive to planets far from their stars and even to free-floating planets, but events never repeat, so follow-up is impossible.",
+    "difficulty": "Hard"
+  },
+  {
+    "id": "83",
+    "question": "What does a planet's bulk density tell astronomers?",
+    "options": [
+      "Whether it is likely rocky, icy, or gas-dominated",
+      "Its exact surface temperature",
+      "The age of its host star",
+      "Its magnetic field strength"
+    ],
+    "correctAnswer": "Whether it is likely rocky, icy, or gas-dominated",
+    "explanation": "Density needs both radius from transits and mass from radial velocity or TTVs. It is the only widely available constraint on interior composition.",
+    "difficulty": "Hard"
+  },
+  {
+    "id": "84",
+    "question": "What is the 'hot Neptune desert'?",
+    "options": [
+      "A scarcity of Neptune-sized planets on very short orbits",
+      "A dry region on Neptune's surface",
+      "A zone where no planets can form",
+      "A gap in the asteroid belt"
+    ],
+    "correctAnswer": "A scarcity of Neptune-sized planets on very short orbits",
+    "explanation": "Neptune-mass planets close to their stars are rare, probably because intense irradiation strips their envelopes, leaving a bare core behind.",
+    "difficulty": "Hard"
+  },
+  {
+    "id": "85",
+    "question": "Why does the radial velocity method usually give only a minimum mass?",
+    "options": [
+      "The orbital inclination is unknown",
+      "The star's mass is uncertain",
+      "Instruments lack precision",
+      "The planet's radius is unknown"
+    ],
+    "correctAnswer": "The orbital inclination is unknown",
+    "explanation": "Radial velocity measures motion along our line of sight only, so it yields M·sin(i). A transit pins the inclination near 90 degrees and resolves the true mass.",
+    "difficulty": "Hard"
+  },
+  {
+    "id": "86",
+    "question": "What is the Rossiter-McLaughlin effect used to determine?",
+    "options": [
+      "Whether a planet's orbit is aligned with its star's rotation",
+      "The planet's atmospheric pressure",
+      "The star's chemical composition",
+      "The planet's number of moons"
+    ],
+    "correctAnswer": "Whether a planet's orbit is aligned with its star's rotation",
+    "explanation": "As a planet transits, it blocks first the approaching then the receding limb of the rotating star, distorting the spectral lines. Misaligned orbits point to violent migration histories.",
+    "difficulty": "Hard"
+  },
+  {
+    "id": "87",
+    "question": "What is a 'sub-Neptune' envelope thought to consist of mostly?",
+    "options": [
+      "Hydrogen and helium",
+      "Carbon dioxide",
+      "Nitrogen and oxygen",
+      "Water vapour only"
+    ],
+    "correctAnswer": "Hydrogen and helium",
+    "explanation": "Even a small hydrogen-helium envelope, a percent or two of the planet's mass, inflates the radius dramatically because those gases are so light.",
+    "difficulty": "Hard"
+  },
+  {
+    "id": "88",
+    "question": "What does 'photoevaporation' describe in exoplanet science?",
+    "options": [
+      "High-energy stellar radiation stripping a planet's atmosphere",
+      "A planet evaporating into its star",
+      "Clouds forming on the day side",
+      "Light pressure slowing a planet's orbit"
+    ],
+    "correctAnswer": "High-energy stellar radiation stripping a planet's atmosphere",
+    "explanation": "X-ray and extreme ultraviolet radiation heats the upper atmosphere until gas escapes. It is a leading explanation for the radius valley.",
+    "difficulty": "Hard"
+  },
+  {
+    "id": "89",
+    "question": "Why is the 'biosignature' detection of a single molecule considered insufficient evidence of life?",
+    "options": [
+      "Most candidate molecules also have abiotic sources",
+      "Molecules cannot be detected reliably",
+      "Life does not produce detectable gases",
+      "Only radio signals count as evidence"
+    ],
+    "correctAnswer": "Most candidate molecules also have abiotic sources",
+    "explanation": "Oxygen, methane and others can be produced by geology or photochemistry. Astronomers look for combinations in chemical disequilibrium, and treat single detections cautiously.",
+    "difficulty": "Hard"
+  }
 ]

@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Impeccable session artifacts (decision-page state, not project source)
+.impeccable/questions/
+.impeccable/mocks/
+.impeccable/live/sessions/
+.impeccable/config.local.json
