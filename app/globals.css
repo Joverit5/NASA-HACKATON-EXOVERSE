@@ -3,68 +3,91 @@
 @tailwind utilities;
 
 @layer base {
+  /*
+   * THE TRANSIT CURVE — token layer.
+   *
+   * One accent, and it is not a brand colour: mint IS the habitability semantic,
+   * so the site's only accent and its most important datum are the same thing.
+   * Everything else is achromatic, on a 210° blue-grey axis so the neutrals read
+   * as chosen rather than inherited.
+   *
+   * The palette and the Roboto Serif / Roboto Mono pairing come from the
+   * un.org "Race to Save Space" reference. See .impeccable/surfaces/app-page-tsx.md.
+   */
   :root {
-    /* Ground and surfaces — see DESIGN.md, "The Two Blacks Rule" */
-    --background: 240 10% 4%;
-    --foreground: 240 10% 96%;
-    --card: 240 10% 10%;
-    --card-foreground: 240 10% 96%;
-    --popover: 240 10% 8%;
-    --popover-foreground: 240 10% 96%;
-    /* Signal Violet / Aurora Violet — interaction states only, never surfaces */
-    --primary: 260 100% 70%;
-    --primary-foreground: 240 10% 10%;
-    --secondary: 260 60% 30%;
-    --secondary-foreground: 240 10% 96%;
-    --muted: 240 10% 20%;
-    --muted-foreground: 240 10% 80%;
-    --accent: 280 100% 70%;
-    --accent-foreground: 240 10% 10%;
-    --destructive: 0 100% 60%;
-    --destructive-foreground: 240 10% 96%;
-    /* Panel Edge (#374151) — the only border color on opaque surfaces */
-    --border: 217 19% 27%;
-    --input: 217 19% 27%;
-    --ring: 260 100% 70%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    /* Ground and surfaces */
+    --void: 210 22% 4%;
+    --surface: 210 22% 7%;
+    --raised: 210 23% 10%;
+    --rule: 210 21% 15%;
+    --rule-strong: 210 20% 22%;
+
+    /* Ink */
+    --ink: 206 16% 92%;
+    --ink-dim: 215 10% 58%;
+    --ink-faint: 212 10% 39%;
+
+    /* The single accent, which is also the habitability semantic */
+    --mint: 151 53% 65%;
+    --mint-deep: 154 34% 28%;
+
+    /* Data semantics. Mint carries "potentially habitable" on its own. */
+    --hostile: 0 91% 71%;
+    --source: 215 70% 70%;
+    --gold: 38 76% 63%;
+
+    /* shadcn surface aliases, retuned to the world above */
+    --background: var(--void);
+    --foreground: var(--ink);
+    --card: var(--surface);
+    --card-foreground: var(--ink);
+    --popover: var(--raised);
+    --popover-foreground: var(--ink);
+    --primary: var(--mint);
+    --primary-foreground: 210 22% 4%;
+    --secondary: var(--raised);
+    --secondary-foreground: var(--ink);
+    --muted: var(--raised);
+    --muted-foreground: var(--ink-dim);
+    --accent: var(--mint);
+    --accent-foreground: 210 22% 4%;
+    --destructive: var(--hostile);
+    --destructive-foreground: 210 22% 4%;
+    --border: var(--rule);
+    --input: var(--rule);
+    --ring: var(--mint);
+
+    --chart-1: var(--mint);
+    --chart-2: var(--source);
+    --chart-3: var(--gold);
+    --chart-4: var(--hostile);
+    --chart-5: var(--ink-dim);
+
     --radius: 0.5rem;
+
+    /*
+     * Motion. One shared cadence the whole interface obeys, at 1x, 2x or 3x.
+     * The scene keeps its own budget: perpetual, slow, never under 3s.
+     */
+    --tick: 240ms;
+    --tick-2: 480ms;
+    --tick-3: 720ms;
+    --ease: cubic-bezier(0.2, 0, 0, 1);
   }
-  .dark {
-    --background: 240 10% 2%;
-    --foreground: 240 10% 98%;
-    --card: 240 10% 8%;
-    --card-foreground: 240 10% 98%;
-    --popover: 240 10% 6%;
-    --popover-foreground: 240 10% 98%;
-    --primary: 260 100% 80%;
-    --primary-foreground: 240 10% 10%;
-    --secondary: 260 60% 20%;
-    --secondary-foreground: 240 10% 98%;
-    --muted: 240 10% 15%;
-    --muted-foreground: 240 10% 85%;
-    --accent: 280 100% 80%;
-    --accent-foreground: 240 10% 10%;
-    --destructive: 0 100% 70%;
-    --destructive-foreground: 240 10% 98%;
-    --border: 217 19% 27%;
-    --input: 217 19% 27%;
-    --ring: 260 100% 80%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --radius: 0.5rem;
-  }
+
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-serif;
+  }
+
+  /* Every archive figure is set in mono, never in the serif. */
+  .readout,
+  [data-readout] {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+    font-variant-numeric: tabular-nums;
   }
 }
 

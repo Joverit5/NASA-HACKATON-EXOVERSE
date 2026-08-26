@@ -1,23 +1,27 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import localFont from "next/font/local"
+import { Roboto_Serif, Roboto_Mono } from "next/font/google"
 import "./globals.css"
 import SmoothScroll from "@/src/components/smoothscroll"
 
-const geistSans = localFont({
-  src: "../src/fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-  display: "swap", 
-  preload: true,
+/**
+ * Roboto Serif carries the narrative. Its optical-size axis (8–144) means one file
+ * serves a 96px display and an 11px caption with the stroke contrast corrected at
+ * each size, which is what keeps a long data narrative readable.
+ *
+ * Roboto Mono carries every archive figure. No measurement is ever set in the serif.
+ */
+const serif = Roboto_Serif({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+  axes: ["opsz"],
 })
 
-const geistMono = localFont({
-  src: "../src/fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-  display: "swap", 
-  preload: true,
+const mono = Roboto_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
 })
 
 export const metadata: Metadata = {
@@ -42,12 +46,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preload" href="/images/exoplanet.webp" as="image" />
         <link rel="preload" href="/images/stars-bg.webp" as="image" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${serif.variable} ${mono.variable} antialiased`}>
         <SmoothScroll />
         {children}
       </body>

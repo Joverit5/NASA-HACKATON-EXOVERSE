@@ -11,10 +11,38 @@ const config: Config = {
   theme: {
   	extend: {
   		fontFamily: {
-  			sans: ['var(--font-geist-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-  			mono: ['var(--font-geist-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace']
+  			serif: ['var(--font-serif)', 'Georgia', 'serif'],
+  			sans: ['var(--font-serif)', 'Georgia', 'serif'],
+  			mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace']
+  		},
+  		transitionDuration: {
+  			tick: '240ms',
+  			'tick-2': '480ms',
+  			'tick-3': '720ms'
+  		},
+  		transitionTimingFunction: {
+  			tick: 'cubic-bezier(0.2, 0, 0, 1)'
   		},
   		colors: {
+  			void: 'hsl(var(--void))',
+  			surface: 'hsl(var(--surface))',
+  			raised: 'hsl(var(--raised))',
+  			rule: {
+  				DEFAULT: 'hsl(var(--rule))',
+  				strong: 'hsl(var(--rule-strong))'
+  			},
+  			ink: {
+  				DEFAULT: 'hsl(var(--ink))',
+  				dim: 'hsl(var(--ink-dim))',
+  				faint: 'hsl(var(--ink-faint))'
+  			},
+  			mint: {
+  				DEFAULT: 'hsl(var(--mint))',
+  				deep: 'hsl(var(--mint-deep))'
+  			},
+  			hostile: 'hsl(var(--hostile))',
+  			source: 'hsl(var(--source))',
+  			gold: 'hsl(var(--gold))',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
