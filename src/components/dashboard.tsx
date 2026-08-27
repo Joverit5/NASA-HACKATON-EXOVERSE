@@ -41,7 +41,7 @@ export function Dashboard() {
         <motion.div
           className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"
           animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 1, repeat: Infinity, ease:"linear" }}
         />
       </div>
     )
@@ -49,10 +49,10 @@ export function Dashboard() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <Card className="bg-indigo-900/30 border-indigo-500/30 backdrop-blur-md overflow-hidden">
+      <Card className="bg-indigo-900/30 border-indigo-500/30 overflow-hidden">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-white flex items-center">
-            <Star className="mr-2 h-6 w-6 text-yellow-400" />
+          <CardTitle className="text-2xl font-bold text-ink flex items-center">
+            <Star className="mr-2 h-6 w-6 text-gold" />
             General Progress
           </CardTitle>
         </CardHeader>
@@ -73,10 +73,10 @@ export function Dashboard() {
             <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-indigo-200">
               <motion.div
                 style={{ width: `${progressPercentage}%` }}
-                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-indigo-500"
+                className="shadow-none flex flex-col text-center whitespace-nowrap text-ink justify-center bg-indigo-500"
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercentage}%` }}
-                transition={{ duration: 1, ease: "easeOut" }}
+                transition={{ duration: 1, ease:"easeOut" }}
               />
             </div>
           </div>
@@ -86,10 +86,10 @@ export function Dashboard() {
         </CardContent>
       </Card>
 
-      <Card className="bg-indigo-900/30 border-indigo-500/30 backdrop-blur-md">
+      <Card className="bg-indigo-900/30 border-indigo-500/30">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-white flex items-center">
-            <Trophy className="mr-2 h-6 w-6 text-yellow-400" />
+          <CardTitle className="text-2xl font-bold text-ink flex items-center">
+            <Trophy className="mr-2 h-6 w-6 text-gold" />
             Achievements
           </CardTitle>
         </CardHeader>
@@ -99,7 +99,7 @@ export function Dashboard() {
               {achievements.map((achievement, index) => (
                 <motion.li
                   key={index}
-                  className="flex items-center justify-between bg-indigo-800/50 p-3 rounded-lg"
+                  className="flex items-center justify-between bg-indigo-800/50 p-3"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
@@ -108,19 +108,19 @@ export function Dashboard() {
                   <div className="flex items-center">
                     <Trophy
                       className={`h-5 w-5 mr-3 ${
-                        achievement.unlocked ? "text-yellow-400" : "text-gray-400"
+                        achievement.unlocked ?"text-gold" :"text-ink-faint"
                       }`}
                     />
                     <span
                       className={`font-medium ${
-                        achievement.unlocked ? "text-white" : "text-indigo-300"
+                        achievement.unlocked ?"text-ink" :"text-indigo-300"
                       }`}
                     >
                       {achievement.name}
                     </span>
                   </div>
                   {achievement.unlocked && (
-                    <Badge variant="secondary" className="bg-indigo-600 text-white">
+                    <Badge variant="secondary" className="bg-indigo-600 text-ink">
                       Unlocked
                     </Badge>
                   )}

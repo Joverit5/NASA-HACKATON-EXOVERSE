@@ -21,19 +21,25 @@ interface TransitCurveProps {
   planet: ProcessedExoplanet
   /** Rendered without motion, for the reduced-motion and no-JS paths. */
   still?: boolean
+  /**
+   * Card-sized: fewer samples, no axes, no annotation. A catalog page holds sixty
+   * of these at once, so the full plot's furniture would be noise and its sample
+   * count wasted.
+   */
+  compact?: boolean
   className?: string
 }
 
 const VIEW_W = 1200
 const VIEW_H = 420
 
-export function TransitCurve({ planet, still = false, className }: TransitCurveProps) {
+export function TransitCurve({ planet, still = false, compact = false, className }: TransitCurveProps) {
   const uid = useId().replace(/:/g, "")
   const depth = planet.transitDepth ?? 0
   const periodDays = Number.parseFloat(planet.orbitalPeriod)
   const period = Number.isNaN(periodDays) ? null : periodDays
 
-  const points = sampleCurve({ depth: depth || 0.02, periodDays: period })
+  const points = sampleCurve({ depth: depth || 0.02, periodDays: period }, compact ? 72 : 240)
   const path = curvePath(points, VIEW_W, VIEW_H, depth || 0.02)
   const half = transitHalfWidth(period)
 
@@ -106,7 +112,7 @@ export function TransitCurve({ planet, still = false, className }: TransitCurveP
         </g>
 
         {/* Ingress and egress, where the crossing begins and ends */}
-        {[-half, half].map((h, i) => {
+        {!compact && [-half, half].map((h, i) => {
           const x = ((h + 1) / 2) * VIEW_W
           return (
             <line
@@ -122,7 +128,7 @@ export function TransitCurve({ planet, still = false, className }: TransitCurveP
           )
         })}
 
-        {/* The floor marker carries the measurement */}
+        {!compact && (<>{/* The floor marker carries the measurement */}
         <circle cx={floorX} cy={floorY} r="5" fill="hsl(var(--mint))" />
         <line x1={floorX} y1={floorY} x2={floorX} y2={baseY} stroke="hsl(var(--mint))" strokeWidth="1" opacity="0.4" />
 
@@ -168,7 +174,7 @@ export function TransitCurve({ planet, still = false, className }: TransitCurveP
           >
             {label}
           </text>
-        ))}
+        ))}</>)}
 
         {/*
           The playhead. Scroll drives it across the curve; without scroll-driven

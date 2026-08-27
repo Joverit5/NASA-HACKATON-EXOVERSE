@@ -39,28 +39,27 @@ export default function Navbar() {
 
 
   const leftNavItems = [
-    { href: "/exoquest/menu", icon: Rocket, label: "ExoQuest" },
-    { href: "/exocreator", icon: Brain, label: "ExoCreator" },
+    { href:"/exoquest/menu", icon: Rocket, label:"ExoQuest" },
+    { href:"/exocreator", icon: Brain, label:"ExoCreator" },
   ];
 
   const rightNavItems = [
-    { href: "/exovis", icon: ChartBar, label: "ExoVis" },
+    { href:"/exovis", icon: ChartBar, label:"ExoVis" },
     { 
-      href: "/#credits", 
+      href:"/#credits", 
       icon: Users, 
-      label: "Credits"
+      label:"Credits"
     },
   ];
 
   return (
     <motion.nav
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4",
-        isScrolled ? "bg-black/50 backdrop-blur-md" : "bg-transparent"
+      className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-tick py-4",
+        isScrolled ?"bg-void/90" :"bg-transparent"
       )}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      transition={{ type:"spring", stiffness: 300, damping: 30 }}
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
@@ -77,8 +76,8 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
-              className="text-white focus:outline-none"
-              aria-label={isOpen ? "Close menu" : "Open menu"}
+              className="text-ink focus:outline-none"
+              aria-label={isOpen ?"Close menu" :"Open menu"}
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -116,7 +115,7 @@ export default function Navbar() {
 const NavItem: React.FC<NavItemProps> = ({ href, icon: Icon, label }) => (
   <Link
     href={href}
-    className="flex items-center space-x-2 text-xl text-white hover:text-blue-400 transition-colors px-8"
+    className="flex items-center space-x-2 text-xl text-ink hover:text-source transition-colors px-8"
   >
     <Icon className="h-5 w-5" />
     <span>{label}</span>
@@ -132,7 +131,7 @@ const MobileMenu: React.FC<Omit<MobileMenuProps, 'handleCreditsClick'>> = ({
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -20 }}
     transition={{ duration: 0.2 }}
-    className="md:hidden absolute top-full left-0 right-0 bg-black/90 backdrop-blur-md py-4"
+    className="md:hidden absolute top-full left-0 right-0 bg-void/90 py-4"
   >
     <div className="container mx-auto px-4 flex flex-col space-y-4">
       <ul className="flex flex-col space-y-2">
@@ -140,7 +139,7 @@ const MobileMenu: React.FC<Omit<MobileMenuProps, 'handleCreditsClick'>> = ({
           <Link
             key={item.href}
             href={item.href}
-            className="flex items-center space-x-2 text-white hover:text-primary transition-colors"
+            className="flex items-center space-x-2 text-ink hover:text-primary transition-colors"
             onClick={toggleMenu}
           >
             <item.icon className="h-4 w-4" />

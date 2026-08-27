@@ -14,14 +14,14 @@ const TwinklingStar = ({ delay = 0, scale = 1 }: { delay?: number; scale?: numbe
       duration: 3,
       delay,
       repeat: Infinity,
-      ease: "easeInOut"
+      ease:"easeInOut"
     }}
     className="absolute"
     style={{
       transform: `scale(${scale})`
     }}
   >
-    <Star className="text-white" size={4} />
+    <Star className="text-ink" size={4} />
   </motion.div>
 )
 
@@ -39,10 +39,10 @@ export default function FeaturesSection({ features }: FeaturesSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"],
+    offset: ["start end","end start"],
   })
 
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%","50%"])
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
   
   // Generate random star positions
@@ -85,7 +85,7 @@ export default function FeaturesSection({ features }: FeaturesSectionProps) {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
+            className="text-6xl font-bold text-ink"
           >
             What ExoVerse Does
           </motion.h2>
@@ -93,7 +93,7 @@ export default function FeaturesSection({ features }: FeaturesSectionProps) {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="text-xl text-gray-400 max-w-2xl mx-auto"
+            className="text-xl text-ink-faint max-w-2xl mx-auto"
           >
             Explore the cutting-edge features that make ExoVerse your gateway to the wonders of exoplanets.
           </motion.p>

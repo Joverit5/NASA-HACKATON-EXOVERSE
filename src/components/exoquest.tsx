@@ -58,8 +58,8 @@ export default function ExoQuest() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const difficulty = searchParams
-    ? searchParams.get("difficulty") || "all"
-    : "all"
+    ? searchParams.get("difficulty") ||"all"
+    :"all"
 
   const shuffleArray = useCallback((array: any[]) => {
     const shuffled = [...array]
@@ -153,12 +153,12 @@ const fetchAchievements = async () => {
   const getButtonStyle = useCallback(
     (option: string) => {
       if (!isAnswered)
-        return "bg-indigo-700/30 text-white hover:bg-indigo-600/50"
+        return "bg-indigo-700/30 text-ink hover:bg-indigo-600/50"
       if (option === questions[currentQuestionIndex].correctAnswer)
-        return "bg-green-500/30 text-white hover:bg-green-600/50"
+        return "bg-green-500/30 text-ink hover:bg-green-600/50"
       if (option === selectedAnswer)
-        return "bg-red-500/30 text-white hover:bg-red-600/50"
-      return "bg-indigo-700/30 text-white hover:bg-indigo-600/50"
+        return "bg-red-500/30 text-ink hover:bg-red-600/50"
+      return "bg-indigo-700/30 text-ink hover:bg-indigo-600/50"
     },
     [isAnswered, questions, currentQuestionIndex, selectedAnswer]
   )
@@ -184,7 +184,7 @@ const fetchAchievements = async () => {
       <div className="flex items-center justify-center h-screen bg-blue-950">
         <Alert
           variant="destructive"
-          className="bg-red-900/30 border-red-600/30 text-white backdrop-blur-md"
+          className="bg-red-900/30 border-red-600/30 text-ink"
         >
           <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
@@ -197,7 +197,7 @@ const fetchAchievements = async () => {
   if (questions.length === 0) {
     return (
       <div className="flex items-center justify-center h-screen bg-blue-950">
-        <Alert className="bg-indigo-900/30 border-indigo-600/30 text-white backdrop-blur-md">
+        <Alert className="bg-indigo-900/30 border-indigo-600/30 text-ink">
           <AlertTitle>No questions available</AlertTitle>
           <AlertDescription>
             No questions found in database. Please, try again later.
@@ -219,29 +219,29 @@ const fetchAchievements = async () => {
         <CoverParticles />
         <Card className="w-full max-w-md bg-surface border border-rule">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center text-white">
-              {isVictory ? "¡Congratulations!" : "Game Over"}
+            <CardTitle className="text-2xl font-bold text-center text-ink">
+              {isVictory ?"¡Congratulations!" :"Game Over"}
             </CardTitle>
           </CardHeader>
           <CardContent className="text-center">
-            <p className="text-xl mb-4 text-white">
+            <p className="text-xl mb-4 text-ink">
               {isVictory
-                ? "You've won! You've got 6 or more answers correct."
+                ?"You've won! You've got 6 or more answers correct."
                 : `You got ${score} out of ${questions.length} correct answers.`}
             </p>
             {isVictory && (
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                transition={{ type:"spring", stiffness: 260, damping: 20 }}
               >
-                <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
-                <p className="text-lg font-semibold mb-2 text-white">
+                <Trophy className="w-16 h-16 text-gold mx-auto mb-4" />
+                <p className="text-lg font-semibold mb-2 text-ink">
                   New badge unlocked!
                 </p>
                 <Badge
                   variant="secondary"
-                  className="text-lg py-1 px-3 bg-indigo-600/30 text-white"
+                  className="text-lg py-1 px-3 bg-indigo-600/30 text-ink"
                 >
                   ExoQuest Master
                 </Badge>
@@ -251,14 +251,14 @@ const fetchAchievements = async () => {
           <CardFooter className="flex justify-center space-x-4">
             <Button
               onClick={handleRetry}
-              className="flex items-center bg-indigo-600/30 text-white hover:bg-indigo-600/50"
+              className="flex items-center bg-indigo-600/30 text-ink hover:bg-indigo-600/50"
             >
               <RefreshCw className="mr-2 h-4 w-4" /> Try Again
             </Button>
             <Button
               onClick={() => router.push("/exoquest/menu")}
               variant="outline"
-              className="text-white border-white/30 hover:bg-white/10"
+              className="text-ink border-rule-strong hover:bg-raised"
             >
               Back to Menu
             </Button>
@@ -282,7 +282,7 @@ const fetchAchievements = async () => {
       <div className="absolute inset-0 bg-gradient-to-br from-black to-purple-500/20" />
       <Card className="w-full max-w-2xl bg-surface border border-rule relative z-10">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center text-white">
+          <CardTitle className="text-2xl font-bold text-center text-ink">
             ExoQuest
           </CardTitle>
         </CardHeader>
@@ -295,7 +295,7 @@ const fetchAchievements = async () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-xl mb-4 text-white">
+              <h2 className="text-xl mb-4 text-ink">
                 {currentQuestion.question}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -303,7 +303,7 @@ const fetchAchievements = async () => {
                   <Button
                     key={index}
                     onClick={() => handleAnswer(option)}
-                    className={`h-auto py-4 px-6 text-left transition-all duration-300 transform hover:scale-105 ${getButtonStyle(
+                    className={`h-auto py-4 px-6 text-left transition-all duration-tick transform hover:scale-105 ${getButtonStyle(
                       option
                     )}`}
                     disabled={isAnswered}
@@ -319,8 +319,8 @@ const fetchAchievements = async () => {
                   transition={{ duration: 0.5 }}
                   className="mt-4 p-4 bg-raised border border-rule"
                 >
-                  <h3 className="font-bold mb-2 text-white">Explanation:</h3>
-                  <p className="text-white">{currentQuestion.explanation}</p>
+                  <h3 className="font-bold mb-2 text-ink">Explanation:</h3>
+                  <p className="text-ink">{currentQuestion.explanation}</p>
                 </motion.div>
               )}
             </motion.div>
@@ -331,17 +331,17 @@ const fetchAchievements = async () => {
             <Progress value={progressPercentage} className="w-full" />
           </div>
           <div className="flex justify-between w-full">
-            <Badge variant="outline" className="border-white/30 text-white">
+            <Badge variant="outline" className="border-rule-strong text-ink">
               Question {currentQuestionIndex + 1} of {questions.length}
             </Badge>
             <Badge
               variant="outline"
-              className="flex items-center gap-1 border-white/30 text-white"
+              className="flex items-center gap-1 border-rule-strong text-ink"
             >
               <Star className="w-4" />
               Score: {score}
             </Badge>
-            <Badge variant="outline" className="border-white/30 text-white">
+            <Badge variant="outline" className="border-rule-strong text-ink">
               {currentQuestion.difficulty}
             </Badge>
           </div>
@@ -354,8 +354,7 @@ const fetchAchievements = async () => {
                 <>
                   Next <ChevronRight className="ml-2 h-4 w-4" />
                 </>
-              ) : (
-                "Show Results"
+              ) : ("Show Results"
               )}
             </Button>
           )}

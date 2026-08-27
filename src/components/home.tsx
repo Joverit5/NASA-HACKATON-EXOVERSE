@@ -40,10 +40,10 @@ export default function Home({ featured }: { featured: ProcessedExoplanet | null
   const heroRef = useRef<HTMLDivElement>(null)
 
   // Optimización: Usar useSpring para animaciones más suaves
-  const heroY = useTransform(scrollYProgress, [0, 0.3], ["0%", "30%"])
+  const heroY = useTransform(scrollYProgress, [0, 0.3], ["0%","30%"])
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
   const planetScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1])
-  const textY = useTransform(scrollYProgress, [0, 0.3], ["0%", "-20%"])
+  const textY = useTransform(scrollYProgress, [0, 0.3], ["0%","-20%"])
 
   const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 }
   const heroYSpring = useSpring(heroY, springConfig)
@@ -53,29 +53,29 @@ export default function Home({ featured }: { featured: ProcessedExoplanet | null
   const features = [
     {
       icon: BookOpen,
-      title: "Information Hub",
-      description: "A fascinating resource that unveils the basics and captivating history of exoplanets.",
+      title:"Information Hub",
+      description:"A fascinating resource that unveils the basics and captivating history of exoplanets.",
     },
     {
       icon: Brain,
-      title: "ExoQuest",
-      description: "An interactive trivia adventure that challenges and expands your cosmic knowledge.",
+      title:"ExoQuest",
+      description:"An interactive trivia adventure that challenges and expands your cosmic knowledge.",
     },
     {
       icon: Palette,
-      title: "ExoCreator",
-      description: "A unique tool empowering you to craft your own exoplanets, fueling your creativity.",
+      title:"ExoCreator",
+      description:"A unique tool empowering you to craft your own exoplanets, fueling your creativity.",
     },
     {
       icon: Telescope,
-      title: "ExoVis",
-      description: "A dynamic portal connecting you to the latest exoplanet discoveries.",
+      title:"ExoVis",
+      description:"A dynamic portal connecting you to the latest exoplanet discoveries.",
     },
   ]
 
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black text-white">
+    <main className="relative min-h-screen overflow-hidden bg-black text-ink">
       <Navbar />
       <ScrollProgress progress={scrollYProgress} />
 
@@ -93,10 +93,10 @@ export default function Home({ featured }: { featured: ProcessedExoplanet | null
             transition={{ duration: 0.72, ease: [0.2, 0, 0, 1] }}
           >
             <p className="font-mono text-xs tracking-[0.18em] uppercase text-mint mb-6">
-              {featured ? `${featured.discoveryMethod} · ${featured.discoveryYear ?? "year unrecorded"}` : "NASA Exoplanet Archive"}
+              {featured ? `${featured.discoveryMethod} · ${featured.discoveryYear ??"year unrecorded"}` :"NASA Exoplanet Archive"}
             </p>
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-normal leading-[1.02] tracking-tight max-w-4xl text-balance">
-              {featured ? featured.name : "Exploring Exoplanets"}
+              {featured ? featured.name :"Exploring Exoplanets"}
             </h1>
             <p className="mt-6 text-lg md:text-xl text-ink-dim leading-relaxed max-w-2xl">
               Every planet here entered the record the same way: as a dip in its
@@ -167,7 +167,7 @@ export default function Home({ featured }: { featured: ProcessedExoplanet | null
 
       <PayPalButton />
       <footer className="p-4 text-center text-indigo-200 relative z-10">
-        <div className="flex justify-center space-x-8 text-sm text-white/40">
+        <div className="flex justify-center space-x-8 text-sm text-ink-faint">
                 <span>© {new Date().getFullYear()} Exoverse</span>
                 <span>•</span>
                 <span>Exploring the cosmos</span>

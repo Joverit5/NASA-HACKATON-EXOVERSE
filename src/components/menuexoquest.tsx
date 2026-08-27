@@ -39,7 +39,7 @@ export default function ExoPlanetPlatform() {
 
   return (
     <motion.div
-      className="flex flex-col min-h-screen bg-blue-950 text-white relative overflow-hidden"
+      className="flex flex-col min-h-screen bg-blue-950 text-ink relative overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -55,19 +55,19 @@ export default function ExoPlanetPlatform() {
       </header>
 
       <main className="flex-grow p-4 overflow-auto relative z-10">
-        <Card className="w-full max-w-4xl mx-auto bg-indigo-900/30 border-indigo-500/30 backdrop-blur-md">
+        <Card className="w-full max-w-4xl mx-auto bg-indigo-900/30 border-indigo-500/30">
           <CardContent className="p-0">
             <Tabs defaultValue="exoquest" className="w-full">
               <TabsList className="grid w-full grid-cols-2 rounded-t-lg overflow-hidden bg-transparent">
                 <TabsTrigger
                   value="exoquest"
-                  className="text-lg font-semibold py-3 px-6 text-indigo-200 bg-indigo-900/50 data-[state=active]:bg-indigo-700 data-[state=active]:text-white transition-all duration-300 rounded-tl-xl flex items-center justify-center"
+                  className="text-lg font-semibold py-3 px-6 text-indigo-200 bg-indigo-900/50 data-[state=active]:bg-indigo-700 data-[state=active]:text-ink transition-all duration-tick rounded-tl-xl flex items-center justify-center"
                 >
                   ExoQuest
                 </TabsTrigger>
                 <TabsTrigger
                   value="dashboard"
-                  className="text-lg font-semibold py-3 px-6 text-indigo-200 bg-indigo-900/50 data-[state=active]:bg-indigo-700 data-[state=active]:text-white transition-all duration-300 rounded-tr-xl flex items-center justify-center"
+                  className="text-lg font-semibold py-3 px-6 text-indigo-200 bg-indigo-900/50 data-[state=active]:bg-indigo-700 data-[state=active]:text-ink transition-all duration-tick rounded-tr-xl flex items-center justify-center"
                 >
                   Dashboard
                 </TabsTrigger>
@@ -85,7 +85,7 @@ export default function ExoPlanetPlatform() {
                   transition={{ duration: 0.5 }}
                 >
                   <CardHeader className="px-0 pt-0">
-                    <CardTitle className="flex items-center gap-2 text-3xl text-white">
+                    <CardTitle className="flex items-center gap-2 text-3xl text-ink">
                       <Brain className="h-9 w-8 text-indigo-300" />
                       ExoQuest
                     </CardTitle>
@@ -110,7 +110,7 @@ export default function ExoPlanetPlatform() {
                         >
                           <Button
                             onClick={() => setShowDifficultyMenu(true)}
-                            className="w-full py-6 text-xl bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 text-white"
+                            className="w-full py-6 text-xl bg-indigo-600 hover:bg-indigo-700 transition-all duration-tick text-ink"
                           >
                             <Rocket className="mr-2 h-6 w-6" /> Launch ExoQuest
                           </Button>
@@ -124,15 +124,15 @@ export default function ExoPlanetPlatform() {
                           transition={{ duration: 0.3 }}
                           className="space-y-4"
                         >
-                          <p className="text-center font-semibold text-xl mb-4 text-white">
+                          <p className="text-center font-semibold text-xl mb-4 text-ink">
                             Choose your mission difficulty:
                           </p>
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            {["easy", "intermediate", "hard"].map((level) => (
+                            {["easy","intermediate","hard"].map((level) => (
                               <Button
                                 key={level}
                                 onClick={() => handleExoQuestRedirect(level)}
-                                className="w-full py-6 text-lg capitalize bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 text-white"
+                                className="w-full py-6 text-lg capitalize bg-indigo-600 hover:bg-indigo-700 transition-all duration-tick text-ink"
                                 disabled={isRedirecting}
                               >
                                 {level}{" "}
@@ -152,7 +152,7 @@ export default function ExoPlanetPlatform() {
       </main>
 
       <footer className="p-4 text-center text-indigo-200 relative z-10">
-        <div className="flex justify-center space-x-8 text-sm text-white/40">
+        <div className="flex justify-center space-x-8 text-sm text-ink-faint">
                 <span>© {new Date().getFullYear()} Exoverse</span>
                 <span>•</span>
                 <span>Exploring the cosmos</span>

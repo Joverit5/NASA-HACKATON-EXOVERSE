@@ -21,14 +21,14 @@ const TwinklingStar = ({ delay = 0, scale = 1 }: { delay?: number; scale?: numbe
       duration: 3,
       delay,
       repeat: Infinity,
-      ease: "easeInOut"
+      ease:"easeInOut"
     }}
     className="absolute"
     style={{
       transform: `scale(${scale})`
     }}
   >
-    <Star className="text-white" size={4} />
+    <Star className="text-ink" size={4} />
   </motion.div>
 )
 
@@ -37,7 +37,7 @@ const RevealText = ({ children }: { children: React.ReactNode }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 1, ease: "easeOut" }}
+    transition={{ duration: 1, ease:"easeOut" }}
     viewport={{ once: true }}
   >
     {children}
@@ -50,27 +50,27 @@ interface TimelineEventProps {
   title: string
   description: string
   image: string
-  align?: "left" | "right"
+  align?:"left" |"right"
 }
 
-const TimelineEvent = ({ year, title, description, image, align = "left" }: TimelineEventProps) => {
+const TimelineEvent = ({ year, title, description, image, align ="left" }: TimelineEventProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"]
+    offset: ["start end","end start"]
   })
 
   const x = useTransform(
     scrollYProgress,
     [0, 0.5, 1],
-    [align === "left" ? -100 : 100, 0, align === "left" ? -100 : 100]
+    [align ==="left" ? -100 : 100, 0, align ==="left" ? -100 : 100]
   )
 
   return (
     <motion.div
       ref={containerRef}
       className={`flex items-center gap-8 ${
-        align === "right" ? "flex-row-reverse" : ""
+        align ==="right" ?"flex-row-reverse" :""
       } my-32`}
       style={{ x }}
     >
@@ -79,7 +79,7 @@ const TimelineEvent = ({ year, title, description, image, align = "left" }: Time
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          className="relative aspect-square rounded-full overflow-hidden border border-white/10"
+          className="relative aspect-square rounded-full overflow-hidden border border-rule"
         >
           <Image
             src={image}
@@ -87,7 +87,7 @@ const TimelineEvent = ({ year, title, description, image, align = "left" }: Time
             fill
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-void/60 to-transparent" />
         </motion.div>
       </div>
       <div className="w-1/2 space-y-4">
@@ -95,17 +95,17 @@ const TimelineEvent = ({ year, title, description, image, align = "left" }: Time
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="text-sm font-mono text-blue-400"
+          className="text-sm font-mono text-source"
         >
           {year}
         </motion.span>
         <RevealText>
-          <h3 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+          <h3 className="text-3xl font-bold text-ink">
             {title}
           </h3>
         </RevealText>
         <RevealText>
-          <p className="text-gray-400 leading-relaxed">{description}</p>
+          <p className="text-ink-faint leading-relaxed">{description}</p>
         </RevealText>
       </div>
     </motion.div>
@@ -116,10 +116,10 @@ export default function HistorySection() {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"],
+    offset: ["start end","end start"],
   })
 
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%","50%"])
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
   
   // Generate random star positions
@@ -162,7 +162,7 @@ export default function HistorySection() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
+            className="text-6xl font-bold text-ink"
           >
             Journey Through Time
           </motion.h2>
@@ -170,7 +170,7 @@ export default function HistorySection() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="text-xl text-gray-400 max-w-2xl mx-auto"
+            className="text-xl text-ink-faint max-w-2xl mx-auto"
           >
             Discover the fascinating history of exoplanet exploration and the remarkable discoveries that have shaped our understanding of the cosmos.
           </motion.p>
