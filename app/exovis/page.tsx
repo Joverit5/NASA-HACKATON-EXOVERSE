@@ -173,7 +173,7 @@ export default function ExovizCatalog() {
             </p>
             <p className="text-xl md:text-2xl text-ink-dim leading-relaxed mx-auto mb-5 max-w-2xl">
               Explore ALL exoplanets from NASA's archive. Search through{" "}
-              {totalCount?.toLocaleString() ||"thousands of"} confirmed exoplanets
+              {totalCount?.toLocaleString("en-US") ||"thousands of"} confirmed exoplanets
             </p>
             {/* Live Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-16">
@@ -183,9 +183,9 @@ export default function ExovizCatalog() {
                 transition={{ duration: 0.3 }}
               >
                 <Globe className="w-8 h-8 mx-auto mb-4 text-ink" />
-                <div className="text-3xl font-light mb-2">{exoplanets.length.toLocaleString()}</div>
+                <div className="text-3xl font-light mb-2">{exoplanets.length.toLocaleString("en-US")}</div>
                 <div className="text-ink-dim">Unique Exoplanets</div>
-                {totalCount && <div className="text-xs text-ink-faint mt-1">of {totalCount.toLocaleString()} total</div>}
+                {totalCount && <div className="text-xs text-ink-faint mt-1">of {totalCount.toLocaleString("en-US")} total</div>}
               </motion.div>
               <motion.div
                 className="bg-surface border border-rule p-6"
@@ -194,7 +194,7 @@ export default function ExovizCatalog() {
               >
                 <Telescope className="w-8 h-8 mx-auto mb-4 text-ink" />
                 <div className="text-3xl font-light mb-2">
-                  {exoplanets.length > 0 ? new Set(exoplanets.map((p) => p.hostStar)).size.toLocaleString() : 0}
+                  {exoplanets.length > 0 ? new Set(exoplanets.map((p) => p.hostStar)).size.toLocaleString("en-US") : 0}
                 </div>
                 <div className="text-ink-dim">Star Systems</div>
               </motion.div>
@@ -204,7 +204,7 @@ export default function ExovizCatalog() {
                 transition={{ duration: 0.3 }}
               >
                 <Orbit className="w-8 h-8 mx-auto mb-4 text-ink" />
-                <div className="text-3xl font-light mb-2">{habitablePlanets.toLocaleString()}</div>
+                <div className="text-3xl font-light mb-2">{habitablePlanets.toLocaleString("en-US")}</div>
                 <div className="text-ink-dim">Potentially Habitable</div>
               </motion.div>
               <motion.div
@@ -213,7 +213,7 @@ export default function ExovizCatalog() {
                 transition={{ duration: 0.3 }}
               >
                 <Database className="w-8 h-8 mx-auto mb-4 text-ink" />
-                <div className="text-3xl font-light mb-2">{totalSources.toLocaleString()}</div>
+                <div className="text-3xl font-light mb-2">{totalSources.toLocaleString("en-US")}</div>
                 <div className="text-ink-dim">Sources Combined</div>
               </motion.div>
             </div>
@@ -332,16 +332,16 @@ export default function ExovizCatalog() {
               <div className="mt-4 text-center text-ink-dim">
                 {searchTerm ? (
                   <span>
-                    Search results for"{searchTerm}" • {exoplanets.length.toLocaleString()} found
+                    Search results for"{searchTerm}" • {exoplanets.length.toLocaleString("en-US")} found
                   </span>
                 ) : (
                   <span>
-                    Showing {exoplanets.length.toLocaleString()} unique exoplanets
+                    Showing {exoplanets.length.toLocaleString("en-US")} unique exoplanets
                     {hasMore &&" • Scroll for more"}
                   </span>
                 )}
                 <div className="text-xs text-ink-faint mt-1">
-                  {totalSources.toLocaleString()} published references behind these planets
+                  {totalSources.toLocaleString("en-US")} published references behind these planets
                 </div>
               </div>
             </div>
@@ -420,7 +420,7 @@ export default function ExovizCatalog() {
                       :"You've reached the end of the exoplanet catalog"}
                   </p>
                   <p className="text-ink-faint mt-2">
-                    Total: {exoplanets.length.toLocaleString()} exoplanets shown, from {totalSources.toLocaleString()}{" "}
+                    Total: {exoplanets.length.toLocaleString("en-US")} exoplanets shown, from {totalSources.toLocaleString("en-US")}{" "}
                     sources
                   </p>
                 </div>

@@ -329,7 +329,22 @@ function parseDistance(distance: string): number {
  * Picked from the archive rather than hard-coded, so the hero cannot go stale or
  * point at a planet whose parameters were later revised away.
  */
-export async function getFeaturedPlanet(): Promise<ProcessedExoplanet | null> {
+export interface FeaturedPick {
+  planet: ProcessedExoplanet
+  /** How many worlds met the bar, so the page can say what it drew from. */
+  poolSize: number
+}
+
+/**
+ * A planet for the landing page, drawn fresh on each visit.
+ *
+ * Every candidate has to clear the same bar: discovered in transit, with a real
+ * measured depth deep enough to read at a glance, well enough studied that its
+ * numbers are trustworthy, and with a period and distance on record. Within that
+ * pool the choice is random, so the hero is a different real world each time
+ * rather than one hard-coded favourite.
+ */
+export async function getFeaturedPlanet(): Promise<FeaturedPick | null> {
   let catalog: ProcessedExoplanet[]
   try {
     catalog = await getCatalog()
@@ -337,18 +352,17 @@ export async function getFeaturedPlanet(): Promise<ProcessedExoplanet | null> {
     return null
   }
 
-  const candidates = catalog.filter(
+  const pool = catalog.filter(
     (p) =>
       p.discoveryMethod === "Transit" &&
       p.transitDepth !== null &&
-      p.transitDepth > 0.0008 &&
-      p.sources >= 8 &&
+      p.transitDepth > 0.0015 &&
+      p.sources >= 5 &&
       p.orbitalPeriod !== "Not available" &&
-      p.distance !== "Not available",
+      p.distance !== "Not available" &&
+      p.radius !== "Not available",
   )
-  if (candidates.length === 0) return null
+  if (pool.length === 0) return null
 
-  // Best studied first; ties broken by the deeper, more legible transit.
-  candidates.sort((a, b) => b.sources - a.sources || (b.transitDepth ?? 0) - (a.transitDepth ?? 0))
-  return candidates[0]
+  return { planet: pool[Math.floor(Math.random() * pool.length)], poolSize: pool.length }
 }

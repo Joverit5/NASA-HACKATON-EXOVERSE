@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useCallback, useRef, Suspense, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls, Stars } from "@react-three/drei"
+import { OrbitControls, Stars, PerformanceMonitor } from "@react-three/drei"
 import * as THREE from "three"
 import { Button } from "@/src/components/ui/button"
 import { Slider } from "@/src/components/ui/slider"
@@ -15,12 +15,21 @@ import Link from "next/link"
 import { achievementsService } from "@/src/lib/achievementsService"
 import {
   derivePlanet,
+  estimateMass,
   sliderToAu,
   starSpec,
   blackbodyRgb,
   starLightIntensity,
   type DerivedPlanet,
 } from "@/src/lib/planetPhysics"
+import {
+  createPlanetMaterial,
+  createAtmosphereMaterial,
+  createStarMaterial,
+  createRingMaterial,
+  rocheLimitRadii,
+  type PlanetSurface,
+} from "@/src/components/exocreator-materials"
 import { PlanetReadout } from "@/src/components/planet-readout"
 
 const contrastColors = [
@@ -35,62 +44,6 @@ const contrastColors = [
   "#20B2AA",
   "#B0E0E6",
 ]
-
-const createProceduralTexture = (type: string, color: string) => {
-  if (typeof window === "undefined" || typeof document === "undefined") {
-    return new THREE.Texture()
-  }
-  const canvas = document.createElement("canvas")
-  canvas.width = 512
-  canvas.height = 256
-  const context = canvas.getContext("2d", { willReadFrequently: true })!
-
-  const baseColor = new THREE.Color(color)
-  const darkerColor = new THREE.Color(color).multiplyScalar(0.5)
-
-  const gradient = context.createLinearGradient(0, 0, 0, 256)
-  gradient.addColorStop(0, `#${baseColor.getHexString()}`)
-  gradient.addColorStop(1, `#${darkerColor.getHexString()}`)
-  context.fillStyle = gradient
-  context.fillRect(0, 0, 512, 256)
-
-  if (type === "rock") {
-    for (let i = 0; i < 3000; i++) {
-      const x = Math.random() * 512
-      const y = Math.random() * 256
-      const radius = Math.random() * 2 + 1
-      context.beginPath()
-      context.arc(x, y, radius, 0, Math.PI * 2)
-      context.fillStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.3)`
-      context.fill()
-    }
-  } else if (type === "water") {
-    for (let i = 0; i < 2000; i++) {
-      const x = Math.random() * 512
-      const y = Math.random() * 256
-      context.beginPath()
-      context.moveTo(x, y)
-      context.lineTo(x + Math.random() * 40 - 20, y + Math.random() * 40 - 20)
-      context.strokeStyle = `rgba(255, 255, 255, ${Math.random() * 0.2 + 0.1})`
-      context.lineWidth = Math.random() * 2 + 1
-      context.stroke()
-    }
-  } else if (type === "gas") {
-    for (let i = 0; i < 15; i++) {
-      const y = Math.random() * 256
-      const height = Math.random() * 50 + 25
-      const bandGradient = context.createLinearGradient(0, y, 0, y + height)
-      bandGradient.addColorStop(0, `rgba(255, 255, 255, ${Math.random() * 0.2})`)
-      bandGradient.addColorStop(1, "rgba(255, 255, 255, 0)")
-      context.fillStyle = bandGradient
-      context.fillRect(0, y, 512, height)
-    }
-  }
-
-  const texture = new THREE.CanvasTexture(canvas)
-  texture.needsUpdate = true
-  return texture
-}
 
 interface SatelliteProps {
   radius: number
@@ -119,23 +72,30 @@ interface PlanetControlsProps {
 
 const Satellite: React.FC<SatelliteProps> = React.memo(({ radius, orbitRadius, speed }) => {
   const meshRef = useRef<THREE.Mesh>(null!)
-  const color = useMemo(() => contrastColors[Math.floor(Math.random() * contrastColors.length)], [])
-  const texture = useMemo(
-    () => createProceduralTexture(["rock", "water", "gas"][Math.floor(Math.random() * 3)], color),
-    [color],
-  )
+
+  // Moons are captured or accreted rock, not confetti. The old scene picked one of
+  // ten saturated colours at random, which under colour-as-meaning said nothing.
+  // A small tint variation stands in for composition; the shading does the rest.
+  const material = useMemo(() => {
+    const grey = 0.38 + (orbitRadius % 0.7) * 0.18
+    const tint = new THREE.Color(grey, grey * 0.97, grey * 0.92)
+    return createPlanetMaterial("rock", "#" + tint.getHexString())
+  }, [orbitRadius])
+
+  useEffect(() => () => material.dispose(), [material])
 
   useFrame(({ clock }) => {
     const angle = clock.getElapsedTime() * speed
+    if (!meshRef.current) return
     meshRef.current.position.x = Math.cos(angle) * orbitRadius
     meshRef.current.position.z = Math.sin(angle) * orbitRadius
     meshRef.current.position.y = Math.sin(angle * 0.5) * orbitRadius * 0.2
+    meshRef.current.rotation.y = angle
   })
 
   return (
-    <mesh ref={meshRef}>
-      <sphereGeometry args={[radius, 16, 16]} />
-      <meshStandardMaterial map={texture} color={color} roughness={0.5} metalness={0.5} />
+    <mesh ref={meshRef} castShadow material={material}>
+      <sphereGeometry args={[radius, 32, 32]} />
     </mesh>
   )
 })
@@ -148,94 +108,112 @@ interface PlanetProps {
   satelliteCount: number
   ringCount: number
   textureType: string
+  /** Host star effective temperature, which sets the atmosphere's scattered colour. */
+  starTeff: number
 }
 
-const Planet: React.FC<PlanetProps> = React.memo(({ radius, color, satelliteCount, ringCount, textureType }) => {
-  const meshRef = useRef<THREE.Mesh>(null!)
-  const texture = useMemo(() => createProceduralTexture(textureType, color), [textureType, color])
+const Planet: React.FC<PlanetProps> = React.memo(
+  ({ radius, color, satelliteCount, ringCount, textureType, starTeff }) => {
+    const meshRef = useRef<THREE.Mesh>(null!)
 
-  useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.005
-    }
-  })
+    const surface: PlanetSurface = textureType === "water" ? "water" : textureType === "gas" ? "gas" : "rock"
 
-  const ringDistances = useMemo(() => {
-    const distances = [radius + 0.5]
-    for (let i = 1; i < ringCount; i++) {
-      distances.push(distances[i - 1] + 0.3)
-    }
-    return distances
-  }, [radius, ringCount])
+    // Node materials are rebuilt only when what they depend on changes; the shader
+    // itself evaluates per-pixel on the GPU, so surface detail no longer costs a
+    // CPU texture upload on every parameter change.
+    const surfaceMaterial = useMemo(() => createPlanetMaterial(surface, color), [surface, color])
+    const atmosphereMaterial = useMemo(() => createAtmosphereMaterial(starTeff, surface), [starTeff, surface])
 
-  return (
-    <group>
-      <mesh ref={meshRef} castShadow receiveShadow>
-        <sphereGeometry args={[radius, 32, 32]} />
-        <meshStandardMaterial
-          map={texture}
-          bumpMap={texture}
-          bumpScale={0.05}
-          color={color}
-          roughness={0.7}
-          metalness={0.2}
-        />
-      </mesh>
-      {Array.from({ length: satelliteCount }, (_, i) => (
-        <Satellite key={i} radius={radius * 0.1} orbitRadius={radius + 1 + i * 0.5} speed={0.5 + i * 0.2} />
-      ))}
-      {ringCount > 0 &&
-        ringDistances.map((distance, i) => (
-          <mesh rotation={[Math.PI / 2, 0, 0]} key={i}>
-            <ringGeometry args={[distance, distance + 0.1, 32]} />
-            <meshStandardMaterial
-              color={contrastColors[i % contrastColors.length]}
-              side={THREE.DoubleSide}
-              transparent
-              opacity={0.7}
-            />
+    // Ring extent is derived, not decorative: material inside the Roche limit cannot
+    // accrete into a moon, which is why Saturn has rings and Earth does not.
+    const density = useMemo(() => {
+      const m = estimateMass(radius).value
+      return m === null ? null : 5.514 * (m / Math.pow(radius, 3))
+    }, [radius])
+    const rocheRadii = useMemo(() => rocheLimitRadii(density), [density])
+
+    const ringBands = useMemo(() => {
+      const inner = radius * 1.35
+      const outer = radius * rocheRadii
+      const span = Math.max(0.25, outer - inner)
+      return Array.from({ length: ringCount }, (_, i) => {
+        const t0 = i / ringCount
+        const t1 = (i + 0.72) / ringCount
+        return { inner: inner + span * t0, outer: inner + span * t1 }
+      })
+    }, [radius, ringCount, rocheRadii])
+
+    const ringMaterial = useMemo(() => createRingMaterial(color), [color])
+
+    useFrame((_, delta) => {
+      // Delta-timed so rotation speed does not depend on frame rate.
+      if (meshRef.current) meshRef.current.rotation.y += delta * 0.28
+    })
+
+    useEffect(() => {
+      return () => {
+        surfaceMaterial.dispose()
+        atmosphereMaterial.dispose()
+        ringMaterial.dispose()
+      }
+    }, [surfaceMaterial, atmosphereMaterial, ringMaterial])
+
+    return (
+      <group>
+        <mesh ref={meshRef} castShadow receiveShadow material={surfaceMaterial}>
+          <sphereGeometry args={[radius, 96, 96]} />
+        </mesh>
+
+        {/* The atmospheric shell, lit at the limb where it is optically thickest. */}
+        <mesh material={atmosphereMaterial}>
+          <sphereGeometry args={[radius * 1.045, 64, 64]} />
+        </mesh>
+
+        {Array.from({ length: satelliteCount }, (_, i) => (
+          <Satellite key={i} radius={radius * 0.1} orbitRadius={radius + 1 + i * 0.5} speed={0.5 + i * 0.2} />
+        ))}
+
+        {ringBands.map((band, i) => (
+          <mesh rotation={[Math.PI / 2, 0, 0]} key={i} material={ringMaterial}>
+            <ringGeometry args={[band.inner, band.outer, 128]} />
           </mesh>
         ))}
-    </group>
-  )
-})
+      </group>
+    )
+  },
+)
 
 Planet.displayName = "Planet"
 
 interface StarProps {
-  color: THREE.Color
+  teff: number
   intensity: number
   distance: number
   size: number
 }
 
-const Star: React.FC<StarProps> = React.memo(({ color, intensity, distance, size }) => {
+const Star: React.FC<StarProps> = React.memo(({ teff, intensity, distance, size }) => {
   const lightRef = useRef<THREE.PointLight>(null!)
-  const glowRef = useRef<THREE.Mesh>(null!)
 
-  useFrame(({ clock }) => {
-    if (lightRef.current && glowRef.current) {
-      const time = clock.getElapsedTime()
-      const glowIntensity = Math.sin(time * 2) * 0.1 + 0.9
-      lightRef.current.position.set(distance, 30, -100)
-      glowRef.current.position.set(distance, 30, -100)
+  const starMaterial = useMemo(() => createStarMaterial(teff), [teff])
+  const lightColor = useMemo(() => {
+    const { r, g, b } = blackbodyRgb(teff)
+    return new THREE.Color(r, g, b)
+  }, [teff])
 
-      const glowMaterial = glowRef.current.material as THREE.MeshBasicMaterial
-      glowMaterial.opacity = glowIntensity
-    }
-  })
+  useEffect(() => () => starMaterial.dispose(), [starMaterial])
+
+  const position: [number, number, number] = [distance, 30, -100]
 
   return (
     <group>
-      <mesh position={[distance, 30, -100]}>
-        <sphereGeometry args={[size, 16, 16]} />
-        <meshBasicMaterial color={color} />
+      {/* The disc itself, limb-darkened and granulated in the shader. */}
+      <mesh position={position} material={starMaterial}>
+        <sphereGeometry args={[size, 64, 64]} />
       </mesh>
-      <mesh ref={glowRef}>
-        <sphereGeometry args={[size * 1.2, 16, 16]} />
-        <meshBasicMaterial color={color} transparent opacity={0.5} />
-      </mesh>
-      <pointLight ref={lightRef} color={color} intensity={intensity * 5} distance={1000} decay={1} />
+
+      {/* The light the planet is actually lit by, in the star's own colour. */}
+      <pointLight ref={lightRef} position={position} color={lightColor} intensity={intensity} distance={0} decay={0} />
     </group>
   )
 })
@@ -297,6 +275,8 @@ const educationalContent = {
 
 const ExoplanetCreator: React.FC = () => {
   const [activeTab, setActiveTab] = useState("planet")
+  const [dpr, setDpr] = useState(1.5)
+  const [backend, setBackend] = useState<string | null>(null)
   const [planetProps, setPlanetProps] = useState({
     radius: 1,
     type: "rock",
@@ -432,11 +412,36 @@ const ExoplanetCreator: React.FC = () => {
 
       </div>
 
-      <Canvas shadows camera={{ position: [0, 5, 15], fov: 60 }}>
+      <Canvas
+        shadows
+        camera={{ position: [0, 5, 15], fov: 60 }}
+        dpr={dpr}
+        /*
+         * WebGPU where the browser has it, WebGL2 everywhere else. WebGPURenderer
+         * picks its own backend at init(), so this is one renderer and one set of
+         * TSL shaders rather than two code paths. If init throws -- an old browser,
+         * a blocked GPU -- the scene falls back to R3F's default WebGL renderer,
+         * and the node materials still compile because TSL emits GLSL too.
+         */
+        gl={async (props: any) => {
+          const { WebGPURenderer } = await import("three/webgpu")
+          const renderer = new WebGPURenderer({ ...props, antialias: true })
+          await renderer.init()
+          setBackend((renderer as any).backend?.isWebGPUBackend ? "WebGPU" : "WebGL2")
+          return renderer as any
+        }}
+      >
+        {/* PRODUCT.md: this has to hold frame rate on a classroom laptop. Rather
+            than guessing at the hardware, watch the actual frame rate and drop
+            resolution when it sags. */}
+        <PerformanceMonitor
+          onDecline={() => setDpr((d) => Math.max(0.75, d - 0.25))}
+          onIncline={() => setDpr((d) => Math.min(2, d + 0.25))}
+        />
         <EnhancedLighting />
         <Suspense fallback={null}>
-          <Planet {...planetProps} />
-          <Star color={starColor} intensity={starIntensity} distance={planetProps.starDistance} size={starSize} />
+          <Planet {...planetProps} starTeff={star.teff} />
+          <Star teff={star.teff} intensity={starIntensity} distance={planetProps.starDistance} size={starSize} />
         </Suspense>
         <OrbitControls enableZoom={true} maxDistance={20} minDistance={5} />
         <Stars radius={300} depth={100} count={2000} factor={4} saturation={0} fade speed={1} />

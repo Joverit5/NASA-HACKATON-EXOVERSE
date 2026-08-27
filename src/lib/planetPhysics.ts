@@ -293,7 +293,7 @@ export function formatDays(days: number): string {
 export function formatDepth(depth: number): string {
   const ppm = depth * 1e6
   if (ppm >= 10000) return `${(ppm / 10000).toFixed(2)} %`
-  return `${Math.round(ppm).toLocaleString()} ppm`
+  return `${Math.round(ppm).toLocaleString("en-US")} ppm`
 }
 
 /**

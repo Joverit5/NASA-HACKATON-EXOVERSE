@@ -90,5 +90,5 @@ export function depthPpm(depth: number | null): string {
   if (depth === null || !Number.isFinite(depth)) return "—"
   const ppm = depth * 1e6
   if (ppm >= 10000) return `${(ppm / 10000).toFixed(1)}%`
-  return `${Math.round(ppm).toLocaleString()} ppm`
+  return `${Math.round(ppm).toLocaleString("en-US")} ppm`
 }

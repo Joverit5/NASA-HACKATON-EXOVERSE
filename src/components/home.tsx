@@ -34,7 +34,13 @@ const CosmicCreditsSection = dynamic(() => import("@/src/components/ui/cosmic-cr
   loading: () => <div className="h-screen bg-transparent" />,
 })
 
-export default function Home({ featured }: { featured: ProcessedExoplanet | null }) {
+export default function Home({
+  featured,
+  poolSize,
+}: {
+  featured: ProcessedExoplanet | null
+  poolSize: number
+}) {
   const { scrollYProgress } = useScroll()
   const containerRef = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLDivElement>(null)
@@ -99,6 +105,11 @@ export default function Home({ featured }: { featured: ProcessedExoplanet | null
               {featured ? featured.name :"Exploring Exoplanets"}
             </h1>
             <p className="mt-6 text-lg md:text-xl text-ink-dim leading-relaxed max-w-2xl">
+              {poolSize > 0 && (
+                <span className="font-mono text-xs text-ink-faint block mb-3 tabular-nums">
+                  Drawn at random from {poolSize.toLocaleString("en-US")} confirmed transiting worlds
+                </span>
+              )}
               Every planet here entered the record the same way: as a dip in its
               star's light. Scroll to walk the crossing.
             </p>

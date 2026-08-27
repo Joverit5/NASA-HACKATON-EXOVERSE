@@ -55,7 +55,7 @@ function CountingNumber({ value }: { value: number }) {
 
   return (
     <motion.span ref={ref} className="font-mono text-7xl md:text-8xl font-light leading-none tracking-tight tabular-nums text-ink">
-      {useTransform(spring, (latest) => Math.round(latest).toLocaleString())}
+      {useTransform(spring, (latest) => Math.round(latest).toLocaleString("en-US"))}
     </motion.span>
   )
 }
