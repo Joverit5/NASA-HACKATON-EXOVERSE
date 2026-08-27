@@ -13,6 +13,15 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/src/compo
 import { ChevronUp, ChevronLeft, Trophy, Sun, SatelliteIcon, CircleDot, Info, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { achievementsService } from "@/src/lib/achievementsService"
+import {
+  derivePlanet,
+  sliderToAu,
+  starSpec,
+  blackbodyRgb,
+  starLightIntensity,
+  type DerivedPlanet,
+} from "@/src/lib/planetPhysics"
+import { PlanetReadout } from "@/src/components/planet-readout"
 
 const contrastColors = [
   "#FF6B6B",
@@ -298,7 +307,7 @@ const ExoplanetCreator: React.FC = () => {
     starDistance: 50,
     textureType: "rock",
   })
-  const [planetInfo, setPlanetInfo] = useState<string | null>(null)
+  const [derived, setDerived] = useState<DerivedPlanet | null>(null)
   const [showAchievement, setShowAchievement] = useState(false)
   const [currentAchievement, setCurrentAchievement] = useState<any | null>(null)
   const [showEducation, setShowEducation] = useState(false)
@@ -316,67 +325,36 @@ const ExoplanetCreator: React.FC = () => {
     setPlanetProps((prev) => ({ ...prev, [prop]: value }))
   }
 
+  const star = useMemo(() => starSpec(planetProps.starType), [planetProps.starType])
+
+  // Colour, brightness and size now come from the real stellar values rather than
+  // three hard-coded switch statements. #ffff00 is not a colour any star is: the Sun
+  // is white, and looks yellow from Earth only because the atmosphere scatters blue.
   const starColor = useMemo(() => {
-    switch (planetProps.starType) {
-      case "redDwarf":
-        return new THREE.Color(0xff4500)
-      case "yellowDwarf":
-        return new THREE.Color(0xffff00)
-      case "giant":
-        return new THREE.Color(0xffd700)
-      default:
-        return new THREE.Color(0xffff00)
-    }
-  }, [planetProps.starType])
+    const { r, g, b } = blackbodyRgb(star.teff)
+    return new THREE.Color(r, g, b)
+  }, [star.teff])
 
-  const starIntensity = useMemo(() => {
-    switch (planetProps.starType) {
-      case "redDwarf":
-        return 12
-      case "yellowDwarf":
-        return 18
-      case "giant":
-        return 30
-      default:
-        return 18
-    }
-  }, [planetProps.starType])
+  const starIntensity = useMemo(() => starLightIntensity(star.luminosity), [star.luminosity])
 
-  const starSize = useMemo(() => {
-    switch (planetProps.starType) {
-      case "redDwarf":
-        return 3
-      case "yellowDwarf":
-        return 5
-      case "giant":
-        return 15
-      default:
-        return 5
-    }
-  }, [planetProps.starType])
+  // Real radius ratio, compressed logarithmically so a 25 R☉ giant and a 0.36 R☉
+  // dwarf both stay in frame.
+  const starSize = useMemo(() => 5 * (1 + Math.log10(star.radius + 0.1) * 0.9), [star.radius])
 
   const generatePlanetInfo = useCallback(() => {
-    const mass = (Math.random() * 10 + 0.1).toFixed(2)
-    const gravity = (Math.random() * 20 + 1).toFixed(2)
-    const temperature = Math.floor(Math.random() * 1000 - 200)
-    const atmosphere = Math.random() > 0.5 ? "Yes" : "No"
-    const possibleLife = Math.random() > 0.8 ? "Possible" : "Unlikely"
-    const orbitalPeriod = (Math.random() * 500 + 10).toFixed(1)
-    const distance = (Math.random() * 100 + 0.5).toFixed(2)
+    // Every figure below is derived from the controls the visitor set. This used to
+    // be Math.random() for mass, gravity, temperature, period and even the orbital
+    // distance the slider had just fixed -- nothing they built affected anything.
+    const result = derivePlanet({
+      radiusEarth: planetProps.radius,
+      type: planetProps.type,
+      starId: planetProps.starType,
+      semiMajorAxisAu: sliderToAu(planetProps.starDistance),
+      moons: planetProps.satelliteCount,
+      rings: planetProps.ringCount,
+    })
 
-    const info = `
-Mass: ${mass} Earth masses
-Surface Gravity: ${gravity} m/s²
-Average Temperature: ${temperature}°C
-Atmosphere: ${atmosphere}
-Orbital Period: ${orbitalPeriod} days
-Distance from Star: ${distance} AU
-Potential for Life: ${possibleLife}
-Planet Type: ${planetProps.type.charAt(0).toUpperCase() + planetProps.type.slice(1)}
-Number of Moons: ${planetProps.satelliteCount}
-    `
-
-    setPlanetInfo(info)
+    setDerived(result)
     setCreationCount((prev) => prev + 1)
 
     if (creationCount === 0) {
@@ -387,9 +365,8 @@ Number of Moons: ${planetProps.satelliteCount}
         setAchievements(achievementsService.getAllAchievements())
         setTimeout(() => setShowAchievement(false), 5000)
       }
-    
     }
-  }, [planetProps.type, planetProps.satelliteCount, creationCount])
+  }, [planetProps, creationCount])
 
   const handleShowEducationalInfo = useCallback(() => {
     const content = {
@@ -518,7 +495,7 @@ Number of Moons: ${planetProps.satelliteCount}
               </section>
 
               <section>
-                <h3 className="text-lg font-semibold mb-2 text-purple-400">Navigation Controls</h3>
+                <h3 className="text-lg mb-2 text-ink">Navigation Controls</h3>
                 <ul className="text-sm text-gray-300 space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-blue-400 font-bold">•</span>
@@ -675,7 +652,7 @@ Number of Moons: ${planetProps.satelliteCount}
               </section>
 
               <section>
-                <h3 className="text-lg font-semibold mb-3 text-purple-400">Amazing Exoplanet Facts</h3>
+                <h3 className="text-lg mb-3 text-ink">Amazing Exoplanet Facts</h3>
                 <ul className="space-y-2">
                   {educationContent.discoveries.map((fact: string, index: number) => (
                     <li key={index} className="flex items-start gap-2 text-sm text-gray-300">
@@ -690,18 +667,8 @@ Number of Moons: ${planetProps.satelliteCount}
         )}
       </AnimatePresence>
 
-      {planetInfo && (
-        <Card className="absolute bottom-24 right-4 w-80 bg-gray-900/90 backdrop-blur-md text-white border-gray-700">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xl font-bold">Planet Data</h3>
-              <Badge variant="secondary" className="bg-blue-500/20 text-blue-300">
-                Exoplanet #{creationCount}
-              </Badge>
-            </div>
-            <pre className="whitespace-pre-wrap text-sm font-mono leading-relaxed">{planetInfo}</pre>
-          </CardContent>
-        </Card>
+      {derived && (
+        <PlanetReadout planet={derived} index={creationCount} onClose={() => setDerived(null)} />
       )}
 
       <AnimatePresence>
@@ -710,7 +677,7 @@ Number of Moons: ${planetProps.satelliteCount}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
-            className="fixed top-20 right-4 bg-gradient-to-r from-purple-900/90 to-blue-900/90 backdrop-blur-md text-white p-4 rounded-2xl shadow-lg flex items-center space-x-3 border border-yellow-400/50"
+            className="fixed top-20 right-4 bg-surface text-ink p-4 flex items-center space-x-3 border border-mint-deep"
           >
             <Trophy className="h-8 w-8 text-yellow-400" />
             <div>
@@ -768,7 +735,7 @@ const PlanetControls: React.FC<PlanetControlsProps> = ({
               variant={activeTab === "planet" ? "default" : "ghost"}
               size="sm"
               className={`rounded-full ${
-                activeTab === "planet" ? "bg-blue-600 text-white" : "text-white/80 hover:bg-white/10"
+                activeTab === "planet" ? "bg-mint text-void" : "text-ink-dim hover:bg-raised hover:text-ink"
               }`}
               onClick={() => onTabChange("planet")}
             >
@@ -779,7 +746,7 @@ const PlanetControls: React.FC<PlanetControlsProps> = ({
               variant={activeTab === "star" ? "default" : "ghost"}
               size="sm"
               className={`rounded-full ${
-                activeTab === "star" ? "bg-yellow-600 text-white" : "text-white/80 hover:bg-white/10"
+                activeTab === "star" ? "bg-mint text-void" : "text-ink-dim hover:bg-raised hover:text-ink"
               }`}
               onClick={() => onTabChange("star")}
             >
@@ -790,7 +757,7 @@ const PlanetControls: React.FC<PlanetControlsProps> = ({
               variant={activeTab === "system" ? "default" : "ghost"}
               size="sm"
               className={`rounded-full ${
-                activeTab === "system" ? "bg-purple-600 text-white" : "text-white/80 hover:bg-white/10"
+                activeTab === "system" ? "bg-mint text-void" : "text-ink-dim hover:bg-raised hover:text-ink"
               }`}
               onClick={() => onTabChange("system")}
             >
@@ -809,7 +776,8 @@ const PlanetControls: React.FC<PlanetControlsProps> = ({
               >
                 <div>
                   <label htmlFor="planet-size" className="text-sm text-white/90 mb-3 block font-medium">
-                    Planet Size: {planetProps.radius.toFixed(1)}x Earth
+                    Planet radius:{" "}
+                    <span className="font-mono text-ink tabular-nums">{planetProps.radius.toFixed(2)} R⊕</span>
                   </label>
                   <Slider
                     id="planet-size"
@@ -887,7 +855,10 @@ const PlanetControls: React.FC<PlanetControlsProps> = ({
               >
                 <div>
                   <label htmlFor="star-distance" className="text-sm text-white/90 mb-3 block font-medium">
-                    Star Distance: {planetProps.starDistance} units
+                    Orbital distance:{" "}
+                    <span className="font-mono text-ink tabular-nums">
+                      {sliderToAu(planetProps.starDistance).toFixed(3)} AU
+                    </span>
                   </label>
                   <Slider
                     id="star-distance"
@@ -972,7 +943,7 @@ const PlanetControls: React.FC<PlanetControlsProps> = ({
 
           <div className="flex gap-3 mt-6">
             <Button
-              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold"
+              className="flex-1 bg-raised hover:bg-rule text-ink border border-rule transition-colors duration-tick ease-tick"
               onClick={onGeneratePlanetInfo}
             >
               <Sparkles className="h-4 w-4 mr-2" />
@@ -980,7 +951,7 @@ const PlanetControls: React.FC<PlanetControlsProps> = ({
             </Button>
             <Button
               variant="outline"
-              className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+              className="bg-transparent hover:bg-raised text-ink-dim hover:text-ink border border-rule transition-colors duration-tick ease-tick"
               onClick={onShowEducationalInfo}
             >
               <Info className="h-4 w-4 mr-2" />

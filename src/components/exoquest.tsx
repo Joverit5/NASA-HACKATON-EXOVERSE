@@ -217,7 +217,7 @@ const fetchAchievements = async () => {
         transition={{ duration: 0.5 }}
       >
         <CoverParticles />
-        <Card className="w-full max-w-md glassmorphism">
+        <Card className="w-full max-w-md bg-surface border border-rule">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center text-white">
               {isVictory ? "¡Congratulations!" : "Game Over"}
@@ -280,7 +280,7 @@ const fetchAchievements = async () => {
     >
       <CoverParticles />
       <div className="absolute inset-0 bg-gradient-to-br from-black to-purple-500/20" />
-      <Card className="w-full max-w-2xl glassmorphism relative z-10">
+      <Card className="w-full max-w-2xl bg-surface border border-rule relative z-10">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center text-white">
             ExoQuest
@@ -317,7 +317,7 @@ const fetchAchievements = async () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="mt-4 p-4 bg-indigo-800/20 rounded-lg backdrop-blur-md"
+                  className="mt-4 p-4 bg-raised border border-rule"
                 >
                   <h3 className="font-bold mb-2 text-white">Explanation:</h3>
                   <p className="text-white">{currentQuestion.explanation}</p>
@@ -348,7 +348,7 @@ const fetchAchievements = async () => {
           {isAnswered && (
             <Button
               onClick={handleNext}
-              className="mt-4 w-full bg-indigo-700/30 text-white hover:bg-indigo-600/50"
+              className="mt-4 w-full bg-raised text-ink border border-rule hover:bg-rule transition-colors duration-tick ease-tick"
             >
               {currentQuestionIndex < questions.length - 1 ? (
                 <>

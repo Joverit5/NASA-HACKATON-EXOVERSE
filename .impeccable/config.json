@@ -1,3 +1,15 @@
 {
-  "buildPath": "comp"
+  "buildPath": "comp",
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-color",
+        "value": "#4ecdc4",
+        "createdAt": "2026-08-27T00:06:18.899Z",
+        "reason": "planet swatch default: in ExoCreator the planet's colour is the value being edited, not chrome"
+      }
+    ]
+  }
 }
