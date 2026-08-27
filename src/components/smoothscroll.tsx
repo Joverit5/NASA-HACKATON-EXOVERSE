@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import Lenis from "lenis"
+import { useQuality } from "@/src/components/quality-provider"
 
 /**
  * Momentum scrolling for the whole app.
@@ -15,9 +16,12 @@ import Lenis from "lenis"
  * stops, it does not merely shorten.
  */
 export default function SmoothScroll() {
+  const { ambientMotion } = useQuality()
+
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)")
     if (reduced.matches) return
+    if (!ambientMotion) return
 
     const lenis = new Lenis({
       duration: 1.1,
@@ -54,7 +58,7 @@ export default function SmoothScroll() {
       cancelAnimationFrame(frame)
       lenis.destroy()
     }
-  }, [])
+  }, [ambientMotion])
 
   return null
 }

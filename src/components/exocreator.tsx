@@ -3,7 +3,12 @@
 import React, { useState, useMemo, useCallback, useRef, Suspense, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls, Stars, PerformanceMonitor } from "@react-three/drei"
+import { OrbitControls } from "@react-three/drei"
+import { Starfield } from "@/src/components/starfield"
+import { useQuality } from "@/src/components/quality-provider"
+import { QualityControl } from "@/src/components/quality-control"
+import { StarBloom } from "@/src/components/star-bloom"
+import type { QualitySettings } from "@/src/lib/quality"
 import * as THREE from "three"
 import { Button } from "@/src/components/ui/button"
 import { Slider } from "@/src/components/ui/slider"
@@ -110,10 +115,11 @@ interface PlanetProps {
   textureType: string
   /** Host star effective temperature, which sets the atmosphere's scattered colour. */
   starTeff: number
+  quality: QualitySettings
 }
 
 const Planet: React.FC<PlanetProps> = React.memo(
-  ({ radius, color, satelliteCount, ringCount, textureType, starTeff }) => {
+  ({ radius, color, satelliteCount, ringCount, textureType, starTeff, quality }) => {
     const meshRef = useRef<THREE.Mesh>(null!)
 
     const surface: PlanetSurface = textureType === "water" ? "water" : textureType === "gas" ? "gas" : "rock"
@@ -160,14 +166,17 @@ const Planet: React.FC<PlanetProps> = React.memo(
 
     return (
       <group>
-        <mesh ref={meshRef} castShadow receiveShadow material={surfaceMaterial}>
-          <sphereGeometry args={[radius, 96, 96]} />
+        <mesh ref={meshRef} castShadow={quality.shadows} receiveShadow={quality.shadows} material={surfaceMaterial}>
+          <sphereGeometry args={[radius, quality.sphereSegments, quality.sphereSegments]} />
         </mesh>
 
-        {/* The atmospheric shell, lit at the limb where it is optically thickest. */}
-        <mesh material={atmosphereMaterial}>
-          <sphereGeometry args={[radius * 1.045, 64, 64]} />
-        </mesh>
+        {/* The atmospheric shell, lit at the limb where it is optically thickest.
+            The first thing dropped when the device cannot hold the frame rate. */}
+        {quality.atmosphere && (
+          <mesh material={atmosphereMaterial}>
+            <sphereGeometry args={[radius * 1.045, Math.max(24, quality.sphereSegments / 2), Math.max(24, quality.sphereSegments / 2)]} />
+          </mesh>
+        )}
 
         {Array.from({ length: satelliteCount }, (_, i) => (
           <Satellite key={i} radius={radius * 0.1} orbitRadius={radius + 1 + i * 0.5} speed={0.5 + i * 0.2} />
@@ -209,7 +218,7 @@ const Star: React.FC<StarProps> = React.memo(({ teff, intensity, distance, size 
     <group>
       {/* The disc itself, limb-darkened and granulated in the shader. */}
       <mesh position={position} material={starMaterial}>
-        <sphereGeometry args={[size, 64, 64]} />
+        <sphereGeometry args={[size, 48, 48]} />
       </mesh>
 
       {/* The light the planet is actually lit by, in the star's own colour. */}
@@ -275,7 +284,7 @@ const educationalContent = {
 
 const ExoplanetCreator: React.FC = () => {
   const [activeTab, setActiveTab] = useState("planet")
-  const [dpr, setDpr] = useState(1.5)
+  const quality = useQuality()
   const [backend, setBackend] = useState<string | null>(null)
   const [planetProps, setPlanetProps] = useState({
     radius: 1,
@@ -368,21 +377,27 @@ const ExoplanetCreator: React.FC = () => {
     <div className="relative w-full h-screen bg-black">
       <div className="absolute top-4 left-4 z-10 flex items-center gap-4">
         <Link href="/">
-          <Button variant="ghost" size="icon" className="rounded-full bg-white/50 backdrop-blur-md hover:bg-white/70">
+          <Button variant="ghost" size="icon" className="rounded-full border border-rule bg-surface text-ink-dim hover:bg-raised hover:text-ink">
             <ChevronLeft className="h-5 w-5" />
           </Button>
         </Link>
-        <div className="bg-black/50 backdrop-blur-md rounded-full px-4 py-2 text-sm text-white/80 flex items-center gap-2">
-          <Sparkles className="h-4 w-4" />
-          You are 1,799 light-years from Earth
+        {/* This read "You are 1,799 light-years from Earth" -- a hardcoded number
+            presented as a fact about a world the visitor had just invented. These
+            two values are real: they come from the controls. */}
+        <div className="flex items-center gap-3 border border-rule bg-surface/90 px-4 py-2">
+          <Sparkles className="h-4 w-4 text-mint" aria-hidden />
+          <span className="font-mono text-xs uppercase tracking-[0.14em] text-ink-dim tabular-nums">
+            {star.label} · {sliderToAu(planetProps.starDistance).toFixed(3)} AU
+          </span>
         </div>
       </div>
 
       <div className="absolute top-4 right-4 z-20 flex gap-2">
+        <QualityControl />
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full bg-white/50 backdrop-blur-md hover:bg-white/70"
+          className="rounded-full border border-rule bg-surface text-ink-dim hover:bg-raised hover:text-ink"
           onClick={handleShowHelp}
         >
           <svg
@@ -404,7 +419,7 @@ const ExoplanetCreator: React.FC = () => {
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full bg-white/50 backdrop-blur-md hover:bg-white/70"
+          className="rounded-full border border-rule bg-surface text-ink-dim hover:bg-raised hover:text-ink"
           onClick={handleShowEducationalInfo}
         >
           <Info className="h-5 w-5" />
@@ -413,9 +428,9 @@ const ExoplanetCreator: React.FC = () => {
       </div>
 
       <Canvas
-        shadows
+        shadows={quality.shadows}
         camera={{ position: [0, 5, 15], fov: 60 }}
-        dpr={dpr}
+        dpr={quality.dpr}
         /*
          * WebGPU where the browser has it, WebGL2 everywhere else. WebGPURenderer
          * picks its own backend at init(), so this is one renderer and one set of
@@ -431,20 +446,17 @@ const ExoplanetCreator: React.FC = () => {
           return renderer as any
         }}
       >
-        {/* PRODUCT.md: this has to hold frame rate on a classroom laptop. Rather
-            than guessing at the hardware, watch the actual frame rate and drop
-            resolution when it sags. */}
-        <PerformanceMonitor
-          onDecline={() => setDpr((d) => Math.max(0.75, d - 0.25))}
-          onIncline={() => setDpr((d) => Math.min(2, d + 0.25))}
-        />
         <EnhancedLighting />
         <Suspense fallback={null}>
-          <Planet {...planetProps} starTeff={star.teff} />
+          <Planet {...planetProps} starTeff={star.teff} quality={quality} />
           <Star teff={star.teff} intensity={starIntensity} distance={planetProps.starDistance} size={starSize} />
         </Suspense>
+        {quality.bloom && <StarBloom />}
         <OrbitControls enableZoom={true} maxDistance={20} minDistance={5} />
-        <Stars radius={300} depth={100} count={2000} factor={4} saturation={0} fade speed={1} />
+        {/* drei's <Stars> builds a raw GLSL ShaderMaterial, which cannot compile
+            on the WebGPU backend -- the stars vanished when the renderer changed.
+            This one is TSL and works on both. */}
+        <Starfield count={quality.starfield} animate={quality.ambientMotion && !quality.reducedMotion} />
       </Canvas>
 
       <PlanetControls

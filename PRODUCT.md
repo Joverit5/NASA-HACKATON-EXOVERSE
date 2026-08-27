@@ -31,7 +31,7 @@ Live at https://exoverse.vercel.app. The project began as a NASA Space Apps hack
 - Visitors arrive overwhelmingly from a shared link (social, a class, a submission page) rather than from search or a deliberate return visit. First-viewport impact carries disproportionate weight.
 - Sessions are typically short and single-visit. There are no accounts and no server-side persistence; progress lives in the visitor's browser.
 - Devices span classroom laptops, personal desktops, and phones. Mobile is not a secondary case.
-- The 3D surfaces (ExoCreator, planet visualizations) are GPU-dependent and run on hardware the team does not control, including low-end school machines.
+- The 3D surfaces (ExoCreator, planet visualizations) are GPU-dependent and run on hardware the team does not control, including low-end school machines. This is handled by measuring and stepping down, not by capping the default.
 - ExoVis depends on a third-party public archive that can be slow or unavailable; that dependency is visible in the experience.
 
 ## Capabilities and Constraints
@@ -45,10 +45,11 @@ Live at https://exoverse.vercel.app. The project began as a NASA Space Apps hack
 
 **Technical facts:**
 
-- Next.js 14 App Router, React 18, TypeScript, Tailwind + shadcn/ui primitives (Radix), Framer Motion, React Three Fiber / drei over Three.js. Deployed on Vercel.
+- Next.js 16 App Router with Turbopack, React 19, TypeScript, Tailwind + shadcn/ui primitives (Radix), Framer Motion, React Three Fiber 9 / drei 10 over Three.js 0.185. Deployed on Vercel.
 - Exoplanet data is fetched server-side through `app/api/exoplanets/route.ts` against the NASA Exoplanet Archive TAP API. Habitability and planet-type classification are derived in-app, not supplied by the archive.
 - Achievements are stored in `localStorage` only (`src/lib/achievementsService.ts`); three exist today, one per interactive pillar. No backend, no accounts, no analytics.
-- Fonts are self-hosted Geist Sans and Geist Mono. Tailwind carries a default shadcn token set that the app largely bypasses in favor of a hardcoded black/white space palette.
+- Type is Roboto Serif (variable, optical-size axis) for narrative and Roboto Mono for every archive figure, served through next/font. The shadcn token aliases resolve through the project's own palette rather than carrying a second one.
+- The ExoCreator scene renders through WebGPU where available and WebGL2 otherwise, with materials written in TSL so one shader source serves both backends.
 
 **Explicitly changeable:** everything outside the four pillars. The data source, copy, credits presentation, visual system, and component structure are all open to proposal and replacement.
 
@@ -78,12 +79,12 @@ Live at https://exoverse.vercel.app. The project began as a NASA Space Apps hack
 2. **Real data, honestly labeled.** The archive is the product's spine. Derived values (habitability, planet type) are shown as the interpretations they are, never as archive facts.
 3. **Wonder that survives contact.** The first viewport should stop someone; the next ten minutes must reward them with substance. Spectacle that leads nowhere fails both the visitor and the evaluator.
 4. **One experience, three audiences.** A twelve-year-old, a hobbyist, and a professor use the same screens. Depth is layered in, not gated behind a mode switch.
-5. **Runs on the machine it's opened on.** A 3D-heavy site that stutters on a classroom laptop or a phone has failed, however good it looks on a workstation.
+5. **Full quality first, degrade on evidence.** The site opens at its best and uses whatever it needs to look right. It does not budget down in advance for hardware it has not met, and a weak-hardware assumption is never a reason to ship a lesser default. When measured frame rate shows the machine cannot hold it, quality steps down in defined tiers — and that decision always comes from measurement on the actual device, never from a guess about it. The lowest tier must still be a good page, not an apology.
 
 ## Accessibility & Inclusion
 
 No formal standard has been mandated. Product-specific needs that follow from the audiences and stack:
 
-- Classroom and low-end hardware means motion and 3D density are an accessibility concern, not only a performance one; honor reduced-motion preferences and degrade gracefully.
+- Motion and 3D density are an accessibility concern as well as a performance one. The `prefers-reduced-motion` preference is a separate axis from the performance tier and is honored on its own terms: a fast machine whose owner asked for less motion still gets less motion.
 - The astronomy vocabulary is the subject matter, so terms must be defined in place rather than assumed — a comprehension requirement for the student and general-public audiences.
 - Data is conveyed through color-coded planet visualizations and habitability badges; color must never be the only carrier of that meaning.

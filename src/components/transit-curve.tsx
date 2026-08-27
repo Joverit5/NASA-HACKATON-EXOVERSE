@@ -3,6 +3,7 @@
 import { useId } from "react"
 import type { ProcessedExoplanet } from "@/src/lib/exoplanetCatalog"
 import { sampleCurve, curvePath, transitHalfWidth, depthPpm } from "@/src/lib/transit"
+import { useQuality } from "@/src/components/quality-provider"
 
 /**
  * The signature surface: a real transit light curve, and the page's navigation.
@@ -35,11 +36,12 @@ const VIEW_H = 420
 
 export function TransitCurve({ planet, still = false, compact = false, className }: TransitCurveProps) {
   const uid = useId().replace(/:/g, "")
+  const { curveSamples, ambientMotion, reducedMotion } = useQuality()
   const depth = planet.transitDepth ?? 0
   const periodDays = Number.parseFloat(planet.orbitalPeriod)
   const period = Number.isNaN(periodDays) ? null : periodDays
 
-  const points = sampleCurve({ depth: depth || 0.02, periodDays: period }, compact ? 72 : 240)
+  const points = sampleCurve({ depth: depth || 0.02, periodDays: period }, compact ? Math.round(curveSamples / 3) : curveSamples)
   const path = curvePath(points, VIEW_W, VIEW_H, depth || 0.02)
   const half = transitHalfWidth(period)
 
@@ -180,7 +182,7 @@ export function TransitCurve({ planet, still = false, compact = false, className
           The playhead. Scroll drives it across the curve; without scroll-driven
           animation support, or under reduced motion, it simply rests at mid-transit.
         */}
-        {!still && (
+        {!still && ambientMotion && !reducedMotion && (
           <g className="curve-playhead">
             <line x1="0" y1={baseY - 40} x2="0" y2={floorY + 40} stroke="hsl(var(--ink))" strokeWidth="1.5" />
             <circle cx="0" cy={baseY - 40} r="4" fill="hsl(var(--ink))" />

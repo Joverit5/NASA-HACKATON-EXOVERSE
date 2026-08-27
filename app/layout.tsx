@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next"
 import { Roboto_Serif, Roboto_Mono } from "next/font/google"
 import "./globals.css"
 import SmoothScroll from "@/src/components/smoothscroll"
+import { QualityProvider } from "@/src/components/quality-provider"
 
 /**
  * Roboto Serif carries the narrative. Its optical-size axis (8–144) means one file
@@ -50,8 +51,10 @@ export default function RootLayout({
         <link rel="preload" href="/images/stars-bg.webp" as="image" />
       </head>
       <body className={`${serif.variable} ${mono.variable} antialiased`}>
-        <SmoothScroll />
-        {children}
+        <QualityProvider>
+          <SmoothScroll />
+          {children}
+        </QualityProvider>
       </body>
     </html>
   )

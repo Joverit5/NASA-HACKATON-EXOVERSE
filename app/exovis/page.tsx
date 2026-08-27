@@ -27,6 +27,8 @@ import {
   Database,
 } from "lucide-react"
 import { useNasaExoplanets } from "@/src/hooks/usenasaexoplanets"
+import { useQuality } from "@/src/components/quality-provider"
+import { QualityControl } from "@/src/components/quality-control"
 import { TransitCurve } from "@/src/components/transit-curve"
 import { depthPpm } from "@/src/lib/transit"
 
@@ -55,6 +57,7 @@ export default function ExovizCatalog() {
     currentHabitabilityFilter,
     currentSortBy,
   } = useNasaExoplanets()
+  const quality = useQuality()
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -144,7 +147,7 @@ export default function ExovizCatalog() {
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-void" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800/20 via-transparent to-transparent" />
-        <CoverParticles />
+        {quality.ambientMotion && <CoverParticles />}
       </div>
 
       {/* Navigation */}
