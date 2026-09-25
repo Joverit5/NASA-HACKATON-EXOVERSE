@@ -31,6 +31,16 @@ export interface QualitySettings {
   curveSamples: number
   /** Perpetual ambient loops outside the 3D scene. */
   ambientMotion: boolean
+  /** Vertex displacement and gradient-perturbed normals on planet surfaces. */
+  relief: boolean
+  /** An independently rotating cloud deck on rocky and ocean worlds. */
+  clouds: boolean
+  /** The star's outer corona shell. */
+  corona: boolean
+  /** Noise octaves in the surface shaders. */
+  octaves: number
+  /** Ring particles per band; the ring is instanced bodies, not a painted disc. */
+  ringParticles: number
 }
 
 export const TIERS: Record<QualityTier, QualitySettings> = {
@@ -46,6 +56,11 @@ export const TIERS: Record<QualityTier, QualitySettings> = {
     shadows: true,
     curveSamples: 320,
     ambientMotion: true,
+    relief: true,
+    clouds: true,
+    corona: true,
+    octaves: 6,
+    ringParticles: 900,
   },
   /* The first step down: the expensive whole-frame effects go, the geometry and
      the materials stay. Visually very close; substantially cheaper. */
@@ -59,6 +74,11 @@ export const TIERS: Record<QualityTier, QualitySettings> = {
     shadows: false,
     curveSamples: 180,
     ambientMotion: true,
+    relief: true,
+    clouds: true,
+    corona: false,
+    octaves: 4,
+    ringParticles: 320,
   },
   /* The floor. Still the same design, the same data, the same shaders — just no
      perpetual motion and no per-pixel extras. Nothing informational is removed. */
@@ -72,6 +92,11 @@ export const TIERS: Record<QualityTier, QualitySettings> = {
     shadows: false,
     curveSamples: 96,
     ambientMotion: false,
+    relief: false,
+    clouds: false,
+    corona: false,
+    octaves: 3,
+    ringParticles: 90,
   },
 }
 
@@ -127,7 +152,7 @@ export const TIER_LABELS: Record<QualityTier, string> = {
 }
 
 export const TIER_DESCRIPTIONS: Record<QualityTier, string> = {
-  full: "Everything on: atmospheres, bloom, full-resolution surfaces.",
-  balanced: "Atmospheres kept, bloom and shadows dropped, lower resolution.",
+  full: "Everything on: surface relief, cloud decks, atmospheres, corona, bloom, 900 ring particles per band.",
+  balanced: "Relief and clouds kept; corona, bloom and shadows dropped. Fewer ring particles.",
   essential: "No perpetual motion and no per-pixel extras. Same data, same design.",
 }

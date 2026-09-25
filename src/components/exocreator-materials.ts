@@ -4,6 +4,7 @@ import {
   vec3,
   uniform,
   positionLocal,
+  normalLocal,
   normalView,
   positionViewDirection,
   mix,
@@ -14,6 +15,9 @@ import {
   oneMinus,
   sin,
   time,
+  normalize,
+  cross,
+  transformNormalToView,
   mx_noise_float,
   mx_fractal_noise_float,
 } from "three/tsl"
@@ -24,89 +28,162 @@ import { blackbodyRgb } from "@/src/lib/planetPhysics"
  * Node materials for the ExoCreator scene, written in TSL.
  *
  * TSL compiles to WGSL under WebGPU and to GLSL under the WebGL2 fallback, so one
- * source serves both backends. That matters here beyond novelty: PRODUCT.md says
- * this has to run on a classroom laptop, and without a single shader source we
- * would be maintaining two.
+ * source serves both backends and the quality tier decides how much of it runs.
  *
  * What this replaces: a 512x256 canvas the CPU filled with a few thousand
- * Math.random() dots and then uploaded as a texture. It was low resolution, it
- * pixelated on approach, it cost a main-thread stall on every parameter change,
- * and it looked the same whether the planet was rock, ocean or gas. Surface detail
- * is now evaluated per-pixel on the GPU at whatever resolution the viewer is at.
+ * Math.random() dots and uploaded as a texture. Surface detail is now evaluated
+ * per-pixel on the GPU, sampled in 3D on the sphere so there is no UV seam and no
+ * pole pinching.
  */
+
+/* ------------------------------------------------------------------- noise */
+
+function fbm(p: any, scale: number, octaves: number) {
+  return mx_fractal_noise_float(p.mul(scale), octaves, 2.0, 0.5)
+}
+
+/**
+ * Perturb the shading normal from the gradient of the height field.
+ *
+ * Displacing vertices alone leaves the lighting flat, because the normals still
+ * describe a smooth sphere. Sampling the height at two small offsets along the
+ * surface and rebuilding the normal from that gradient is what makes the
+ * terminator pick out relief instead of sliding across a billiard ball.
+ */
+function perturbedNormal(scale: number, octaves: number, strength: number) {
+  // Capped: three samples at six octaves each is ~24 octaves per pixel, and the
+  // gradient only needs the high-frequency part to read as relief.
+  const o = Math.min(octaves, 3)
+  const eps = 0.035
+
+  // Two directions across the surface, built from the geometric normal.
+  const n = normalize(normalLocal)
+  const tangent = normalize(cross(n, vec3(0.0, 1.0, 0.0).add(vec3(0.001, 0.0, 0.002))))
+  const bitangent = normalize(cross(n, tangent))
+
+  const h0 = fbm(positionLocal, scale, o)
+  const hT = fbm(positionLocal.add(tangent.mul(eps)), scale, o)
+  const hB = fbm(positionLocal.add(bitangent.mul(eps)), scale, o)
+
+  const dT = hT.sub(h0).mul(strength)
+  const dB = hB.sub(h0).mul(strength)
+
+  return transformNormalToView(normalize(n.sub(tangent.mul(dT)).sub(bitangent.mul(dB))))
+}
 
 /* ------------------------------------------------------------------ planets */
 
-/**
- * Fractal Brownian motion over the local position of the sphere. Because it is
- * sampled in 3D on the surface itself there is no UV seam and no pole pinching,
- * which the equirectangular canvas texture had at both ends.
- */
-function surfaceNoise(scale: number, octaves: number) {
-  return mx_fractal_noise_float(positionLocal.mul(scale), octaves, 2.0, 0.5)
-}
-
 export type PlanetSurface = "rock" | "water" | "gas"
 
-export function createPlanetMaterial(surface: PlanetSurface, colorHex: string): MeshStandardNodeMaterial {
+export interface PlanetMaterialOptions {
+  /** Equilibrium temperature in kelvin, which decides whether the world glows. */
+  temperatureK: number
+  /** Vertex displacement and normal detail. Off on the essential tier. */
+  relief: boolean
+  /** Shading octaves; fewer is cheaper and still reads correctly. */
+  octaves: number
+}
+
+const DEFAULT_OPTIONS: PlanetMaterialOptions = { temperatureK: 255, relief: true, octaves: 6 }
+
+export function createPlanetMaterial(
+  surface: PlanetSurface,
+  colorHex: string,
+  options: Partial<PlanetMaterialOptions> = {},
+): MeshStandardNodeMaterial {
+  const { temperatureK, relief, octaves } = { ...DEFAULT_OPTIONS, ...options }
   const material = new MeshStandardNodeMaterial()
   const base = uniform(new THREE.Color(colorHex))
 
+  /*
+   * Thermal emission. Above roughly 800 K a body radiates visibly in its own
+   * right — this is why hot Jupiters are detectable in secondary eclipse, and why
+   * their night sides are not black. The colour is the blackbody colour of the
+   * planet itself, not of its star.
+   */
+  const glowStrength = Math.max(0, Math.min(1, (temperatureK - 750) / 1400))
+  if (glowStrength > 0.001) {
+    const { r, g, b } = blackbodyRgb(Math.max(1000, temperatureK))
+    material.emissiveNode = vec3(r, g, b).mul(float(glowStrength * 0.9))
+  }
+
   if (surface === "gas") {
-    /* Latitudinal banding, the way a gas giant actually organises itself: zonal
-       flow stretches turbulence into bands parallel to the equator. The bands are
-       driven by local Y, then distorted by noise so they meander instead of
-       reading as stripes. */
-    const turbulence = surfaceNoise(2.2, 4).mul(0.35)
-    const bands = sin(positionLocal.y.mul(11.0).add(turbulence.mul(6.0)))
-      .mul(0.5)
-      .add(0.5)
+    /* Latitudinal banding, the way zonal flow really organises a giant: turbulence
+       stretched into bands parallel to the equator, meandering rather than striped. */
+    const turbulence = fbm(positionLocal, 2.2, octaves - 2).mul(0.35)
+    const bands = sin(positionLocal.y.mul(11.0).add(turbulence.mul(6.0))).mul(0.5).add(0.5)
+    const storm = smoothstep(0.62, 0.94, fbm(positionLocal, 3.4, octaves - 1))
 
-    const storm = smoothstep(0.62, 0.94, surfaceNoise(3.4, 5))
-
-    const light = base.mul(1.25)
-    const dark = base.mul(0.55)
-    const banded = mix(dark, light, bands)
-
+    const banded = mix(base.mul(0.55), base.mul(1.25), bands)
     material.colorNode = mix(banded, base.mul(1.6), storm)
     material.roughnessNode = float(0.95)
     material.metalnessNode = float(0.0)
+
+    // A gas giant has no solid relief, but its cloud decks do have depth.
+    if (relief) material.normalNode = perturbedNormal(2.6, octaves - 2, 1.4)
     return material
   }
 
   if (surface === "water") {
-    /* An ocean world: a low-frequency continental mask with a hard coastline, and
-       roughness that actually differs between land and sea, so the star glints off
-       the water and not off the continents. */
-    const continents = surfaceNoise(1.6, 5)
+    const continents = fbm(positionLocal, 1.6, octaves)
     const land = smoothstep(0.02, 0.14, continents)
 
-    const sea = base.mul(0.75)
-    const shallow = base.mul(1.35)
-    const coastal = mix(sea, shallow, smoothstep(-0.06, 0.02, continents))
-
-    const rock = vec3(0.32, 0.29, 0.24).mul(oneMinus(surfaceNoise(6.0, 4).mul(0.4)))
+    const coastal = mix(base.mul(0.75), base.mul(1.35), smoothstep(-0.06, 0.02, continents))
+    const rock = vec3(0.32, 0.29, 0.24).mul(oneMinus(fbm(positionLocal, 6.0, octaves - 2).mul(0.4)))
 
     material.colorNode = mix(coastal, rock, land)
     // Water is a mirror, land is not. This is the whole reason to have a shader.
     material.roughnessNode = mix(float(0.08), float(0.92), land)
     material.metalnessNode = float(0.0)
+
+    if (relief) {
+      // Only the land is displaced; an ocean surface is level by definition.
+      material.positionNode = positionLocal.add(normalLocal.mul(land.mul(continents).mul(0.035)))
+      material.normalNode = perturbedNormal(4.0, octaves - 1, 2.2)
+    }
     return material
   }
 
-  /* Rock: broad terrain plus fine cratering, with the fine detail modulating the
-     normal so the terminator picks out relief instead of sliding across a
-     billiard ball. */
-  const terrain = surfaceNoise(2.4, 6)
+  /* Rock: broad terrain plus fine cratering, displaced so the silhouette itself
+     is uneven rather than a perfect circle. */
+  const terrain = fbm(positionLocal, 2.4, octaves)
   const craters = smoothstep(0.55, 0.85, abs(mx_noise_float(positionLocal.mul(9.0))))
 
-  const low = base.mul(0.5)
-  const high = base.mul(1.3)
-  const ground = mix(low, high, clamp(terrain.add(0.5), 0.0, 1.0))
-
+  const ground = mix(base.mul(0.5), base.mul(1.3), clamp(terrain.add(0.5), 0.0, 1.0))
   material.colorNode = mix(ground, ground.mul(0.62), craters)
   material.roughnessNode = clamp(float(0.95).sub(terrain.mul(0.2)), 0.4, 1.0)
   material.metalnessNode = float(0.02)
+
+  if (relief) {
+    material.positionNode = positionLocal.add(normalLocal.mul(terrain.mul(0.055)))
+    material.normalNode = perturbedNormal(3.2, octaves, 3.0)
+  }
+  return material
+}
+
+/* ------------------------------------------------------------------ clouds */
+
+/**
+ * A cloud deck on its own shell, rotating independently of the surface.
+ *
+ * Real atmospheres are not locked to the ground — Venus's upper clouds lap the
+ * planet in four days while its surface takes 243. Giving the deck its own mesh
+ * and its own rotation is what sells a planet as a world with weather rather than
+ * a painted ball.
+ */
+export function createCloudMaterial(colorHex: string): MeshStandardNodeMaterial {
+  const material = new MeshStandardNodeMaterial()
+
+  const drift = positionLocal.add(vec3(time.mul(0.012), 0.0, 0.0))
+  const density = fbm(drift, 3.1, 5)
+  const cover = smoothstep(0.06, 0.4, density)
+
+  material.colorNode = vec3(1.0, 0.99, 0.97)
+  material.opacityNode = cover.mul(0.72)
+  material.roughnessNode = float(1.0)
+  material.metalnessNode = float(0.0)
+  material.transparent = true
+  material.depthWrite = false
   return material
 }
 
@@ -117,29 +194,35 @@ export function createPlanetMaterial(surface: PlanetSurface, colorHex: string): 
  *
  * Rendered on the back faces of a slightly larger sphere and added to the frame,
  * so it reads as a glow around the planet's edge rather than a film over its face.
- * The Fresnel term concentrates it at the limb, which is where an atmosphere is
- * optically thickest from our viewpoint — the same reason Earth's is a thin blue
- * arc from orbit rather than an even haze.
+ * The Fresnel term concentrates it at the limb, where an atmosphere is optically
+ * thickest from our viewpoint — the same reason Earth's is a thin blue arc from
+ * orbit rather than an even haze.
  *
- * Colour comes from the host star's temperature: a red dwarf's atmosphere cannot
- * scatter blue light it does not emit.
+ * Colour comes from the host star: a red dwarf's atmosphere cannot scatter blue
+ * light it never emitted.
  */
 export function createAtmosphereMaterial(starTeff: number, surface: PlanetSurface): MeshBasicNodeMaterial {
   const material = new MeshBasicNodeMaterial()
 
   const { r, g, b } = blackbodyRgb(starTeff)
   // Rayleigh scattering goes as 1/lambda^4, so the blue end survives the trip
-  // through the shell far better than the red end. Bias the starlight accordingly.
+  // through the shell far better than the red end.
   const scattered = new THREE.Color(r * 0.45, g * 0.72, b * 1.0)
   if (surface === "gas") scattered.multiplyScalar(0.85)
 
+  // Light that grazes the limb travels through far more air, which strips the blue
+  // out of it. That is sunset, and it belongs at the very edge of the disc.
+  const reddened = new THREE.Color(r * 1.0, g * 0.55, b * 0.28)
+
   const tint = uniform(scattered)
+  const sunset = uniform(reddened)
 
   // mu is cos(angle) between the surface normal and the eye: 1 head-on, 0 at the limb.
   const mu = normalView.dot(positionViewDirection).abs()
   const rim = pow(oneMinus(mu), 2.4)
+  const grazing = pow(oneMinus(mu), 7.0)
 
-  material.colorNode = tint.mul(rim.mul(1.8))
+  material.colorNode = mix(tint, sunset, clamp(grazing.mul(1.6), 0.0, 1.0)).mul(rim.mul(1.8))
   material.opacityNode = clamp(rim.mul(1.15), 0.0, 0.85)
   material.transparent = true
   material.depthWrite = false
@@ -153,31 +236,54 @@ export function createAtmosphereMaterial(starTeff: number, surface: PlanetSurfac
 /**
  * A star's disc, with the two things that actually make one look like a star.
  *
- * Limb darkening: a star is not a flat disc of uniform brightness. Looking at its
- * edge you see higher, cooler layers of the photosphere, so the limb is dimmer and
- * redder than the centre. This is a real, measurable effect — it is part of how
- * transit depths get modelled in the first place.
+ * Limb darkening: a star is not a flat disc of uniform brightness. At its edge you
+ * see higher, cooler layers of the photosphere, so the limb is dimmer and redder.
+ * This is real and measurable — it is part of how transit depths get modelled.
  *
- * Granulation: the convective cells that tile the photosphere, drifting slowly.
+ * Granulation: the convective cells tiling the photosphere, drifting slowly.
  */
 export function createStarMaterial(teff: number): MeshBasicNodeMaterial {
   const material = new MeshBasicNodeMaterial()
 
   const { r, g, b } = blackbodyRgb(teff)
   const core = uniform(new THREE.Color(r, g, b))
-  // The limb shows cooler gas, so it is dimmer and shifted toward the red.
   const limbTint = uniform(new THREE.Color(r, g * 0.82, b * 0.62))
 
   const mu = clamp(normalView.dot(positionViewDirection).abs(), 0.0, 1.0)
 
-  // Classic linear limb-darkening law: I(mu) / I(1) = 1 - u(1 - mu), u ~ 0.6.
+  // Classic linear limb-darkening law: I(mu)/I(1) = 1 - u(1 - mu), u ~ 0.62.
   const darkening = float(1.0).sub(float(0.62).mul(oneMinus(mu)))
 
-  const granulation = mx_fractal_noise_float(positionLocal.mul(7.0).add(time.mul(0.06)), 4, 2.0, 0.5)
-    .mul(0.12)
-    .add(1.0)
+  // Two scales of convection: broad supergranules under fine granules.
+  const supergranules = fbm(positionLocal.add(vec3(time.mul(0.02), 0.0, 0.0)), 3.0, 3).mul(0.09)
+  const granules = fbm(positionLocal.add(vec3(0.0, time.mul(0.05), 0.0)), 9.0, 4).mul(0.11)
+  const surface = supergranules.add(granules).add(1.0)
 
-  material.colorNode = mix(limbTint, core, pow(mu, 0.55)).mul(darkening).mul(granulation)
+  material.colorNode = mix(limbTint, core, pow(mu, 0.55)).mul(darkening).mul(surface)
+  material.toneMapped = false
+  return material
+}
+
+/**
+ * The corona: the outer atmosphere, far hotter and far fainter than the disc.
+ * Visible around a real star only when the disc itself is blocked, which is why it
+ * belongs on its own shell rather than blended into the photosphere.
+ */
+export function createCoronaMaterial(teff: number): MeshBasicNodeMaterial {
+  const material = new MeshBasicNodeMaterial()
+  const { r, g, b } = blackbodyRgb(teff)
+  const tint = uniform(new THREE.Color(r, g, b))
+
+  const mu = clamp(normalView.dot(positionViewDirection).abs(), 0.0, 1.0)
+  const halo = pow(oneMinus(mu), 3.2)
+  const flicker = sin(time.mul(0.7)).mul(0.06).add(0.94)
+
+  material.colorNode = tint.mul(halo.mul(1.4).mul(flicker))
+  material.opacityNode = clamp(halo.mul(0.9), 0.0, 0.6)
+  material.transparent = true
+  material.depthWrite = false
+  material.side = THREE.BackSide
+  material.blending = THREE.AdditiveBlending
   material.toneMapped = false
   return material
 }
@@ -185,25 +291,21 @@ export function createStarMaterial(teff: number): MeshBasicNodeMaterial {
 /* ------------------------------------------------------------------- rings */
 
 /**
- * Ring particles, shaded so the ring is a field of debris rather than a flat disc.
+ * Ring particles: individual bodies, not a painted disc.
  *
- * Real ring systems live inside the Roche limit, where tidal forces prevent the
- * material from accreting into a moon. That is why Saturn has rings and Earth does
- * not, and it is why the outer radius here is derived rather than decorative.
+ * Ring systems live inside the Roche limit, where tidal forces prevent material
+ * from accreting into a moon. That is why Saturn has rings and Earth does not, and
+ * it is why the outer radius is derived rather than chosen.
  */
-export function createRingMaterial(colorHex: string): MeshBasicNodeMaterial {
-  const material = new MeshBasicNodeMaterial()
+export function createRingParticleMaterial(colorHex: string): MeshStandardNodeMaterial {
+  const material = new MeshStandardNodeMaterial()
   const base = uniform(new THREE.Color(colorHex))
 
-  // Radial banding: gaps carved by resonances with the moons.
-  const radial = positionLocal.xz.length()
-  const gaps = smoothstep(0.35, 0.65, mx_noise_float(vec3(radial.mul(26.0), 0.0, 0.0)).add(0.5))
-
-  material.colorNode = base.mul(mix(float(0.35), float(1.0), gaps))
-  material.opacityNode = mix(float(0.12), float(0.7), gaps)
-  material.transparent = true
-  material.depthWrite = false
-  material.side = THREE.DoubleSide
+  // Ring material is dirty ice: bright, rough, and varied particle to particle.
+  const grain = fbm(positionLocal, 14.0, 3).mul(0.35).add(0.8)
+  material.colorNode = base.mul(grain)
+  material.roughnessNode = float(0.85)
+  material.metalnessNode = float(0.0)
   return material
 }
 

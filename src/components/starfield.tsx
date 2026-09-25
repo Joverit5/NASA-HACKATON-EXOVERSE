@@ -2,17 +2,23 @@
 
 import { useEffect, useMemo, useRef } from "react"
 import * as THREE from "three"
-import { PointsNodeMaterial } from "three/webgpu"
-import { attribute, float, mix, oneMinus, sin, smoothstep, time, uv, vec3 } from "three/tsl"
+import { SpriteNodeMaterial } from "three/webgpu"
+import { attribute, float, oneMinus, positionGeometry, sin, smoothstep, time, uv, vec2, vec3 } from "three/tsl"
 import { blackbodyRgb } from "@/src/lib/planetPhysics"
 
 /**
  * The background sky for the ExoCreator scene.
  *
- * This replaces drei's <Stars>, which builds a raw GLSL ShaderMaterial. That
- * cannot compile on the WebGPU backend, so the stars silently vanished when the
- * scene moved to WebGPURenderer — a regression introduced with the renderer swap.
- * Written in TSL it works on both backends, like the rest of the scene's materials.
+ * Two rewrites, both for real reasons:
+ *
+ * drei's <Stars> builds a raw GLSL ShaderMaterial, which cannot compile on the
+ * WebGPU backend, so the stars silently vanished when the scene moved to
+ * WebGPURenderer.
+ *
+ * The replacement used THREE.Points with a sizeNode, which does not work either:
+ * WebGPU has no gl_PointSize, so every star drew at one pixel and the field was
+ * invisible against black. Instanced billboarded sprites are the construction that
+ * behaves identically on both backends.
  *
  * The colours are not decorative. Each star's temperature is drawn from a
  * distribution close to the real stellar population — overwhelmingly cool red
@@ -36,76 +42,78 @@ interface StarfieldProps {
  * without pretending to be a real initial mass function.
  */
 function sampleTemperature(r: number): number {
-  const t = r * r * r
-  return 2600 + t * 22000
+  return 2600 + r * r * r * 22000
 }
 
-/*
- * three's TSL declarations do not infer a node's type from the string argument to
- * attribute(), so the node arrives without its operators. The runtime is correct;
- * only the declaration is loose, so the cast is localised here rather than spread
- * through the shader.
- */
+/* three's TSL declarations do not infer a node's type from attribute()'s string
+   argument, so the casts are localised here rather than spread through the shader. */
 const vec3Attribute = (name: string) => attribute(name, "vec3") as unknown as ReturnType<typeof vec3>
 const floatAttribute = (name: string) => attribute(name, "float") as unknown as ReturnType<typeof float>
 
 export function Starfield({ count, radius = 340, animate = true }: StarfieldProps) {
-  const pointsRef = useRef<THREE.Points>(null!)
+  const meshRef = useRef<THREE.InstancedMesh>(null!)
 
   const geometry = useMemo(() => {
-    const positions = new Float32Array(count * 3)
+    const quad = new THREE.PlaneGeometry(1, 1)
+    const g = new THREE.InstancedBufferGeometry()
+    g.index = quad.index
+    g.attributes.position = quad.attributes.position
+    g.attributes.uv = quad.attributes.uv
+
+    const centres = new Float32Array(count * 3)
     const colors = new Float32Array(count * 3)
     const sizes = new Float32Array(count)
 
     for (let i = 0; i < count; i++) {
       // Uniform on the sphere: acos of a uniform cosine, or the poles crowd.
-      const u = Math.random()
-      const v = Math.random()
-      const theta = 2 * Math.PI * u
-      const phi = Math.acos(2 * v - 1)
+      const theta = 2 * Math.PI * Math.random()
+      const phi = Math.acos(2 * Math.random() - 1)
       const r = radius * (0.82 + Math.random() * 0.18)
 
-      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
-      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
-      positions[i * 3 + 2] = r * Math.cos(phi)
+      centres[i * 3] = r * Math.sin(phi) * Math.cos(theta)
+      centres[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
+      centres[i * 3 + 2] = r * Math.cos(phi)
 
-      const teff = sampleTemperature(Math.random())
-      const { r: cr, g: cg, b: cb } = blackbodyRgb(teff)
+      const { r: cr, g: cg, b: cb } = blackbodyRgb(sampleTemperature(Math.random()))
       // Apparent brightness varies far more than colour does; most stars are faint.
-      const brightness = 0.35 + Math.pow(Math.random(), 2.2) * 0.65
+      const brightness = 0.4 + Math.pow(Math.random(), 2.2) * 0.6
       colors[i * 3] = cr * brightness
       colors[i * 3 + 1] = cg * brightness
       colors[i * 3 + 2] = cb * brightness
 
-      sizes[i] = 0.7 + Math.pow(Math.random(), 3) * 3.2
+      sizes[i] = 0.9 + Math.pow(Math.random(), 3) * 3.4
     }
 
-    const g = new THREE.BufferGeometry()
-    g.setAttribute("position", new THREE.BufferAttribute(positions, 3))
-    g.setAttribute("starColor", new THREE.BufferAttribute(colors, 3))
-    g.setAttribute("starSize", new THREE.BufferAttribute(sizes, 1))
+    g.setAttribute("starCentre", new THREE.InstancedBufferAttribute(centres, 3))
+    g.setAttribute("starColor", new THREE.InstancedBufferAttribute(colors, 3))
+    g.setAttribute("starSize", new THREE.InstancedBufferAttribute(sizes, 1))
+    g.instanceCount = count
+    quad.dispose()
     return g
   }, [count, radius])
 
   const material = useMemo(() => {
-    const m = new PointsNodeMaterial()
+    const m = new SpriteNodeMaterial()
+
+    const centre = vec3Attribute("starCentre")
     const starColor = vec3Attribute("starColor")
     const starSize = floatAttribute("starSize")
 
-    // Round the point sprite off and soften its edge, so stars are discs of light
-    // rather than the hard squares a raw point primitive gives.
-    const d = uv().sub(vec3(0.5, 0.5, 0.0).xy).length()
-    const disc = oneMinus(smoothstep(0.18, 0.5, d))
+    // SpriteNodeMaterial billboards the quad on its own; positionNode places the
+    // centre and scaleNode sizes it.
+    m.positionNode = centre
+    m.scaleNode = starSize
 
-    // Atmospheric scintillation: each star drifts on its own phase, seeded by size
-    // so neighbours do not pulse in unison.
-    const twinkle = animate
-      ? sin(time.mul(1.7).add(starSize.mul(19.0))).mul(0.16).add(0.9)
-      : float(1.0)
+    // Round the quad off so a star is a disc of light rather than a square.
+    const d = vec2(uv()).sub(vec2(0.5, 0.5)).length()
+    const disc = oneMinus(smoothstep(0.1, 0.5, d))
+
+    // Scintillation: each star drifts on its own phase, seeded by size so
+    // neighbours do not pulse in unison.
+    const twinkle = animate ? sin(time.mul(1.7).add(starSize.mul(19.0))).mul(0.16).add(0.9) : float(1.0)
 
     m.colorNode = starColor.mul(twinkle)
     m.opacityNode = disc
-    m.sizeNode = starSize
     m.transparent = true
     m.depthWrite = false
     m.blending = THREE.AdditiveBlending
@@ -122,5 +130,11 @@ export function Starfield({ count, radius = 340, animate = true }: StarfieldProp
 
   if (count <= 0) return null
 
-  return <points ref={pointsRef} geometry={geometry} material={material} frustumCulled={false} />
+  return (
+    <instancedMesh
+      ref={meshRef}
+      args={[geometry as unknown as THREE.BufferGeometry, material, count]}
+      frustumCulled={false}
+    />
+  )
 }

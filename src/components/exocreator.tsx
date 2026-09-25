@@ -30,11 +30,13 @@ import {
 import {
   createPlanetMaterial,
   createAtmosphereMaterial,
+  createCloudMaterial,
   createStarMaterial,
-  createRingMaterial,
+  createCoronaMaterial,
   rocheLimitRadii,
   type PlanetSurface,
 } from "@/src/components/exocreator-materials"
+import { RingSystem } from "@/src/components/ring-system"
 import { PlanetReadout } from "@/src/components/planet-readout"
 
 const contrastColors = [
@@ -54,6 +56,7 @@ interface SatelliteProps {
   radius: number
   orbitRadius: number
   speed: number
+  quality: QualitySettings
 }
 
 interface PlanetControlsProps {
@@ -75,7 +78,7 @@ interface PlanetControlsProps {
   isVisible?: boolean
 }
 
-const Satellite: React.FC<SatelliteProps> = React.memo(({ radius, orbitRadius, speed }) => {
+const Satellite: React.FC<SatelliteProps> = React.memo(({ radius, orbitRadius, speed, quality }) => {
   const meshRef = useRef<THREE.Mesh>(null!)
 
   // Moons are captured or accreted rock, not confetti. The old scene picked one of
@@ -84,8 +87,11 @@ const Satellite: React.FC<SatelliteProps> = React.memo(({ radius, orbitRadius, s
   const material = useMemo(() => {
     const grey = 0.38 + (orbitRadius % 0.7) * 0.18
     const tint = new THREE.Color(grey, grey * 0.97, grey * 0.92)
-    return createPlanetMaterial("rock", "#" + tint.getHexString())
-  }, [orbitRadius])
+    return createPlanetMaterial("rock", "#" + tint.getHexString(), {
+      relief: quality.relief,
+      octaves: Math.max(3, quality.octaves - 2),
+    })
+  }, [orbitRadius, quality.relief, quality.octaves])
 
   useEffect(() => () => material.dispose(), [material])
 
@@ -99,8 +105,8 @@ const Satellite: React.FC<SatelliteProps> = React.memo(({ radius, orbitRadius, s
   })
 
   return (
-    <mesh ref={meshRef} castShadow material={material}>
-      <sphereGeometry args={[radius, 32, 32]} />
+    <mesh ref={meshRef} castShadow={quality.shadows} material={material}>
+      <sphereGeometry args={[radius, Math.max(16, quality.sphereSegments / 4), Math.max(16, quality.sphereSegments / 4)]} />
     </mesh>
   )
 })
@@ -115,20 +121,32 @@ interface PlanetProps {
   textureType: string
   /** Host star effective temperature, which sets the atmosphere's scattered colour. */
   starTeff: number
+  /** The planet's own equilibrium temperature: above ~800 K it glows in its own right. */
+  temperatureK: number
   quality: QualitySettings
 }
 
 const Planet: React.FC<PlanetProps> = React.memo(
-  ({ radius, color, satelliteCount, ringCount, textureType, starTeff, quality }) => {
+  ({ radius, color, satelliteCount, ringCount, textureType, starTeff, temperatureK, quality }) => {
     const meshRef = useRef<THREE.Mesh>(null!)
+    const cloudRef = useRef<THREE.Mesh>(null!)
 
     const surface: PlanetSurface = textureType === "water" ? "water" : textureType === "gas" ? "gas" : "rock"
 
     // Node materials are rebuilt only when what they depend on changes; the shader
-    // itself evaluates per-pixel on the GPU, so surface detail no longer costs a
-    // CPU texture upload on every parameter change.
-    const surfaceMaterial = useMemo(() => createPlanetMaterial(surface, color), [surface, color])
+    // itself evaluates per-pixel on the GPU, so surface detail costs no CPU texture
+    // upload when a parameter moves.
+    const surfaceMaterial = useMemo(
+      () =>
+        createPlanetMaterial(surface, color, {
+          temperatureK,
+          relief: quality.relief,
+          octaves: quality.octaves,
+        }),
+      [surface, color, temperatureK, quality.relief, quality.octaves],
+    )
     const atmosphereMaterial = useMemo(() => createAtmosphereMaterial(starTeff, surface), [starTeff, surface])
+    const cloudMaterial = useMemo(() => createCloudMaterial(color), [color])
 
     // Ring extent is derived, not decorative: material inside the Roche limit cannot
     // accrete into a moon, which is why Saturn has rings and Earth does not.
@@ -138,55 +156,68 @@ const Planet: React.FC<PlanetProps> = React.memo(
     }, [radius])
     const rocheRadii = useMemo(() => rocheLimitRadii(density), [density])
 
-    const ringBands = useMemo(() => {
-      const inner = radius * 1.35
-      const outer = radius * rocheRadii
-      const span = Math.max(0.25, outer - inner)
-      return Array.from({ length: ringCount }, (_, i) => {
-        const t0 = i / ringCount
-        const t1 = (i + 0.72) / ringCount
-        return { inner: inner + span * t0, outer: inner + span * t1 }
-      })
-    }, [radius, ringCount, rocheRadii])
-
-    const ringMaterial = useMemo(() => createRingMaterial(color), [color])
-
     useFrame((_, delta) => {
       // Delta-timed so rotation speed does not depend on frame rate.
       if (meshRef.current) meshRef.current.rotation.y += delta * 0.28
+      // The deck laps the surface: Venus's upper clouds circle in four days while
+      // its ground takes 243. Locking them together is what makes a planet look painted.
+      if (cloudRef.current) cloudRef.current.rotation.y += delta * 0.42
     })
 
     useEffect(() => {
       return () => {
         surfaceMaterial.dispose()
         atmosphereMaterial.dispose()
-        ringMaterial.dispose()
+        cloudMaterial.dispose()
       }
-    }, [surfaceMaterial, atmosphereMaterial, ringMaterial])
+    }, [surfaceMaterial, atmosphereMaterial, cloudMaterial])
+
+    const shellSegments = Math.max(24, Math.round(quality.sphereSegments / 2))
 
     return (
       <group>
-        <mesh ref={meshRef} castShadow={quality.shadows} receiveShadow={quality.shadows} material={surfaceMaterial}>
+        <mesh
+          ref={meshRef}
+          castShadow={quality.shadows}
+          receiveShadow={quality.shadows}
+          material={surfaceMaterial}
+        >
           <sphereGeometry args={[radius, quality.sphereSegments, quality.sphereSegments]} />
         </mesh>
 
-        {/* The atmospheric shell, lit at the limb where it is optically thickest.
-            The first thing dropped when the device cannot hold the frame rate. */}
+        {/* Weather, on its own shell and its own clock. Gas giants carry their bands
+            in the surface shader instead, so they get no separate deck. */}
+        {quality.clouds && surface !== "gas" && (
+          <mesh ref={cloudRef} material={cloudMaterial}>
+            <sphereGeometry args={[radius * 1.018, shellSegments, shellSegments]} />
+          </mesh>
+        )}
+
+        {/* The atmospheric shell, lit at the limb where it is optically thickest. */}
         {quality.atmosphere && (
           <mesh material={atmosphereMaterial}>
-            <sphereGeometry args={[radius * 1.045, Math.max(24, quality.sphereSegments / 2), Math.max(24, quality.sphereSegments / 2)]} />
+            <sphereGeometry args={[radius * 1.05, shellSegments, shellSegments]} />
           </mesh>
         )}
 
         {Array.from({ length: satelliteCount }, (_, i) => (
-          <Satellite key={i} radius={radius * 0.1} orbitRadius={radius + 1 + i * 0.5} speed={0.5 + i * 0.2} />
+          <Satellite
+            key={i}
+            radius={radius * 0.1}
+            orbitRadius={radius + 1 + i * 0.5}
+            speed={0.5 + i * 0.2}
+            quality={quality}
+          />
         ))}
 
-        {ringBands.map((band, i) => (
-          <mesh rotation={[Math.PI / 2, 0, 0]} key={i} material={ringMaterial}>
-            <ringGeometry args={[band.inner, band.outer, 128]} />
-          </mesh>
-        ))}
+        <RingSystem
+          planetRadius={radius}
+          bandCount={ringCount}
+          rocheRadii={rocheRadii}
+          color={color}
+          particlesPerBand={quality.ringParticles}
+          animate={quality.ambientMotion}
+        />
       </group>
     )
   },
@@ -199,30 +230,52 @@ interface StarProps {
   intensity: number
   distance: number
   size: number
+  quality: QualitySettings
 }
 
-const Star: React.FC<StarProps> = React.memo(({ teff, intensity, distance, size }) => {
-  const lightRef = useRef<THREE.PointLight>(null!)
-
+const Star: React.FC<StarProps> = React.memo(({ teff, intensity, distance, size, quality }) => {
   const starMaterial = useMemo(() => createStarMaterial(teff), [teff])
+  const coronaMaterial = useMemo(() => createCoronaMaterial(teff), [teff])
+
   const lightColor = useMemo(() => {
     const { r, g, b } = blackbodyRgb(teff)
     return new THREE.Color(r, g, b)
   }, [teff])
 
-  useEffect(() => () => starMaterial.dispose(), [starMaterial])
+  useEffect(() => {
+    return () => {
+      starMaterial.dispose()
+      coronaMaterial.dispose()
+    }
+  }, [starMaterial, coronaMaterial])
 
-  const position: [number, number, number] = [distance, 30, -100]
+  const position: [number, number, number] = [distance * 0.6, 12, -70]
+  const segments = Math.max(32, Math.round(quality.sphereSegments / 2))
 
   return (
     <group>
-      {/* The disc itself, limb-darkened and granulated in the shader. */}
+      {/* The photosphere, limb-darkened and granulated in the shader. */}
       <mesh position={position} material={starMaterial}>
-        <sphereGeometry args={[size, 48, 48]} />
+        <sphereGeometry args={[size, segments, segments]} />
       </mesh>
 
+      {/* The corona: hotter, fainter, and on its own shell because on a real star
+          it is only visible when the disc is blocked. */}
+      {quality.corona && (
+        <mesh position={position} material={coronaMaterial}>
+          <sphereGeometry args={[size * 1.6, segments, segments]} />
+        </mesh>
+      )}
+
       {/* The light the planet is actually lit by, in the star's own colour. */}
-      <pointLight ref={lightRef} position={position} color={lightColor} intensity={intensity} distance={0} decay={0} />
+      <pointLight
+        position={position}
+        color={lightColor}
+        intensity={intensity}
+        distance={0}
+        decay={0}
+        castShadow={quality.shadows}
+      />
     </group>
   )
 })
@@ -325,6 +378,22 @@ const ExoplanetCreator: React.FC = () => {
   }, [star.teff])
 
   const starIntensity = useMemo(() => starLightIntensity(star.luminosity), [star.luminosity])
+
+  // Live equilibrium temperature for the current controls. Above ~800 K a world
+  // radiates visibly in its own right, which is what makes a hot Jupiter's night
+  // side glow rather than go black.
+  const liveTemperatureK = useMemo(
+    () =>
+      derivePlanet({
+        radiusEarth: planetProps.radius,
+        type: planetProps.type,
+        starId: planetProps.starType,
+        semiMajorAxisAu: sliderToAu(planetProps.starDistance),
+        moons: planetProps.satelliteCount,
+        rings: planetProps.ringCount,
+      }).equilibriumTempK,
+    [planetProps],
+  )
 
   // Real radius ratio, compressed logarithmically so a 25 R☉ giant and a 0.36 R☉
   // dwarf both stay in frame.
@@ -429,7 +498,7 @@ const ExoplanetCreator: React.FC = () => {
 
       <Canvas
         shadows={quality.shadows}
-        camera={{ position: [0, 5, 15], fov: 60 }}
+        camera={{ position: [0, 2.2, 8.5], fov: 45 }}
         dpr={quality.dpr}
         /*
          * WebGPU where the browser has it, WebGL2 everywhere else. WebGPURenderer
@@ -442,17 +511,22 @@ const ExoplanetCreator: React.FC = () => {
           const { WebGPURenderer } = await import("three/webgpu")
           const renderer = new WebGPURenderer({ ...props, antialias: true })
           await renderer.init()
+          // A star is orders of magnitude brighter than anything it lights. Filmic
+          // tone mapping is what keeps its disc from clipping to a flat white blob
+          // while the planet's night side still holds detail.
+          renderer.toneMapping = THREE.ACESFilmicToneMapping
+          renderer.toneMappingExposure = 1.15
           setBackend((renderer as any).backend?.isWebGPUBackend ? "WebGPU" : "WebGL2")
           return renderer as any
         }}
       >
         <EnhancedLighting />
         <Suspense fallback={null}>
-          <Planet {...planetProps} starTeff={star.teff} quality={quality} />
-          <Star teff={star.teff} intensity={starIntensity} distance={planetProps.starDistance} size={starSize} />
+          <Planet {...planetProps} starTeff={star.teff} temperatureK={liveTemperatureK} quality={quality} />
+          <Star teff={star.teff} intensity={starIntensity} distance={planetProps.starDistance} size={starSize} quality={quality} />
         </Suspense>
         {quality.bloom && <StarBloom />}
-        <OrbitControls enableZoom={true} maxDistance={20} minDistance={5} />
+        <OrbitControls enableZoom maxDistance={24} minDistance={3} target={[0, -1.15, 0]} enablePan={false} />
         {/* drei's <Stars> builds a raw GLSL ShaderMaterial, which cannot compile
             on the WebGPU backend -- the stars vanished when the renderer changed.
             This one is TSL and works on both. */}

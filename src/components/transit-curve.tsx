@@ -167,9 +167,9 @@ export function TransitCurve({ planet, still = false, compact = false, className
         {hours.map((label, i) => (
           <text
             key={label}
-            x={(VIEW_W / (hours.length - 1)) * i}
+            x={Math.min(VIEW_W - 26, Math.max(26, (VIEW_W / (hours.length - 1)) * i))}
             y={VIEW_H - 12}
-            textAnchor="middle"
+            textAnchor={i === 0 ? "start" : i === hours.length - 1 ? "end" : "middle"}
             className="font-mono"
             fontSize="14"
             fill="hsl(var(--ink-faint))"
