@@ -16,7 +16,7 @@ import { Card, CardContent } from "@/src/components/ui/card"
 import { Badge } from "@/src/components/ui/badge"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/src/components/ui/collapsible"
 import { ChevronUp, ChevronLeft, Trophy, Sun, SatelliteIcon, CircleDot, Info, Sparkles } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/src/i18n/navigation"
 import { achievementsService } from "@/src/lib/achievementsService"
 import {
   derivePlanet,

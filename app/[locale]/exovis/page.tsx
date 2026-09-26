@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useRef, useCallback, useEffect, useMemo } from "react"
-import Link from "next/link"
+import { Link } from "@/src/i18n/navigation"
 import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 import { Input } from "@/src/components/ui/input"
 import { Button } from "@/src/components/ui/button"

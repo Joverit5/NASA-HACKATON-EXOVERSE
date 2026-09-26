@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "exoquest": "ExoQuest",
+    "exocreator": "ExoCreator",
+    "exovis": "ExoVis",
+    "credits": "Créditos",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "language": "Idioma"
+  },
+  "home": {
+    "kickerFallback": "Archivo de Exoplanetas de la NASA",
+    "titleFallback": "Explorando exoplanetas",
+    "drawnFrom": "Elegido al azar entre {count} mundos en tránsito confirmados",
+    "lede": "Cada planeta entró al registro de la misma forma: como una caída en la luz de su estrella. Bajá para recorrer el cruce.",
+    "yearUnrecorded": "año sin registrar",
+    "hostStar": "Estrella anfitriona",
+    "distance": "Distancia",
+    "radius": "Radio",
+    "orbitalPeriod": "Período orbital"
+  },
+  "exovis": {
+    "lede": "Explorá cada exoplaneta del archivo de la NASA. Buscá entre {count} mundos confirmados.",
+    "uniqueExoplanets": "Exoplanetas únicos",
+    "withMeasuredTransit": "{count} con tránsito medido",
+    "starSystems": "Sistemas estelares",
+    "potentiallyHabitable": "Potencialmente habitables",
+    "sourcesCombined": "Referencias combinadas",
+    "searchPlaceholder": "Buscá cualquier exoplaneta o estrella anfitriona...",
+    "sortBy": "Ordenar por:",
+    "sortName": "Nombre",
+    "sortDistance": "Distancia",
+    "sortYear": "Año de descubrimiento",
+    "sortHabitability": "Habitabilidad",
+    "loadingTitle": "Consultando el Archivo de Exoplanetas de la NASA",
+    "loadingDetail": "{count} registros · consulta TAP en vivo · la primera carga tarda unos segundos",
+    "loadingMore": "Trayendo la siguiente página del archivo",
+    "noTransit": "Sin tránsito medido",
+    "references": "{count} referencias publicadas detrás de estos planetas"
+  },
+  "quality": {
+    "heading": "Calidad de render",
+    "explain": "La escena abre en calidad completa y baja solo si este dispositivo no sostiene los fotogramas. Podés forzarlo vos.",
+    "backToAuto": "Volver a automático",
+    "full": "Completa",
+    "balanced": "Equilibrada",
+    "essential": "Esencial",
+    "fullDetail": "Todo activo: relieve de superficie, capas de nubes, atmósferas, corona, bloom, 900 partículas de anillo por banda.",
+    "balancedDetail": "Se mantienen relieve y nubes; caen corona, bloom y sombras. Menos partículas de anillo.",
+    "essentialDetail": "Sin movimiento perpetuo ni extras por píxel. Mismos datos, mismo diseño."
+  },
+  "curve": {
+    "label": "Curva de luz de tránsito de {planet}",
+    "description": "El brillo de {star} cae un {depth} cuando {planet} pasa por delante. El planeta completa una órbita cada {period}.",
+    "theDipIsThePlanet": "EL BACHE ES EL PLANETA"
+  }
+}

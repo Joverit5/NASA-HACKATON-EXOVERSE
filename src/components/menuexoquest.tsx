@@ -14,7 +14,7 @@ import {
 import { Button } from "@/src/components/ui/button";
 import { Brain, Rocket, ChevronRight } from "lucide-react";
 import { Dashboard } from "@/src/components/dashboard";
-import Link from "next/link";
+import { Link } from "@/src/i18n/navigation";
 import dynamic from "next/dynamic";
 
 const CoverParticles = dynamic(() => import("@/src/components/ui/star_particles"), {

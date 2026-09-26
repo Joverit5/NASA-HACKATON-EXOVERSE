@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "exoquest": "ExoQuest",
+    "exocreator": "ExoCreator",
+    "exovis": "ExoVis",
+    "credits": "Credits",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language"
+  },
+  "home": {
+    "kickerFallback": "NASA Exoplanet Archive",
+    "titleFallback": "Exploring Exoplanets",
+    "drawnFrom": "Drawn at random from {count} confirmed transiting worlds",
+    "lede": "Every planet here entered the record the same way: as a dip in its star's light. Scroll to walk the crossing.",
+    "yearUnrecorded": "year unrecorded",
+    "hostStar": "Host star",
+    "distance": "Distance",
+    "radius": "Radius",
+    "orbitalPeriod": "Orbital period"
+  },
+  "exovis": {
+    "lede": "Explore every exoplanet in NASA's archive. Search {count} confirmed worlds.",
+    "uniqueExoplanets": "Unique Exoplanets",
+    "withMeasuredTransit": "{count} with a measured transit",
+    "starSystems": "Star Systems",
+    "potentiallyHabitable": "Potentially Habitable",
+    "sourcesCombined": "Sources Combined",
+    "searchPlaceholder": "Search any exoplanet or host star...",
+    "sortBy": "Sort by:",
+    "sortName": "Name",
+    "sortDistance": "Distance",
+    "sortYear": "Discovery Year",
+    "sortHabitability": "Habitability",
+    "loadingTitle": "Querying the NASA Exoplanet Archive",
+    "loadingDetail": "{count} records · live TAP query · first load takes a few seconds",
+    "loadingMore": "Fetching the next page from the archive",
+    "noTransit": "No transit measured",
+    "references": "{count} published references behind these planets"
+  },
+  "quality": {
+    "heading": "Rendering quality",
+    "explain": "The scene opens at full quality and steps down only if this device cannot hold the frame rate. You can override that.",
+    "backToAuto": "Back to automatic",
+    "full": "Full",
+    "balanced": "Balanced",
+    "essential": "Essential",
+    "fullDetail": "Everything on: surface relief, cloud decks, atmospheres, corona, bloom, 900 ring particles per band.",
+    "balancedDetail": "Relief and clouds kept; corona, bloom and shadows dropped. Fewer ring particles.",
+    "essentialDetail": "No perpetual motion and no per-pixel extras. Same data, same design."
+  },
+  "curve": {
+    "label": "Transit light curve of {planet}",
+    "description": "The brightness of {star} dips by {depth} when {planet} crosses in front of it. The planet completes an orbit every {period}.",
+    "theDipIsThePlanet": "THE DIP IS THE PLANET"
+  }
+}

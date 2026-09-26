@@ -10,6 +10,7 @@ import ScrollProgress from "@/src/components/ui/scrollprogress"
 import { TransitCurve } from "@/src/components/transit-curve"
 import { SplitReveal } from "@/src/components/split-reveal"
 import { CountingReadout } from "@/src/components/counting-readout"
+import { useTranslations } from "next-intl"
 import type { ProcessedExoplanet } from "@/src/lib/exoplanetCatalog"
 
 // Optimización: Lazy loading de componentes pesados
@@ -43,6 +44,7 @@ export default function Home({
   featured: ProcessedExoplanet | null
   poolSize: number
 }) {
+  const t = useTranslations("home")
   const { scrollYProgress } = useScroll()
   const containerRef = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLDivElement>(null)
@@ -101,7 +103,9 @@ export default function Home({
             transition={{ duration: 0.72, ease: [0.2, 0, 0, 1] }}
           >
             <p className="font-mono text-xs tracking-[0.18em] uppercase text-mint mb-6">
-              {featured ? `${featured.discoveryMethod} · ${featured.discoveryYear ?? "year unrecorded"}` : "NASA Exoplanet Archive"}
+              {featured
+                ? `${featured.discoveryMethod} · ${featured.discoveryYear ?? t("yearUnrecorded")}`
+                : t("kickerFallback")}
             </p>
             <SplitReveal
               as="h1"
@@ -109,16 +113,15 @@ export default function Home({
               delay={0.12}
               className="text-5xl sm:text-6xl md:text-7xl font-normal leading-[1.02] tracking-tight max-w-4xl text-balance"
             >
-              {featured ? featured.name : "Exploring Exoplanets"}
+              {featured ? featured.name : t("titleFallback")}
             </SplitReveal>
             <p className="mt-6 text-lg md:text-xl text-ink-dim leading-relaxed max-w-2xl">
               {poolSize > 0 && (
                 <span className="font-mono text-xs text-ink-faint block mb-3 tabular-nums">
-                  Drawn at random from <CountingReadout value={poolSize} /> confirmed transiting worlds
+                  {t.rich("drawnFrom", { count: () => <CountingReadout value={poolSize} /> })}
                 </span>
               )}
-              Every planet here entered the record the same way: as a dip in its
-              star's light. Scroll to walk the crossing.
+              {t("lede")}
             </p>
           </motion.div>
         </div>
@@ -134,10 +137,10 @@ export default function Home({
 
             <dl className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-px bg-rule border border-rule">
               {[
-                ["Host star", featured.hostStar],
-                ["Distance", featured.distance],
-                ["Radius", featured.radius],
-                ["Orbital period", featured.orbitalPeriod],
+                [t("hostStar"), featured.hostStar],
+                [t("distance"), featured.distance],
+                [t("radius"), featured.radius],
+                [t("orbitalPeriod"), featured.orbitalPeriod],
               ].map(([label, value]) => (
                 <div key={label} className="bg-surface px-4 py-4">
                   <dt className="font-mono text-xs tracking-[0.14em] uppercase text-ink-faint">{label}</dt>

@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/src/i18n/navigation";
+import { LanguageSwitcher } from "@/src/components/language-switcher";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Rocket, Brain, BarChartIcon as ChartBar, Users } from 'lucide-react';
 import { cn } from "@/src/utils/utils";
@@ -19,6 +21,7 @@ interface MobileMenuProps {
 }
 
 export default function Navbar() {
+  const t = useTranslations("nav");
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -39,16 +42,16 @@ export default function Navbar() {
 
 
   const leftNavItems = [
-    { href: "/exoquest/menu", icon: Rocket, label: "ExoQuest" },
-    { href: "/exocreator", icon: Brain, label: "ExoCreator" },
+    { href: "/exoquest/menu", icon: Rocket, label: t("exoquest") },
+    { href: "/exocreator", icon: Brain, label: t("exocreator") },
   ];
 
   const rightNavItems = [
-    { href: "/exovis", icon: ChartBar, label: "ExoVis" },
+    { href: "/exovis", icon: ChartBar, label: t("exovis") },
     { 
       href: "/#credits", 
       icon: Users, 
-      label: "Credits"
+      label: t("credits")
     },
   ];
 
@@ -77,7 +80,7 @@ export default function Navbar() {
             <button
               onClick={toggleMenu}
               className="text-ink focus:outline-none"
-              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-label={isOpen ? t("closeMenu") : t("openMenu")}
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -95,6 +98,9 @@ export default function Navbar() {
                 <NavItem {...item} />
               </li>
             ))}
+            <li>
+              <LanguageSwitcher />
+            </li>
           </ul>
         </div>
 
