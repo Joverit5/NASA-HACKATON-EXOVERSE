@@ -335,14 +335,36 @@ export interface FeaturedPick {
   poolSize: number
 }
 
+/** How long one pick stays put. See getFeaturedPlanet for why this exists. */
+const PICK_WINDOW_MS = 15000
+
+/**
+ * Deterministic PRNG so a given seed always yields the same index.
+ * Math.random() cannot be used here: see the note in getFeaturedPlanet.
+ */
+function seededUnit(seed: number): number {
+  let x = Math.imul(seed ^ 0x9e3779b9, 0x85ebca6b)
+  x = Math.imul(x ^ (x >>> 13), 0xc2b2ae35)
+  return ((x ^ (x >>> 16)) >>> 0) / 4294967296
+}
+
 /**
  * A planet for the landing page, drawn fresh on each visit.
  *
- * Every candidate has to clear the same bar: discovered in transit, with a real
- * measured depth deep enough to read at a glance, well enough studied that its
- * numbers are trustworthy, and with a period and distance on record. Within that
- * pool the choice is random, so the hero is a different real world each time
- * rather than one hard-coded favourite.
+ * Every candidate clears the same bar: discovered in transit, with a measured
+ * depth deep enough to read at a glance, well enough studied that its numbers are
+ * trustworthy, and with a period and distance on record.
+ *
+ * The pick is seeded from a 15-second time bucket rather than Math.random(), and
+ * that is not a detail. With a per-request random pick, the browser's RSC prefetch
+ * of this same route returned a DIFFERENT planet than the HTML it had just
+ * hydrated — React reconciled two different worlds and threw hydration error 418.
+ * Verified directly: the document served HATS-26 b while the prefetch of the same
+ * URL answered TOI-1694 b.
+ *
+ * A time bucket fixes it without giving up the randomness: a document and its
+ * prefetches land in the same window and agree, while any real return visit lands
+ * in a later one and gets a different world.
  */
 export async function getFeaturedPlanet(): Promise<FeaturedPick | null> {
   let catalog: ProcessedExoplanet[]
@@ -364,5 +386,55 @@ export async function getFeaturedPlanet(): Promise<FeaturedPick | null> {
   )
   if (pool.length === 0) return null
 
-  return { planet: pool[Math.floor(Math.random() * pool.length)], poolSize: pool.length }
+  const bucket = Math.floor(Date.now() / PICK_WINDOW_MS)
+  const index = Math.floor(seededUnit(bucket) * pool.length)
+  return { planet: pool[index], poolSize: pool.length }
+}
+
+export interface CatalogStats {
+  /** Every planet in the archive. */
+  total: number
+  /** Distinct host stars across the whole archive. */
+  systems: number
+  /** Planets the habitability test passes, archive-wide. */
+  habitable: number
+  /** Published references behind the whole archive. */
+  references: number
+  /** How many carry a measured transit depth, so the curve is real. */
+  withTransitDepth: number
+}
+
+/**
+ * Archive-wide figures for the ExoVis stat tiles.
+ *
+ * These were previously computed from whatever page happened to be loaded, which
+ * made them wrong in a way that mattered: with 60 alphabetical rows on screen the
+ * "Potentially Habitable" tile read 0, while the archive holds 83. A stat tile that
+ * says zero about a non-zero archive is not a rounding problem, it is a false
+ * claim, and PRODUCT.md's second principle is that derived values are shown as
+ * what they are.
+ *
+ * Computed once per cache load, so it costs nothing per request.
+ */
+export async function getCatalogStats(): Promise<CatalogStats | null> {
+  let catalog: ProcessedExoplanet[]
+  try {
+    catalog = await getCatalog()
+  } catch {
+    return null
+  }
+
+  const systems = new Set<string>()
+  let habitable = 0
+  let references = 0
+  let withTransitDepth = 0
+
+  for (const p of catalog) {
+    systems.add(p.hostStar)
+    if (p.habitability === "Potentially Habitable") habitable++
+    references += p.sources
+    if (p.transitDepth !== null) withTransitDepth++
+  }
+
+  return { total: catalog.length, systems: systems.size, habitable, references, withTransitDepth }
 }

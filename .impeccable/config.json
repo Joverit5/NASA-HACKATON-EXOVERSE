@@ -9,6 +9,18 @@
         "value": "#4ecdc4",
         "createdAt": "2026-08-27T00:06:18.899Z",
         "reason": "planet swatch default: in ExoCreator the planet's colour is the value being edited, not chrome"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "clamp(3.5rem, 21vw, 15rem)",
+        "createdAt": "2026-09-26T03:44:24.312Z",
+        "reason": "EXOVIS wordmark at viewport scale: a graphic element, not type in the hierarchy. Device taken from aurigaspace.com, a reference the user pinned."
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "15rem",
+        "createdAt": "2026-09-26T03:44:53.327Z",
+        "reason": "EXOVIS wordmark ceiling: a name at viewport scale is a graphic element, not type in the hierarchy. Device from aurigaspace.com, a reference the user pinned. Its floor (3rem) is on the ramp."
       }
     ]
   }

@@ -58,10 +58,21 @@ export function TransitCurve({ planet, still = false, compact = false, className
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         className="w-full h-auto"
         role="img"
-        aria-labelledby={`${uid}-title ${uid}-desc`}
+        /*
+         * aria-label rather than an SVG <title>. React 19 hoists <title> to the
+         * document head as page metadata, and it does that for one inside an <svg>
+         * too: the server emitted it in place, the client hoisted it, the trees
+         * disagreed, and the landing threw hydration error 418 on every load.
+         * Confirmed by removing the element and watching the error go.
+         *
+         * aria-label plus aria-describedby gives a screen reader the same two
+         * strings — a short name and a full sentence — with no element React wants
+         * to relocate.
+         */
+        aria-label={`Transit light curve of ${planet.name}`}
+        aria-describedby={`${uid}-desc`}
         preserveAspectRatio="xMidYMid meet"
       >
-        <title id={`${uid}-title`}>Transit light curve of {planet.name}</title>
         <desc id={`${uid}-desc`}>
           The brightness of {planet.hostStar} dips by {depthPpm(planet.transitDepth)} when {planet.name} crosses in
           front of it. The planet completes an orbit every {planet.orbitalPeriod}.

@@ -26,7 +26,7 @@ const FloatingNebula = ({
       duration: 20,
       delay,
       repeat: Number.POSITIVE_INFINITY,
-      ease:"easeInOut",
+      ease: "easeInOut",
     }}
   />
 )
@@ -44,7 +44,7 @@ const BlueParticleField = () => {
             height: Math.random() * 4 + 2 +"px",
             left: Math.random() * 100 +"%",
             top: Math.random() * 100 +"%",
-            filter:"drop-shadow(0 0 4px rgba(59, 130, 246, 0.6))",
+            filter: "drop-shadow(0 0 4px rgba(59, 130, 246, 0.6))",
           }}
           animate={{
             opacity: [0.3, 1, 0.3],
@@ -54,7 +54,7 @@ const BlueParticleField = () => {
           transition={{
             duration: Math.random() * 4 + 3,
             repeat: Number.POSITIVE_INFINITY,
-            ease:"easeInOut",
+            ease: "easeInOut",
             delay: Math.random() * 2,
           }}
         />
@@ -67,10 +67,10 @@ export default function CosmicCreditsSection() {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end","end start"],
+    offset: ["start end", "end start"],
   })
 
-  const parallaxY = useTransform(scrollYProgress, [0, 1], ["0%","30%"])
+  const parallaxY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
   const parallaxYSpring = useSpring(parallaxY, { stiffness: 100, damping: 30 })
 
   return (

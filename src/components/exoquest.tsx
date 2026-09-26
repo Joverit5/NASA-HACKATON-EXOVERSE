@@ -59,7 +59,7 @@ export default function ExoQuest() {
   const searchParams = useSearchParams()
   const difficulty = searchParams
     ? searchParams.get("difficulty") ||"all"
-    :"all"
+    : "all"
 
   const shuffleArray = useCallback((array: any[]) => {
     const shuffled = [...array]
@@ -220,20 +220,20 @@ const fetchAchievements = async () => {
         <Card className="w-full max-w-md bg-surface border border-rule">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center text-ink">
-              {isVictory ?"¡Congratulations!" :"Game Over"}
+              {isVictory ? "¡Congratulations!" : "Game Over"}
             </CardTitle>
           </CardHeader>
           <CardContent className="text-center">
             <p className="text-xl mb-4 text-ink">
               {isVictory
-                ?"You've won! You've got 6 or more answers correct."
+                ? "You've won! You've got 6 or more answers correct."
                 : `You got ${score} out of ${questions.length} correct answers.`}
             </p>
             {isVictory && (
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type:"spring", stiffness: 260, damping: 20 }}
+                transition={{ type: "spring", stiffness: 260, damping: 20 }}
               >
                 <Trophy className="w-16 h-16 text-gold mx-auto mb-4" />
                 <p className="text-lg font-semibold mb-2 text-ink">

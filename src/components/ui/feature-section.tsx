@@ -14,7 +14,7 @@ const TwinklingStar = ({ delay = 0, scale = 1 }: { delay?: number; scale?: numbe
       duration: 3,
       delay,
       repeat: Infinity,
-      ease:"easeInOut"
+      ease: "easeInOut"
     }}
     className="absolute"
     style={{
@@ -39,10 +39,10 @@ export default function FeaturesSection({ features }: FeaturesSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end","end start"],
+    offset: ["start end", "end start"],
   })
 
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%","50%"])
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
   
   // Generate random star positions

@@ -16,30 +16,30 @@ interface StatProps {
 const stats: StatProps[] = [
   { 
     value: 5463, 
-    label:"Exoplanets",
-    sublabel:"Confirmed",
-    image:"/images/Cancri.webp",
-    className:"md:col-start-1 md:col-end-3 md:row-start-1"
+    label: "Exoplanets",
+    sublabel: "Confirmed",
+    image: "/images/Cancri.webp",
+    className: "md:col-start-1 md:col-end-3 md:row-start-1"
   },
   { 
     value: 64, 
-    label:"Potentially habitable",
-    sublabel:"Exoplanets",
-    image:"/images/kepler.webp",
-    className:"md:col-start-3 md:col-end-5 md:row-start-2"
+    label: "Potentially habitable",
+    sublabel: "Exoplanets",
+    image: "/images/kepler.webp",
+    className: "md:col-start-3 md:col-end-5 md:row-start-2"
   },
   { 
     value: 3916, 
-    label:"Planetary",
-    sublabel:"Systems",
-    image:"/images/pegasi.webp",
-    className:"md:col-start-1 md:col-end-3 md:row-start-3"
+    label: "Planetary",
+    sublabel: "Systems",
+    image: "/images/pegasi.webp",
+    className: "md:col-start-1 md:col-end-3 md:row-start-3"
   }
 ]
 
 function CountingNumber({ value }: { value: number }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin:"-100px" })
+  const inView = useInView(ref, { once: true, margin: "-100px" })
   
   const spring = useSpring(0, {
     stiffness: 50,
@@ -65,7 +65,7 @@ function Stat({ value, label, sublabel, image, className ="" }: StatProps) {
     <motion.div 
       className={`flex flex-col items-center gap-4 ${className}`}
       whileHover={{ scale: 1.05 }}
-      transition={{ type:"spring", stiffness: 300, damping: 10 }}
+      transition={{ type: "spring", stiffness: 300, damping: 10 }}
     >
       <div className="relative w-48 h-48 md:w-64 md:h-64 mb-8 group">
         <Image
@@ -93,13 +93,13 @@ export function EnhancedStatisticsSection() {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end","end start"]
+    offset: ["start end", "end start"]
   })
 
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8])
-  const nebulaY = useTransform(scrollYProgress, [0, 1], ["0%","30%"])
-  const starsY = useTransform(scrollYProgress, [0, 1], ["0%","50%"])
+  const nebulaY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
+  const starsY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
 
   return (
     <section 
@@ -160,33 +160,33 @@ export function EnhancedStatisticsSection() {
           <motion.div 
             className="absolute left-[10%] top-[10%] w-[200px] h-[200px] border border-rule rounded-full opacity-20"
             animate={{ rotate: 360 }}
-            transition={{ duration: 150, repeat: Infinity, ease:"linear" }}
+            transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
           />
           <motion.div 
             className="absolute left-[5%] top-[15%] w-[100px] h-[100px] border border-gray-600 rounded-full opacity-30"
             animate={{ rotate: -360 }}
-            transition={{ duration: 100, repeat: Infinity, ease:"linear" }}
+            transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
           />
           <motion.div 
             className="absolute left-[15%] top-[5%] w-[150px] h-[150px] border border-gray-500 rounded-full opacity-25"
             animate={{ rotate: 360 }}
-            transition={{ duration: 120, repeat: Infinity, ease:"linear" }}
+            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
           />
           {/* Decorative elements */}
           <motion.div 
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-rule rounded-full opacity-10"
             animate={{ rotate: 360 }}
-            transition={{ duration: 200, repeat: Infinity, ease:"linear" }}
+            transition={{ duration: 200, repeat: Infinity, ease: "linear" }}
           />
           <motion.div 
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-gray-600 rounded-full opacity-15"
             animate={{ rotate: -360 }}
-            transition={{ duration: 150, repeat: Infinity, ease:"linear" }}
+            transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
           />
           <motion.div 
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-gray-500 rounded-full opacity-20"
             animate={{ rotate: 360 }}
-            transition={{ duration: 100, repeat: Infinity, ease:"linear" }}
+            transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
           />
         </div>
 

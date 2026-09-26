@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
-import type { ProcessedExoplanet } from "@/src/lib/exoplanetCatalog"
+import type { CatalogStats, ProcessedExoplanet } from "@/src/lib/exoplanetCatalog"
 
 export type { ProcessedExoplanet }
 
@@ -25,6 +25,7 @@ interface CatalogResponse {
   limit: number
   hasMore: boolean
   catalogSize: number
+  stats?: CatalogStats | null
   error?: string
   details?: string
 }
@@ -37,6 +38,8 @@ export function useNasaExoplanets() {
   const [offset, setOffset] = useState(0)
   const [totalCount, setTotalCount] = useState<number | null>(null)
   const [matchCount, setMatchCount] = useState<number | null>(null)
+  /** Archive-wide figures, so the stat tiles describe the archive not the page. */
+  const [stats, setStats] = useState<CatalogStats | null>(null)
   const [isSearching, setIsSearching] = useState(false)
 
   const [currentSearch, setCurrentSearch] = useState("")
@@ -89,6 +92,7 @@ export function useNasaExoplanets() {
         setOffset(currentOffset + data.planets.length)
         setMatchCount(data.total)
         setTotalCount(data.catalogSize)
+        if (data.stats) setStats(data.stats)
       } catch (err: any) {
         if (err?.name === "AbortError" || id !== requestId.current) return
         setError(err?.message || "Could not reach the exoplanet catalog.")
@@ -146,6 +150,8 @@ export function useNasaExoplanets() {
     totalCount,
     /** How many planets match the current query. */
     matchCount,
+    /** Archive-wide figures. Null until the first response lands. */
+    stats,
     loadMore,
     refetch,
     searchGlobal,

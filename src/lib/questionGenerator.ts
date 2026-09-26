@@ -81,7 +81,7 @@ const nearest: Builder = (pool, difficulty) => {
   const winner = picks.reduce((a, b) => (value(a.distance)! < value(b.distance)! ? a : b))
   return {
     id: `gen-near-${winner.name}`,
-    question: "Which of these exoplanets lies closest to Earth?",
+    question: "Which of these exoplanets lies closest to Earth? ",
     options: shuffle(picks.map((p) => p.name)),
     correctAnswer: winner.name,
     explanation: `${winner.name} sits ${winner.distance} away, orbiting ${winner.hostStar}. ${picks
@@ -99,7 +99,7 @@ const largest: Builder = (pool, difficulty) => {
   const winner = picks.reduce((a, b) => (value(a.radius)! > value(b.radius)! ? a : b))
   return {
     id: `gen-big-${winner.name}`,
-    question: "Which of these exoplanets has the largest radius?",
+    question: "Which of these exoplanets has the largest radius? ",
     options: shuffle(picks.map((p) => p.name)),
     correctAnswer: winner.name,
     explanation: `${winner.name} measures ${winner.radius}, where Earth is 1 R⊕. It is classified as a ${winner.type.toLowerCase()}.`,
@@ -114,7 +114,7 @@ const hottest: Builder = (pool, difficulty) => {
   const winner = picks.reduce((a, b) => (a.temperature! > b.temperature! ? a : b))
   return {
     id: `gen-hot-${winner.name}`,
-    question: "Which of these exoplanets is the hottest?",
+    question: "Which of these exoplanets is the hottest? ",
     options: shuffle(picks.map((p) => p.name)),
     correctAnswer: winner.name,
     explanation: `${winner.name} has an equilibrium temperature of ${Math.round(winner.temperature!)} K. For comparison, Earth sits near 255 K.`,
@@ -180,7 +180,7 @@ const orbitalPeriod: Builder = (pool, difficulty) => {
   const winner = picks.reduce((a, b) => (value(a.orbitalPeriod)! < value(b.orbitalPeriod)! ? a : b))
   return {
     id: `gen-period-${winner.name}`,
-    question: "Which of these exoplanets has the shortest year?",
+    question: "Which of these exoplanets has the shortest year? ",
     options: shuffle(picks.map((p) => p.name)),
     correctAnswer: winner.name,
     explanation: `${winner.name} completes an orbit in ${winner.orbitalPeriod}, so a year there is shorter than on any of the others.`,

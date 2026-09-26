@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server"
-import { getCatalog, queryCatalog } from "@/src/lib/exoplanetCatalog"
+import { getCatalog, getCatalogStats, queryCatalog } from "@/src/lib/exoplanetCatalog"
 
 /**
  * ExoVis catalog endpoint.
@@ -23,7 +23,11 @@ export async function GET(req: NextRequest) {
       limit: Number(searchParams.get("limit") ?? 60),
     })
 
-    return Response.json(page, {
+    // Archive-wide figures ride along so the stat tiles describe the archive
+    // rather than the page that happens to be loaded.
+    const stats = await getCatalogStats()
+
+    return Response.json({ ...page, stats }, {
       headers: { "Cache-Control": "s-maxage=3600, stale-while-revalidate=86400" },
     })
   } catch (err: any) {

@@ -46,10 +46,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preload" href="/images/exoplanet.webp" as="image" />
-        <link rel="preload" href="/images/stars-bg.webp" as="image" />
-      </head>
       <body className={`${serif.variable} ${mono.variable} antialiased`}>
         <QualityProvider>
           <SmoothScroll />

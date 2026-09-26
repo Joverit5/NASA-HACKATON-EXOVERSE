@@ -21,7 +21,7 @@ const TwinklingStar = ({ delay = 0, scale = 1 }: { delay?: number; scale?: numbe
       duration: 3,
       delay,
       repeat: Infinity,
-      ease:"easeInOut"
+      ease: "easeInOut"
     }}
     className="absolute"
     style={{
@@ -37,7 +37,7 @@ const RevealText = ({ children }: { children: React.ReactNode }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 1, ease:"easeOut" }}
+    transition={{ duration: 1, ease: "easeOut" }}
     viewport={{ once: true }}
   >
     {children}
@@ -50,14 +50,14 @@ interface TimelineEventProps {
   title: string
   description: string
   image: string
-  align?:"left" |"right"
+  align?: "left" |"right"
 }
 
 const TimelineEvent = ({ year, title, description, image, align ="left" }: TimelineEventProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end","end start"]
+    offset: ["start end", "end start"]
   })
 
   const x = useTransform(
@@ -70,7 +70,7 @@ const TimelineEvent = ({ year, title, description, image, align ="left" }: Timel
     <motion.div
       ref={containerRef}
       className={`flex items-center gap-8 ${
-        align ==="right" ?"flex-row-reverse" :""
+        align ==="right" ? "flex-row-reverse" : ""
       } my-32`}
       style={{ x }}
     >
@@ -116,10 +116,10 @@ export default function HistorySection() {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end","end start"],
+    offset: ["start end", "end start"],
   })
 
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%","50%"])
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
   
   // Generate random star positions

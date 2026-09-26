@@ -29,6 +29,8 @@ import {
 import { useNasaExoplanets } from "@/src/hooks/usenasaexoplanets"
 import { useQuality } from "@/src/components/quality-provider"
 import { QualityControl } from "@/src/components/quality-control"
+import { CountingReadout } from "@/src/components/counting-readout"
+import { SplitReveal } from "@/src/components/split-reveal"
 import { TransitCurve } from "@/src/components/transit-curve"
 import { depthPpm } from "@/src/lib/transit"
 
@@ -46,6 +48,7 @@ export default function ExovizCatalog() {
     error,
     hasMore,
     totalCount,
+    stats,
     loadMore,
     refetch,
     searchGlobal,
@@ -61,10 +64,10 @@ export default function ExovizCatalog() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start","end start"],
+    offset: ["start start", "end start"],
   })
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%","30%"])
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.95])
 
@@ -133,11 +136,11 @@ export default function ExovizCatalog() {
   // Los filtros y el orden se aplican solo en el frontend usando los setters del hook
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior:"smooth" })
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  const planetTypes = useMemo(() => ["All","Terrestrial","Super-Earth","Mini-Neptune","Neptune-like","Gas Giant","Hot Jupiter"], []);
-  const habitabilityOptions = useMemo(() => ["All","Potentially Habitable","Not Habitable"], []);
+  const planetTypes = useMemo(() => ["All", "Terrestrial", "Super-Earth", "Mini-Neptune", "Neptune-like", "Gas Giant", "Hot Jupiter"], []);
+  const habitabilityOptions = useMemo(() => ["All", "Potentially Habitable", "Not Habitable"], []);
   const habitablePlanets = useMemo(() => exoplanets.filter((p) => p.habitability ==="Potentially Habitable").length, [exoplanets]);
   const totalSources = useMemo(() => exoplanets.reduce((sum, planet) => sum + planet.sources, 0), [exoplanets]);
 
@@ -168,55 +171,59 @@ export default function ExovizCatalog() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
-            <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 text-ink leading-tight">
-              EXOVIS
-            </h1>
+            <SplitReveal
+              as="h1"
+              by="chars"
+              className="mb-8 text-ink font-normal tracking-[-0.04em] leading-[0.84]"
+            >
+              <span style={{ fontSize: "clamp(3rem, 21vw, 15rem)", display: "block" }}>EXOVIS</span>
+            </SplitReveal>
             <p className="text-xl md:text-2xl text-ink-dim font-light max-w-3xl mx-auto mb-12 leading-relaxed">
 
             </p>
             <p className="text-xl md:text-2xl text-ink-dim leading-relaxed mx-auto mb-5 max-w-2xl">
               Explore ALL exoplanets from NASA's archive. Search through{" "}
-              {totalCount?.toLocaleString("en-US") ||"thousands of"} confirmed exoplanets
+              {totalCount?.toLocaleString("en-US") ||"thousands of "} confirmed exoplanets
             </p>
             {/* Live Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-16">
               <motion.div
                 className="bg-surface border border-rule p-6"
-                whileHover={{ scale: 1.05, backgroundColor:"rgba(255,255,255,0.1)" }}
+                whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
                 transition={{ duration: 0.3 }}
               >
                 <Globe className="w-8 h-8 mx-auto mb-4 text-ink" />
-                <div className="text-3xl font-light mb-2">{exoplanets.length.toLocaleString("en-US")}</div>
+                <div className="font-mono text-3xl font-light mb-2 tabular-nums"><CountingReadout value={stats?.total ?? exoplanets.length} /></div>
                 <div className="text-ink-dim">Unique Exoplanets</div>
-                {totalCount && <div className="text-xs text-ink-faint mt-1">of {totalCount.toLocaleString("en-US")} total</div>}
+                {stats && <div className="font-mono text-xs text-ink-faint mt-1">{stats.withTransitDepth.toLocaleString("en-US")} with a measured transit</div>}
               </motion.div>
               <motion.div
                 className="bg-surface border border-rule p-6"
-                whileHover={{ scale: 1.05, backgroundColor:"rgba(255,255,255,0.1)" }}
+                whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
                 transition={{ duration: 0.3 }}
               >
                 <Telescope className="w-8 h-8 mx-auto mb-4 text-ink" />
-                <div className="text-3xl font-light mb-2">
-                  {exoplanets.length > 0 ? new Set(exoplanets.map((p) => p.hostStar)).size.toLocaleString("en-US") : 0}
+                <div className="font-mono text-3xl font-light mb-2 tabular-nums">
+                  <CountingReadout value={stats?.systems ?? 0} />
                 </div>
                 <div className="text-ink-dim">Star Systems</div>
               </motion.div>
               <motion.div
                 className="bg-surface border border-rule p-6"
-                whileHover={{ scale: 1.05, backgroundColor:"rgba(255,255,255,0.1)" }}
+                whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
                 transition={{ duration: 0.3 }}
               >
                 <Orbit className="w-8 h-8 mx-auto mb-4 text-ink" />
-                <div className="text-3xl font-light mb-2">{habitablePlanets.toLocaleString("en-US")}</div>
+                <div className="font-mono text-3xl font-light mb-2 tabular-nums"><CountingReadout value={stats?.habitable ?? habitablePlanets} /></div>
                 <div className="text-ink-dim">Potentially Habitable</div>
               </motion.div>
               <motion.div
                 className="bg-surface border border-rule p-6"
-                whileHover={{ scale: 1.05, backgroundColor:"rgba(255,255,255,0.1)" }}
+                whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
                 transition={{ duration: 0.3 }}
               >
                 <Database className="w-8 h-8 mx-auto mb-4 text-ink" />
-                <div className="text-3xl font-light mb-2">{totalSources.toLocaleString("en-US")}</div>
+                <div className="font-mono text-3xl font-light mb-2 tabular-nums"><CountingReadout value={stats?.references ?? totalSources} /></div>
                 <div className="text-ink-dim">Sources Combined</div>
               </motion.div>
             </div>
@@ -310,20 +317,20 @@ export default function ExovizCatalog() {
               <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t border-rule">
                 <span className="text-ink-dim text-sm">Sort by:</span>
                 {[
-                  { value:"name", label:"Name" },
-                  { value:"distance", label:"Distance" },
-                  { value:"year", label:"Discovery Year" },
-                  { value:"habitability", label:"Habitability" },
+                  { value: "name", label: "Name" },
+                  { value: "distance", label: "Distance" },
+                  { value: "year", label: "Discovery Year" },
+                  { value: "habitability", label: "Habitability" },
                 ].map((option) => (
                   <Button
                     key={option.value}
-                    variant={currentSortBy === option.value ?"default" :"ghost"}
+                    variant={currentSortBy === option.value ? "default" : "ghost"}
                     size="sm"
                     onClick={() => setCurrentSortBy(option.value)}
                     className={`text-xs ${
                       currentSortBy === option.value
-                        ?"bg-white text-black"
-                        :"text-ink-dim hover:text-ink hover:bg-raised"
+                        ? "bg-white text-black"
+                        : "text-ink-dim hover:text-ink hover:bg-raised"
                     }`}
                   >
                     {option.label}
@@ -358,7 +365,7 @@ export default function ExovizCatalog() {
               <motion.div
                 className="w-16 h-16 border-4 border-rule border-t-white rounded-full mb-6"
                 animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease:"linear" }}
+                transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
               />
               <motion.p
                 className="text-ink-dim text-lg"
@@ -366,7 +373,15 @@ export default function ExovizCatalog() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                Loading and combining exoplanet data from NASA...
+                Querying the NASA Exoplanet Archive
+              </motion.p>
+              <motion.p
+                className="font-mono text-xs text-ink-faint mt-3 tracking-[0.12em] uppercase"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                6,354 records · live TAP query · first load takes a few seconds
               </motion.p>
             </div>
           )}
@@ -410,7 +425,7 @@ export default function ExovizCatalog() {
               {loading && exoplanets.length > 0 && (
                 <div className="flex justify-center items-center py-12">
                   <Loader2 className="w-8 h-8 animate-spin text-ink-dim mr-3" />
-                  <span className="text-ink-dim">Loading and combining more exoplanets...</span>
+                  <span className="font-mono text-xs text-ink-dim uppercase tracking-[0.12em]">Fetching the next page from the archive</span>
                 </div>
               )}
 
@@ -420,7 +435,7 @@ export default function ExovizCatalog() {
                   <p className="text-ink-dim">
                     {searchTerm
                       ? `End of search results for"${searchTerm}"`
-                      :"You've reached the end of the exoplanet catalog"}
+                      : "You've reached the end of the exoplanet catalog"}
                   </p>
                   <p className="text-ink-faint mt-2">
                     Total: {exoplanets.length.toLocaleString("en-US")} exoplanets shown, from {totalSources.toLocaleString("en-US")}{" "}
@@ -483,23 +498,23 @@ const ExoplanetCard = React.memo(function ExoplanetCard({ planet, index }: { pla
     const isHabitable = habitability ==="Potentially Habitable"
 
     let colors = {
-      primary: isHabitable ?"#4A90E2" :"#8B4513",
-      secondary: isHabitable ?"#87CEEB" :"#A0522D",
-      glow: isHabitable ?"#00FF00" :"#FF6B6B",
+      primary: isHabitable ? "#4A90E2" : "#8B4513",
+      secondary: isHabitable ? "#87CEEB" : "#A0522D",
+      glow: isHabitable ? "#00FF00" : "#FF6B6B",
     }
 
     switch (type) {
-      case"Gas Giant":
-        colors = { primary:"#FFA500", secondary:"#FFD700", glow:"#FF8C00" }
+      case "Gas Giant":
+        colors = { primary: "#FFA500", secondary: "#FFD700", glow: "#FF8C00" }
         break
-      case"Hot Jupiter":
-        colors = { primary:"#FF4500", secondary:"#FF6347", glow:"#FF0000" }
+      case "Hot Jupiter":
+        colors = { primary: "#FF4500", secondary: "#FF6347", glow: "#FF0000" }
         break
-      case"Neptune-like":
-        colors = { primary:"#4169E1", secondary:"#6495ED", glow:"#0000FF" }
+      case "Neptune-like":
+        colors = { primary: "#4169E1", secondary: "#6495ED", glow: "#0000FF" }
         break
-      case"Sub-Neptune":
-        colors = { primary:"#6495ED", secondary:"#87CEEB", glow:"#4169E1" }
+      case "Sub-Neptune":
+        colors = { primary: "#6495ED", secondary: "#87CEEB", glow: "#4169E1" }
         break
     }
 
@@ -514,7 +529,7 @@ const ExoplanetCard = React.memo(function ExoplanetCard({ planet, index }: { pla
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: (index % 12) * 0.05 }}
-      viewport={{ once: true, margin:"-100px" }}
+      viewport={{ once: true, margin: "-100px" }}
       whileHover={{ y: -5 }}
     >
       <Card className="relative bg-surface border border-rule overflow-hidden group h-full">
@@ -524,14 +539,14 @@ const ExoplanetCard = React.memo(function ExoplanetCard({ planet, index }: { pla
               {planet.type}
             </Badge>
             <Badge
-              variant={planet.habitability ==="Potentially Habitable" ?"default" :"secondary"}
+              variant={planet.habitability ==="Potentially Habitable" ? "default" : "secondary"}
               className={`text-xs ${
                 planet.habitability ==="Potentially Habitable"
-                  ?"bg-mint/15 text-mint border-mint-deep"
-                  :"bg-hostile/15 text-hostile border-hostile/40"
+                  ? "bg-mint/15 text-mint border-mint-deep"
+                  : "bg-hostile/15 text-hostile border-hostile/40"
               }`}
             >
-              {planet.habitability ==="Potentially Habitable" ?"🌍" :"🔥"}
+              {planet.habitability ==="Potentially Habitable" ? "🌍" : "🔥"}
             </Badge>
             {planet.sources > 1 && (
               <Badge variant="outline" className="bg-source/15 text-source border-source/40 text-xs">
@@ -581,7 +596,7 @@ const ExoplanetCard = React.memo(function ExoplanetCard({ planet, index }: { pla
             {showDetails && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height:"auto" }}
+                animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 className="space-y-2 border-t border-rule pt-2 mt-2"
               >
@@ -648,7 +663,7 @@ const ExoplanetCard = React.memo(function ExoplanetCard({ planet, index }: { pla
               className="flex-1 bg-raised border-rule text-ink hover:bg-rule hover:border-rule-strong transition-all duration-tick text-xs"
               onClick={() => setShowDetails(!showDetails)}
             >
-              {showDetails ?"Less" :"More"}
+              {showDetails ? "Less" : "More"}
             </Button>
 
             <Button
@@ -658,7 +673,7 @@ const ExoplanetCard = React.memo(function ExoplanetCard({ planet, index }: { pla
               asChild
             >
               <a
-                href={`https://eyes.nasa.gov/apps/exo/#/planet/${planet.name.replace(/\s+/g,"_")}`}
+                href={`https://eyes.nasa.gov/apps/exo/#/planet/${planet.name.replace(/\s+/g, "_")}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

@@ -39,27 +39,27 @@ export default function Navbar() {
 
 
   const leftNavItems = [
-    { href:"/exoquest/menu", icon: Rocket, label:"ExoQuest" },
-    { href:"/exocreator", icon: Brain, label:"ExoCreator" },
+    { href: "/exoquest/menu", icon: Rocket, label: "ExoQuest" },
+    { href: "/exocreator", icon: Brain, label: "ExoCreator" },
   ];
 
   const rightNavItems = [
-    { href:"/exovis", icon: ChartBar, label:"ExoVis" },
+    { href: "/exovis", icon: ChartBar, label: "ExoVis" },
     { 
-      href:"/#credits", 
+      href: "/#credits", 
       icon: Users, 
-      label:"Credits"
+      label: "Credits"
     },
   ];
 
   return (
     <motion.nav
       className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-tick py-4",
-        isScrolled ?"bg-void/90" :"bg-transparent"
+        isScrolled ? "bg-void/90" : "bg-transparent"
       )}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ type:"spring", stiffness: 300, damping: 30 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
@@ -77,7 +77,7 @@ export default function Navbar() {
             <button
               onClick={toggleMenu}
               className="text-ink focus:outline-none"
-              aria-label={isOpen ?"Close menu" :"Open menu"}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>

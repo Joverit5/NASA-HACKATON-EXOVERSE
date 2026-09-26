@@ -8,6 +8,8 @@ import PayPalButton from "@/src/components/ui/paypalbutton"
 import dynamic from "next/dynamic"
 import ScrollProgress from "@/src/components/ui/scrollprogress"
 import { TransitCurve } from "@/src/components/transit-curve"
+import { SplitReveal } from "@/src/components/split-reveal"
+import { CountingReadout } from "@/src/components/counting-readout"
 import type { ProcessedExoplanet } from "@/src/lib/exoplanetCatalog"
 
 // Optimización: Lazy loading de componentes pesados
@@ -46,10 +48,10 @@ export default function Home({
   const heroRef = useRef<HTMLDivElement>(null)
 
   // Optimización: Usar useSpring para animaciones más suaves
-  const heroY = useTransform(scrollYProgress, [0, 0.3], ["0%","30%"])
+  const heroY = useTransform(scrollYProgress, [0, 0.3], ["0%", "30%"])
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
   const planetScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1])
-  const textY = useTransform(scrollYProgress, [0, 0.3], ["0%","-20%"])
+  const textY = useTransform(scrollYProgress, [0, 0.3], ["0%", "-20%"])
 
   const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 }
   const heroYSpring = useSpring(heroY, springConfig)
@@ -59,23 +61,23 @@ export default function Home({
   const features = [
     {
       icon: BookOpen,
-      title:"Information Hub",
-      description:"A fascinating resource that unveils the basics and captivating history of exoplanets.",
+      title: "Information Hub",
+      description: "A fascinating resource that unveils the basics and captivating history of exoplanets.",
     },
     {
       icon: Brain,
-      title:"ExoQuest",
-      description:"An interactive trivia adventure that challenges and expands your cosmic knowledge.",
+      title: "ExoQuest",
+      description: "An interactive trivia adventure that challenges and expands your cosmic knowledge.",
     },
     {
       icon: Palette,
-      title:"ExoCreator",
-      description:"A unique tool empowering you to craft your own exoplanets, fueling your creativity.",
+      title: "ExoCreator",
+      description: "A unique tool empowering you to craft your own exoplanets, fueling your creativity.",
     },
     {
       icon: Telescope,
-      title:"ExoVis",
-      description:"A dynamic portal connecting you to the latest exoplanet discoveries.",
+      title: "ExoVis",
+      description: "A dynamic portal connecting you to the latest exoplanet discoveries.",
     },
   ]
 
@@ -99,15 +101,20 @@ export default function Home({
             transition={{ duration: 0.72, ease: [0.2, 0, 0, 1] }}
           >
             <p className="font-mono text-xs tracking-[0.18em] uppercase text-mint mb-6">
-              {featured ? `${featured.discoveryMethod} · ${featured.discoveryYear ??"year unrecorded"}` :"NASA Exoplanet Archive"}
+              {featured ? `${featured.discoveryMethod} · ${featured.discoveryYear ?? "year unrecorded"}` : "NASA Exoplanet Archive"}
             </p>
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-normal leading-[1.02] tracking-tight max-w-4xl text-balance">
-              {featured ? featured.name :"Exploring Exoplanets"}
-            </h1>
+            <SplitReveal
+              as="h1"
+              by="chars"
+              delay={0.12}
+              className="text-5xl sm:text-6xl md:text-7xl font-normal leading-[1.02] tracking-tight max-w-4xl text-balance"
+            >
+              {featured ? featured.name : "Exploring Exoplanets"}
+            </SplitReveal>
             <p className="mt-6 text-lg md:text-xl text-ink-dim leading-relaxed max-w-2xl">
               {poolSize > 0 && (
                 <span className="font-mono text-xs text-ink-faint block mb-3 tabular-nums">
-                  Drawn at random from {poolSize.toLocaleString("en-US")} confirmed transiting worlds
+                  Drawn at random from <CountingReadout value={poolSize} /> confirmed transiting worlds
                 </span>
               )}
               Every planet here entered the record the same way: as a dip in its

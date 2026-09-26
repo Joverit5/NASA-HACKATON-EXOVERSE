@@ -128,7 +128,7 @@ export default function ExoPlanetPlatform() {
                             Choose your mission difficulty:
                           </p>
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            {["easy","intermediate","hard"].map((level) => (
+                            {["easy", "intermediate", "hard"].map((level) => (
                               <Button
                                 key={level}
                                 onClick={() => handleExoQuestRedirect(level)}
